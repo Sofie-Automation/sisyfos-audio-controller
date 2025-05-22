@@ -213,27 +213,30 @@ export class AutomationConnection {
             }  else if (check('SET_CHANNEL_STATE')) {
                 wrapChannelCommand((ch: any) => {
                     const apiState: AutomationChannelAPI = JSON.parse(message.args[0])
-                    const channelState: Fader = {... state.faders[0].fader[ch - 1],
-                        faderLevel: apiState.faderLevel || state.faders[0].fader[ch - 1].faderLevel,
-                        pgmOn: apiState.pgmOn || state.faders[0].fader[ch - 1].pgmOn,
-                        voOn: apiState.voOn || state.faders[0].fader[ch - 1].voOn,
-                        pstOn: apiState.pstOn   || state.faders[0].fader[ch - 1].pstOn,
-                        showChannel: apiState.showChannel || state.faders[0].fader[ch - 1].showChannel,
-                        muteOn: apiState.muteOn || state.faders[0].fader[ch - 1].muteOn,
-                        inputGain: apiState.inputGain || state.faders[0].fader[ch - 1].inputGain,
-                        inputSelector: apiState.inputSelector || state.faders[0].fader[ch - 1].inputSelector,
-                        label: apiState.label || state.faders[0].fader[ch - 1].label,
+                    const oldState = state.faders[0].fader[ch - 1]
+                    const channelState: Fader = {
+                      ...oldState,
+                      faderLevel: apiState.faderLevel ?? oldState.faderLevel,
+                      pgmOn: apiState.pgmOn ?? oldState.pgmOn,
+                      voOn: apiState.voOn ?? oldState.voOn,
+                      pstOn: apiState.pstOn ?? oldState.pstOn,
+                      showChannel: apiState.showChannel ?? oldState.showChannel,
+                      muteOn: apiState.muteOn ?? oldState.muteOn,
+                      inputGain: apiState.inputGain ?? oldState.inputGain,
+                      inputSelector:
+                        apiState.inputSelector ?? oldState.inputSelector,
+                      label: apiState.label ?? oldState.label,
                     }
                     store.dispatch({
                         type: FaderActionTypes.SET_SINGLE_FADER_STATE,
                         faderIndex: ch - 1,
-                        state: channelState,                        
+                        state: channelState,
                     })
                 })
             } else if (check('INJECT_COMMAND')) {
                 /*
-                The INJECT COMMAND is not implemented 
-                It's planned for injecting commands directly from Sisyfos into the Audiomixer.  
+                The INJECT COMMAND is not implemented
+                It's planned for injecting commands directly from Sisyfos into the Audiomixer.
                 wrapChannelCommand((ch: any) => {
                     store.dispatch({
                         type: FaderActionTypes.SET_FADER_LABEL,
@@ -300,7 +303,7 @@ export class AutomationConnection {
                                     showChannel,
                                     muteOn,
                                     inputGain,
-                                    inputSelector,                                    
+                                    inputSelector,
                                 }: Fader,
                                 index,
                             ): AutomationChannelAPI => ({
