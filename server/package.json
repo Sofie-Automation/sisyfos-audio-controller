@@ -9,7 +9,7 @@
         "test:watch": "jest --watch"
     },
     "devDependencies": {
-        "@types/express": "^4.17.21",
+        "@types/express": "^5.0.6",
         "@types/jest": "^29.5.11",
         "@types/node": "^18.16.0",
         "@types/webmidi": "^2.0.10",
@@ -23,7 +23,7 @@
         "atem-connection": "^3.4.0",
         "casparcg-connection": "^5.1.0",
         "emberplus-connection": "^0.2.1",
-        "express": "^4.18.2",
+        "express": "^5.2.1",
         "node-emberplus": "^3.0.5",
         "node-vmix": "^1.6.1",
         "osc": "^2.4.4",
