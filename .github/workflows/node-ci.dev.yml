@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - uses: ./.github/actions/cache
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -24,14 +24,14 @@ jobs:
     needs: cache-dependencies
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - uses: ./.github/actions/test
 
   validate-dependencies:
     runs-on: ubuntu-latest
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - uses: ./.github/actions/validate-dependencies
 
   build:
@@ -41,7 +41,7 @@ jobs:
       - validate-dependencies
     steps:
       - name: Access repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - uses: ./.github/actions/cache
 
       - name: Install dependencies
@@ -69,7 +69,7 @@ jobs:
       defined: ${{ steps.username.outputs.defined == 'true' && steps.password.outputs.defined == 'true' }}
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Check if has username
         id: username
@@ -90,7 +90,7 @@ jobs:
       - check-docker-credentials
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - uses: actions/download-artifact@v3
         with:
