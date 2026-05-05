@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - uses: ./.github/actions/cache
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -44,7 +44,7 @@ jobs:
     needs: cache-dependencies
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - uses: ./.github/actions/cache
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -56,7 +56,7 @@ jobs:
     needs: cache-dependencies
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - uses: ./.github/actions/test
 
@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - uses: ./.github/actions/validate-dependencies
 
   bump-version:
@@ -81,7 +81,7 @@ jobs:
       commit_sha: ${{ steps.commit_sha.outputs.commit_sha }}
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Configure committer
         run: |
           git config user.name "${{ github.event.pusher.name }}"
@@ -121,7 +121,7 @@ jobs:
       - bump-version
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Pull request to develop
         id: develop
         continue-on-error: true
@@ -142,7 +142,7 @@ jobs:
       - bump-version
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ needs.bump-version.outputs.commit_sha }}
       - name: Ensure commits from bump-version
@@ -170,7 +170,7 @@ jobs:
       - build
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ needs.bump-version.outputs.commit_sha }}
       - name: Ensure commits from bump-version
@@ -201,7 +201,7 @@ jobs:
       defined: ${{ steps.release.outputs.defined == 'true' }}
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Check if is set to release
         id: release
         uses: ./.github/actions/check-secret
@@ -216,7 +216,7 @@ jobs:
       - check-github-release
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ needs.bump-version.outputs.commit_sha }}
       - name: Ensure commits from bump-version
@@ -247,7 +247,7 @@ jobs:
       defined: ${{ steps.token.outputs.defined == 'true' }}
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Check if has username
         id: token
         uses: ./.github/actions/check-secret
@@ -262,7 +262,7 @@ jobs:
       - check-npm-token
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Configure publisher
         run: |
           git config user.name "${{ github.event.pusher.name }}"
@@ -288,7 +288,7 @@ jobs:
       defined: ${{ steps.username.outputs.defined == 'true' && steps.password.outputs.defined == 'true' }}
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Check if has username
         id: username
         uses: ./.github/actions/check-secret
@@ -308,7 +308,7 @@ jobs:
       - check-docker-credentials
     steps:
       - name: Access repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Extract version for tags
         id: version
