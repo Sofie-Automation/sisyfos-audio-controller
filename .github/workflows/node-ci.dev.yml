@@ -51,13 +51,13 @@ jobs:
         run: yarn build
 
       - name: Upload client build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ github.event.repository.name }}-client-develop
           path: client/dist
 
       - name: Upload server build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ github.event.repository.name }}-server-develop
           path: server/dist
