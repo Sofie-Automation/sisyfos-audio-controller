@@ -176,11 +176,11 @@ jobs:
       - name: Ensure commits from bump-version
         run: git pull
       - uses: ./.github/actions/cache
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v8
         with:
           name: ${{ github.event.repository.name }}-client
           path: client/dist
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v8
         with:
           name: ${{ github.event.repository.name }}-server
           path: server/dist
@@ -221,7 +221,7 @@ jobs:
           ref: ${{ needs.bump-version.outputs.commit_sha }}
       - name: Ensure commits from bump-version
         run: git pull
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v8
         with:
           name: ${{ github.event.repository.name }}-desktop
           path: desktop/dist
@@ -268,7 +268,7 @@ jobs:
           git config user.name "${{ github.event.pusher.name }}"
           git config user.email "${{ github.event.pusher.email }}"
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v8
         with:
           name: ${{ github.event.repository.name }}
           path: dist

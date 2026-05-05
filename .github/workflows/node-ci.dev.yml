@@ -92,12 +92,12 @@ jobs:
       - name: Access repository
         uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v8
         with:
           name: ${{ github.event.repository.name }}-client-develop
           path: client/dist
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v8
         with:
           name: ${{ github.event.repository.name }}-server-develop
           path: server/dist
