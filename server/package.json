@@ -18,7 +18,7 @@
         "typescript": "^5.0.4"
     },
     "dependencies": {
-        "@babel/core": "^7.22.10",
+        "@babel/core": "^7.29.6",
         "@tv2media/logger": "^2.0.1",
         "atem-connection": "^3.2.0",
         "casparcg-connection": "^5.1.0",
