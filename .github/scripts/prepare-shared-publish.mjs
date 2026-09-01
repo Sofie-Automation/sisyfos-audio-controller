@@ -10,6 +10,8 @@ const ROOT_PACKAGE_JSON = path.join(ROOT, 'package.json')
 const versionArgIndex = process.argv.indexOf('--version')
 const VERSION_ARG =
     versionArgIndex >= 0 ? process.argv[versionArgIndex + 1] : null
+const scopeArgIndex = process.argv.indexOf('--scope')
+const SCOPE_ARG = scopeArgIndex >= 0 ? process.argv[scopeArgIndex + 1] : null
 const githubOutputArg = process.argv.indexOf('--github-output')
 const GITHUB_OUTPUT =
     githubOutputArg >= 0 ? process.argv[githubOutputArg + 1] : null
@@ -35,19 +37,42 @@ function resolveVersion() {
     return rootPackage.version
 }
 
+function resolveScope() {
+    const scope = SCOPE_ARG || process.env.GITHUB_REPOSITORY_OWNER
+    if (!scope) {
+        throw new Error(
+            'Missing publish scope: set GITHUB_REPOSITORY_OWNER or pass --scope'
+        )
+    }
+
+    return scope.toLowerCase()
+}
+
+function resolvePublishName(sharedPackage, scope) {
+    const packageName = sharedPackage.name.includes('/')
+        ? sharedPackage.name.split('/').pop()
+        : sharedPackage.name
+
+    return `@${scope}/${packageName}`
+}
+
 function main() {
     const version = resolveVersion()
+    const scope = resolveScope()
     const sharedPackage = readJson(SHARED_PACKAGE_JSON)
+    const publishName = resolvePublishName(sharedPackage, scope)
 
     sharedPackage.version = version
+    sharedPackage.name = publishName
     writeJson(SHARED_PACKAGE_JSON, sharedPackage)
 
-    process.stdout.write(
-        `Prepared ${sharedPackage.name}@${version} for publish\n`
-    )
+    process.stdout.write(`Prepared ${publishName}@${version} for publish\n`)
 
     if (GITHUB_OUTPUT) {
-        fs.appendFileSync(GITHUB_OUTPUT, `version=${version}\n`)
+        fs.appendFileSync(
+            GITHUB_OUTPUT,
+            `version=${version}\nname=${publishName}\n`
+        )
     }
 }
 
