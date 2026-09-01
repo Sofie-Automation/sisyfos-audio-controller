@@ -3,10 +3,6 @@ name: Publish container image
 on:
     workflow_call:
         inputs:
-            ref:
-                description: 'Git ref to checkout'
-                required: true
-                type: string
             tags:
                 description: 'Docker metadata tags'
                 required: true
@@ -28,7 +24,7 @@ jobs:
             - name: Access repository
               uses: actions/checkout@v4
               with:
-                  ref: ${{ inputs.ref }}
+                  ref: ${{ github.ref }}
                   persist-credentials: false
 
             - name: Create the image tags

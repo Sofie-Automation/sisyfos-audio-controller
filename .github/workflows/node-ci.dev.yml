@@ -23,6 +23,9 @@ jobs:
         steps:
             - name: Access repository
               uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.ref }}
+                  fetch-depth: ${{ inputs.fetch-depth }}
 
             - name: Compute image tag
               id: tag
@@ -46,5 +49,4 @@ jobs:
         uses: ./.github/workflows/publish-container-image.yml
         secrets: inherit
         with:
-            ref: ${{ github.ref }}
             tags: ${{ needs.resolve-tag.outputs.tags }}

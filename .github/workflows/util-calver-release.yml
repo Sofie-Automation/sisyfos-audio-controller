@@ -3,11 +3,6 @@ name: CalVer release
 on:
     workflow_call:
         inputs:
-            ref:
-                description: 'Git ref to checkout'
-                required: false
-                type: string
-                default: 'main'
             fetch-depth:
                 description: 'Checkout fetch depth'
                 required: false
@@ -43,7 +38,7 @@ jobs:
             - name: Access repository
               uses: actions/checkout@v4
               with:
-                  ref: ${{ inputs.ref }}
+                  ref: ${{ github.ref }}
                   fetch-depth: ${{ inputs.fetch-depth }}
 
             - name: Setup Node.js

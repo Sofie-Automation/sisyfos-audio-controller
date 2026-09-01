@@ -15,11 +15,6 @@ permissions:
 on:
     workflow_dispatch:
         inputs:
-            ref:
-                description: 'Git ref to publish from'
-                required: false
-                type: string
-                default: main
             version:
                 description: 'Version to publish (defaults to root package.json version)'
                 required: false
@@ -30,5 +25,4 @@ jobs:
         uses: ./.github/workflows/publish-shared-lib.yml
         secrets: inherit
         with:
-            ref: ${{ inputs.ref }}
             version: ${{ inputs.version }}

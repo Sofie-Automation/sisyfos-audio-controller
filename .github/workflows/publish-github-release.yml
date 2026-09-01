@@ -3,10 +3,6 @@ name: Publish GitHub release
 on:
     workflow_call:
         inputs:
-            ref:
-                description: 'Git ref to checkout'
-                required: true
-                type: string
             version:
                 description: 'Release version'
                 required: true
@@ -35,7 +31,7 @@ jobs:
             - name: Access repository
               uses: actions/checkout@v4
               with:
-                  ref: ${{ inputs.ref }}
+                  ref: ${{ github.ref }}
                   fetch-depth: ${{ inputs.fetch-depth }}
 
             - uses: actions/download-artifact@v4

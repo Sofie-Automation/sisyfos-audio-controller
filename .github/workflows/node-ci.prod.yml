@@ -19,25 +19,17 @@ on:
 jobs:
     cache-dependencies:
         uses: ./.github/workflows/util-cache-dependencies.yml
-        with:
-            ref: main
 
     prebuild:
         needs: cache-dependencies
         uses: ./.github/workflows/util-prebuild.yml
-        with:
-            ref: main
 
     test:
         needs: cache-dependencies
         uses: ./.github/workflows/util-test.yml
-        with:
-            ref: main
 
     validate-dependencies:
         uses: ./.github/workflows/util-validate-dependencies.yml
-        with:
-            ref: main
 
     calver-release:
         needs:
@@ -51,8 +43,6 @@ jobs:
         needs: calver-release
         uses: ./.github/workflows/build.yml
         secrets: inherit
-        with:
-            ref: ${{ needs.calver-release.outputs.tag }}
 
     build-desktop:
         needs:
@@ -60,8 +50,6 @@ jobs:
             - build
         uses: ./.github/workflows/build-desktop.yml
         secrets: inherit
-        with:
-            ref: ${{ needs.calver-release.outputs.tag }}
 
     publish-github-release:
         needs:
@@ -70,7 +58,6 @@ jobs:
         uses: ./.github/workflows/publish-github-release.yml
         secrets: inherit
         with:
-            ref: ${{ needs.calver-release.outputs.tag }}
             version: ${{ needs.calver-release.outputs.version }}
             tag: ${{ needs.calver-release.outputs.tag }}
             changelog: ${{ needs.calver-release.outputs.changelog }}
@@ -82,7 +69,6 @@ jobs:
         uses: ./.github/workflows/publish-container-image.yml
         secrets: inherit
         with:
-            ref: ${{ needs.calver-release.outputs.tag }}
             tags: |
                 type=raw,value=${{ needs.calver-release.outputs.tag }}
                 type=raw,value=latest
