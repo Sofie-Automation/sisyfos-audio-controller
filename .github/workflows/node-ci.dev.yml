@@ -12,16 +12,14 @@ permissions:
     contents: read
     packages: write
 
-env:
-    node-version: 24
-    yarn-version: 4.1.0
-
 on:
     workflow_dispatch:
 
 jobs:
-    build-and-publish:
+    resolve-tag:
         runs-on: ubuntu-latest
+        outputs:
+            tags: ${{ steps.tag.outputs.tags }}
         steps:
             - name: Access repository
               uses: actions/checkout@v4
@@ -40,64 +38,13 @@ jobs:
                       exit 1
                   fi
                   IMAGE_TAG="${SAFE_BRANCH}-${SHORT_SHA}"
-                  IMAGE_NAME="ghcr.io/$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')"
-                  echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
-                  echo "image_name=${IMAGE_NAME}" >> "$GITHUB_OUTPUT"
-                  echo "Using image tag: ${IMAGE_NAME}:${IMAGE_TAG}"
+                  echo "tags=type=raw,value=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+                  echo "Using image tag: ghcr.io/${GITHUB_REPOSITORY,,}:${IMAGE_TAG}"
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ env.node-version }}
-
-            - name: Enable Corepack
-              run: corepack enable
-
-            - name: Set Yarn Version
-              run: corepack prepare yarn@${{ env.yarn-version }} --activate
-
-            - name: Get Yarn cache directory
-              id: yarn-cache-dir
-              run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-            - name: Cache Yarn dependencies
-              uses: actions/cache@v4
-              with:
-                  path: |
-                      ${{ steps.yarn-cache-dir.outputs.dir }}
-                      .yarn/cache
-                      .yarn/patches
-                      .yarn/plugins
-                      .yarn/releases
-                      .yarn/sdks
-                      .yarn/versions
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-yarn-
-
-            - name: Update Lockfile
-              run: yarn install --mode=update-lockfile
-
-            - name: Install dependencies
-              run: yarn install --mode=skip-build
-
-            - name: Build
-              run: yarn build
-
-            - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v4
-
-            - name: Login to GitHub Container Registry
-              uses: docker/login-action@v4
-              with:
-                  registry: ghcr.io
-                  username: ${{ github.repository_owner }}
-                  password: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Build and push
-              uses: docker/build-push-action@v7
-              with:
-                  context: .
-                  push: true
-                  provenance: false
-                  tags: ${{ steps.tag.outputs.image_name }}:${{ steps.tag.outputs.image_tag }}
+    publish-container-image:
+        needs: resolve-tag
+        uses: ./.github/workflows/publish/publish-container-image.yml
+        secrets: inherit
+        with:
+            ref: ${{ github.ref }}
+            tags: ${{ needs.resolve-tag.outputs.tags }}

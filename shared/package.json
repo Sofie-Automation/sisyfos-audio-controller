@@ -1,16 +1,17 @@
 {
     "name": "@sofie-automation/sisyfos-audio-controller-shared-lib",
-    "private": true,
     "version": "0.0.0",
+    "description": "Shared types, reducers, and constants for Sisyfos Audio Controller",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Sofie-Automation/sisyfos-audio-controller.git"
+        "url": "git+https://github.com/Sofie-Automation/sisyfos-audio-controller.git",
+        "directory": "shared"
     },
     "bugs": {
         "url": "https://github.com/Sofie-Automation/sisyfos-audio-controller/issues"
     },
-    "homepage": "https://github.com/Sofie-Automation/sisyfos-audio-controller#readme",
+    "homepage": "https://github.com/Sofie-Automation/sisyfos-audio-controller/tree/main/shared#readme",
     "contributors": [
         {
             "name": "Kasper Olsson Hans",
@@ -50,6 +51,9 @@
     "scripts": {
         "build": "tsc",
         "watch": "tsc --watch"
+    },
+    "publishConfig": {
+        "access": "public"
     },
     "devDependencies": {
         "@types/node": "^24",

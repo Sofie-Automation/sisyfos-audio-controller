@@ -1,9 +1,15 @@
 name: 'Cache dependencies'
 description: 'Cache dependencies'
+inputs:
+    clean-cache:
+        description: 'Clean Yarn state before restoring cache'
+        required: false
+        default: 'false'
 runs:
     using: 'composite'
     steps:
         - name: Clean Yarn State
+          if: inputs.clean-cache == 'true'
           shell: bash
           run: |
               rm -rf .yarn/cache

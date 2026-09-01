@@ -1,0 +1,56 @@
+name: CalVer release
+
+on:
+    workflow_call:
+        inputs:
+            ref:
+                description: 'Git ref to checkout'
+                required: false
+                type: string
+                default: 'main'
+            fetch-depth:
+                description: 'Checkout fetch depth'
+                required: false
+                type: string
+                default: '0'
+            node-version:
+                description: 'Node.js version'
+                required: false
+                type: string
+                default: '24'
+        outputs:
+            version:
+                description: 'Release version'
+                value: ${{ jobs.calver-release.outputs.version }}
+            tag:
+                description: 'Release tag'
+                value: ${{ jobs.calver-release.outputs.tag }}
+            changelog:
+                description: 'Release changelog'
+                value: ${{ jobs.calver-release.outputs.changelog }}
+
+permissions:
+    contents: write
+
+jobs:
+    calver-release:
+        runs-on: ubuntu-latest
+        outputs:
+            version: ${{ steps.calver.outputs.version }}
+            tag: ${{ steps.calver.outputs.tag }}
+            changelog: ${{ steps.calver.outputs.changelog }}
+        steps:
+            - name: Access repository
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ inputs.ref }}
+                  fetch-depth: ${{ inputs.fetch-depth }}
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ inputs.node-version }}
+
+            - name: Bump CalVer, update CHANGELOG, commit and tag
+              id: calver
+              run: node .github/scripts/calver-release.mjs --commit --tag --github-output "$GITHUB_OUTPUT"

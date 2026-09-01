@@ -1,0 +1,26 @@
+name: 'Setup Node.js and Yarn'
+description: 'Setup Node.js via Corepack and activate the configured Yarn version'
+inputs:
+    node-version:
+        description: 'Node.js version'
+        required: false
+        default: '24'
+    yarn-version:
+        description: 'Yarn version'
+        required: false
+        default: '4.1.0'
+runs:
+    using: 'composite'
+    steps:
+        - name: Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+              node-version: ${{ inputs.node-version }}
+
+        - name: Enable Corepack
+          shell: bash
+          run: corepack enable
+
+        - name: Set Yarn Version
+          shell: bash
+          run: corepack prepare yarn@${{ inputs.yarn-version }} --activate

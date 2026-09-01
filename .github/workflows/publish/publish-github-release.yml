@@ -1,0 +1,67 @@
+name: Publish GitHub release
+
+on:
+    workflow_call:
+        inputs:
+            ref:
+                description: 'Git ref to checkout'
+                required: true
+                type: string
+            version:
+                description: 'Release version'
+                required: true
+                type: string
+            tag:
+                description: 'Release tag'
+                required: true
+                type: string
+            changelog:
+                description: 'Release changelog'
+                required: true
+                type: string
+            fetch-depth:
+                description: 'Checkout fetch depth'
+                required: false
+                type: string
+                default: '0'
+
+permissions:
+    contents: write
+
+jobs:
+    publish-github-release:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Access repository
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ inputs.ref }}
+                  fetch-depth: ${{ inputs.fetch-depth }}
+
+            - uses: actions/download-artifact@v4
+              with:
+                  name: ${{ github.event.repository.name }}-desktop
+                  path: desktop/dist
+
+            - name: Compress desktop artifact to zip
+              working-directory: desktop/dist
+              run: |
+                  zip -r "../../${{ github.event.repository.name }}-${{ inputs.version }}.zip" .
+
+            - name: Create GitHub release
+              uses: softprops/action-gh-release@v2
+              with:
+                  name: Release ${{ inputs.tag }}
+                  tag_name: ${{ inputs.tag }}
+                  body: |
+                      ## Docker
+
+                      ```
+                      docker pull ghcr.io/${{ github.repository }}:${{ inputs.tag }}
+                      ```
+
+                      ${{ inputs.changelog }}
+                  files: |
+                      ${{ github.event.repository.name }}-${{ inputs.version }}.zip
+                      desktop/dist/*.exe
+                  # TODO: macOS releases: desktop/dist/*.dmg

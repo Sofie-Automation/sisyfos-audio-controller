@@ -1,0 +1,22 @@
+name: 'Install Yarn dependencies'
+description: 'Restore Yarn cache and install dependencies'
+inputs:
+    clean-cache:
+        description: 'Clean Yarn state before restoring cache'
+        required: false
+        default: 'false'
+runs:
+    using: 'composite'
+    steps:
+        - name: Restore Yarn cache
+          uses: ./.github/actions/cache
+          with:
+              clean-cache: ${{ inputs.clean-cache }}
+
+        - name: Update Lockfile
+          shell: bash
+          run: yarn install --mode=update-lockfile
+
+        - name: Install dependencies
+          shell: bash
+          run: yarn install --mode=skip-build

@@ -1,0 +1,65 @@
+name: Build desktop
+
+on:
+    workflow_call:
+        inputs:
+            ref:
+                description: 'Git ref to checkout'
+                required: true
+                type: string
+            fetch-depth:
+                description: 'Checkout fetch depth'
+                required: false
+                type: string
+                default: '0'
+            node-version:
+                description: 'Node.js version'
+                required: false
+                type: string
+                default: '24'
+            yarn-version:
+                description: 'Yarn version'
+                required: false
+                type: string
+                default: '4.1.0'
+
+permissions:
+    contents: read
+
+jobs:
+    build-desktop:
+        runs-on: windows-latest
+        steps:
+            - name: Access repository
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ inputs.ref }}
+                  fetch-depth: ${{ inputs.fetch-depth }}
+
+            - name: Setup Node.js and Yarn
+              uses: ./.github/actions/setup-node-yarn
+              with:
+                  node-version: ${{ inputs.node-version }}
+                  yarn-version: ${{ inputs.yarn-version }}
+
+            - uses: actions/download-artifact@v4
+              with:
+                  name: ${{ github.event.repository.name }}-client
+                  path: client/dist
+
+            - uses: actions/download-artifact@v4
+              with:
+                  name: ${{ github.event.repository.name }}-server
+                  path: server/dist
+
+            - name: Install dependencies
+              uses: ./.github/actions/yarn-install
+
+            - name: Build desktop
+              run: yarn build:desktop
+
+            - name: Upload desktop build artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ${{ github.event.repository.name }}-desktop
+                  path: desktop/dist
