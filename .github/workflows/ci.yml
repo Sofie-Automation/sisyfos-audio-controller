@@ -9,15 +9,15 @@ on:
 
 jobs:
     cache-dependencies:
-        uses: ./.github/workflows/util/cache-dependencies.yml
+        uses: ./.github/workflows/util-cache-dependencies.yml
 
     prebuild:
         needs: cache-dependencies
-        uses: ./.github/workflows/util/prebuild.yml
+        uses: ./.github/workflows/util-prebuild.yml
 
     test:
         needs: cache-dependencies
-        uses: ./.github/workflows/util/test.yml
+        uses: ./.github/workflows/util-test.yml
 
     validate-dependencies:
-        uses: ./.github/workflows/util/validate-dependencies.yml
+        uses: ./.github/workflows/util-validate-dependencies.yml

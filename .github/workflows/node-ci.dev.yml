@@ -43,7 +43,7 @@ jobs:
 
     publish-container-image:
         needs: resolve-tag
-        uses: ./.github/workflows/publish/publish-container-image.yml
+        uses: ./.github/workflows/publish-container-image.yml
         secrets: inherit
         with:
             ref: ${{ github.ref }}

@@ -18,24 +18,24 @@ on:
 
 jobs:
     cache-dependencies:
-        uses: ./.github/workflows/util/cache-dependencies.yml
+        uses: ./.github/workflows/util-cache-dependencies.yml
         with:
             ref: main
 
     prebuild:
         needs: cache-dependencies
-        uses: ./.github/workflows/util/prebuild.yml
+        uses: ./.github/workflows/util-prebuild.yml
         with:
             ref: main
 
     test:
         needs: cache-dependencies
-        uses: ./.github/workflows/util/test.yml
+        uses: ./.github/workflows/util-test.yml
         with:
             ref: main
 
     validate-dependencies:
-        uses: ./.github/workflows/util/validate-dependencies.yml
+        uses: ./.github/workflows/util-validate-dependencies.yml
         with:
             ref: main
 
@@ -44,12 +44,12 @@ jobs:
             - prebuild
             - test
             - validate-dependencies
-        uses: ./.github/workflows/util/calver-release.yml
+        uses: ./.github/workflows/util-calver-release.yml
         secrets: inherit
 
     build:
         needs: calver-release
-        uses: ./.github/workflows/build/build.yml
+        uses: ./.github/workflows/build.yml
         secrets: inherit
         with:
             ref: ${{ needs.calver-release.outputs.tag }}
@@ -58,7 +58,7 @@ jobs:
         needs:
             - calver-release
             - build
-        uses: ./.github/workflows/build/build-desktop.yml
+        uses: ./.github/workflows/build-desktop.yml
         secrets: inherit
         with:
             ref: ${{ needs.calver-release.outputs.tag }}
@@ -67,7 +67,7 @@ jobs:
         needs:
             - calver-release
             - build-desktop
-        uses: ./.github/workflows/publish/publish-github-release.yml
+        uses: ./.github/workflows/publish-github-release.yml
         secrets: inherit
         with:
             ref: ${{ needs.calver-release.outputs.tag }}
@@ -79,7 +79,7 @@ jobs:
         needs:
             - calver-release
             - build
-        uses: ./.github/workflows/publish/publish-container-image.yml
+        uses: ./.github/workflows/publish-container-image.yml
         secrets: inherit
         with:
             ref: ${{ needs.calver-release.outputs.tag }}
