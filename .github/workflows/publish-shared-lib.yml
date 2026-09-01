@@ -1,0 +1,87 @@
+name: Publish shared lib
+
+on:
+    workflow_call:
+        inputs:
+            ref:
+                description: 'Git ref to checkout'
+                required: false
+                type: string
+                default: 'main'
+            fetch-depth:
+                description: 'Checkout fetch depth'
+                required: false
+                type: string
+                default: '1'
+            version:
+                description: 'Version to publish (defaults to root package.json version)'
+                required: false
+                type: string
+                default: ''
+            node-version:
+                description: 'Node.js version'
+                required: false
+                type: string
+                default: '24'
+            yarn-version:
+                description: 'Yarn version'
+                required: false
+                type: string
+                default: '4.1.0'
+        outputs:
+            version:
+                description: 'Published package version'
+                value: ${{ jobs.publish-shared-lib.outputs.version }}
+
+permissions:
+    contents: read
+    packages: write
+
+jobs:
+    publish-shared-lib:
+        runs-on: ubuntu-latest
+        outputs:
+            version: ${{ steps.prepare.outputs.version }}
+        steps:
+            - name: Access repository
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ inputs.ref != '' && inputs.ref || github.ref }}
+                  fetch-depth: ${{ inputs.fetch-depth }}
+
+            - name: Setup Node.js for GitHub Packages
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ inputs.node-version }}
+                  registry-url: https://npm.pkg.github.com
+                  scope: '@sofie-automation'
+
+            - name: Enable Corepack
+              run: corepack enable
+
+            - name: Set Yarn Version
+              run: corepack prepare yarn@${{ inputs.yarn-version }} --activate
+
+            - name: Install dependencies
+              uses: ./.github/actions/yarn-install
+
+            - name: Prepare shared package version
+              id: prepare
+              env:
+                  VERSION: ${{ inputs.version }}
+              run: |
+                  set -euo pipefail
+                  args=(--github-output "$GITHUB_OUTPUT")
+                  if [ -n "$VERSION" ]; then
+                      args+=(--version "$VERSION")
+                  fi
+                  node .github/scripts/prepare-shared-publish.mjs "${args[@]}"
+
+            - name: Build shared package
+              run: yarn --cwd shared build
+
+            - name: Publish to GitHub Packages
+              working-directory: shared
+              run: yarn npm publish --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

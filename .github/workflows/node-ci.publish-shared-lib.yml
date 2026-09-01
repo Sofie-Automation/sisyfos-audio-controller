@@ -1,0 +1,34 @@
+#######################################################################################################################
+#
+#   Shared Lib Publish
+#
+#   Manual workflow_dispatch. Builds and publishes @sofie-automation/sisyfos-audio-controller-shared-lib
+#   to GitHub Packages (npm registry).
+#
+#######################################################################################################################
+name: Publish shared lib
+
+permissions:
+    contents: read
+    packages: write
+
+on:
+    workflow_dispatch:
+        inputs:
+            ref:
+                description: 'Git ref to publish from'
+                required: false
+                type: string
+                default: main
+            version:
+                description: 'Version to publish (defaults to root package.json version)'
+                required: false
+                type: string
+
+jobs:
+    publish-shared-lib:
+        uses: ./.github/workflows/publish-shared-lib.yml
+        secrets: inherit
+        with:
+            ref: ${{ inputs.ref }}
+            version: ${{ inputs.version }}

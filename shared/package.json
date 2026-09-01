@@ -53,7 +53,8 @@
         "watch": "tsc --watch"
     },
     "publishConfig": {
-        "access": "public"
+        "access": "public",
+        "registry": "https://npm.pkg.github.com"
     },
     "devDependencies": {
         "@types/node": "^24",
