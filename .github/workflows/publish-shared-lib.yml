@@ -8,6 +8,19 @@ on:
                 required: false
                 type: string
                 default: ''
+            registry-url:
+                description: 'npm registry URL to publish to'
+                required: true
+                type: string
+            prepare-publish-args:
+                description: 'Optional args for prepare-shared-publish.mjs after build'
+                required: false
+                type: string
+                default: ''
+        secrets:
+            npm-auth-token:
+                description: 'Auth token for the publish registry'
+                required: true
         outputs:
             version:
                 description: 'Published package version'
@@ -15,7 +28,6 @@ on:
 
 permissions:
     contents: read
-    packages: write
 
 jobs:
     publish-shared-lib:
@@ -47,14 +59,21 @@ jobs:
                   node .github/scripts/prepare-shared-publish.mjs "${args[@]}"
 
             - name: Build shared package
-              run: yarn --cwd shared build
+              run: yarn build:shared
 
-            - name: Set publish package name
-              run: node .github/scripts/prepare-shared-publish.mjs --set-publish-name
-
-            - name: Publish to GitHub Packages
-              working-directory: shared
-              run: yarn npm publish --access public
+            - name: Prepare for publish
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  YARN_NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  REGISTRY_URL: ${{ inputs.registry-url }}
+                  PREPARE_PUBLISH_ARGS: ${{ inputs.prepare-publish-args }}
+              run: |
+                  set -euo pipefail
+                  npm pkg set "publishConfig.registry=${REGISTRY_URL}" publishConfig.access=public --prefix shared
+                  if [ -n "$PREPARE_PUBLISH_ARGS" ]; then
+                      node .github/scripts/prepare-shared-publish.mjs "$PREPARE_PUBLISH_ARGS"
+                  fi
+
+            - name: Publish
+              run: yarn --cwd shared npm publish --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token }}
+                  YARN_NPM_AUTH_TOKEN: ${{ secrets.npm-auth-token }}

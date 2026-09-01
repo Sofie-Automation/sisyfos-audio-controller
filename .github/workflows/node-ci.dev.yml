@@ -23,9 +23,6 @@ jobs:
         steps:
             - name: Access repository
               uses: actions/checkout@v4
-              with:
-                  ref: ${{ github.ref }}
-                  fetch-depth: ${{ inputs.fetch-depth }}
 
             - name: Compute image tag
               id: tag

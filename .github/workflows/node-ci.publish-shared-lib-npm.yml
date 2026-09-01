@@ -1,15 +1,15 @@
 #######################################################################################################################
 #
-#   Shared Lib Publish (GitHub Packages)
+#   Shared Lib Publish (npm)
 #
-#   Manual workflow_dispatch. Builds and publishes the shared lib to GitHub Packages.
+#   Manual workflow_dispatch. Builds and publishes @sofie-automation/sisyfos-audio-controller-shared-lib
+#   to the public npm registry. Requires an NPM_TOKEN repository secret with publish access.
 #
 #######################################################################################################################
-name: Publish shared lib (GitHub Packages)
+name: Publish shared lib (npm)
 
 permissions:
     contents: read
-    packages: write
 
 on:
     workflow_dispatch:
@@ -24,7 +24,6 @@ jobs:
         uses: ./.github/workflows/publish-shared-lib.yml
         with:
             version: ${{ inputs.version }}
-            registry-url: https://npm.pkg.github.com
-            prepare-publish-args: --set-publish-name
+            registry-url: https://registry.npmjs.org
         secrets:
-            npm-auth-token: ${{ secrets.GITHUB_TOKEN }}
+            npm-auth-token: ${{ secrets.NPM_TOKEN }}
