@@ -49,6 +49,9 @@ jobs:
             - name: Build shared package
               run: yarn --cwd shared build
 
+            - name: Set publish package name
+              run: node .github/scripts/prepare-shared-publish.mjs --set-publish-name
+
             - name: Publish to GitHub Packages
               working-directory: shared
               run: yarn npm publish --access public

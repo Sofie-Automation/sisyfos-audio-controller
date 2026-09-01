@@ -7,6 +7,7 @@ const ROOT = process.cwd()
 const SHARED_PACKAGE_JSON = path.join(ROOT, 'shared/package.json')
 const ROOT_PACKAGE_JSON = path.join(ROOT, 'package.json')
 
+const SET_PUBLISH_NAME = process.argv.includes('--set-publish-name')
 const versionArgIndex = process.argv.indexOf('--version')
 const VERSION_ARG =
     versionArgIndex >= 0 ? process.argv[versionArgIndex + 1] : null
@@ -56,24 +57,46 @@ function resolvePublishName(sharedPackage, scope) {
     return `@${scope}/${packageName}`
 }
 
-function main() {
+function setVersion() {
     const version = resolveVersion()
+    const sharedPackage = readJson(SHARED_PACKAGE_JSON)
+
+    sharedPackage.version = version
+    writeJson(SHARED_PACKAGE_JSON, sharedPackage)
+
+    process.stdout.write(
+        `Prepared ${sharedPackage.name}@${version} for build\n`
+    )
+
+    if (GITHUB_OUTPUT) {
+        fs.appendFileSync(GITHUB_OUTPUT, `version=${version}\n`)
+    }
+}
+
+function setPublishName() {
     const scope = resolveScope()
     const sharedPackage = readJson(SHARED_PACKAGE_JSON)
     const publishName = resolvePublishName(sharedPackage, scope)
 
-    sharedPackage.version = version
     sharedPackage.name = publishName
     writeJson(SHARED_PACKAGE_JSON, sharedPackage)
 
-    process.stdout.write(`Prepared ${publishName}@${version} for publish\n`)
+    process.stdout.write(
+        `Prepared publish name ${publishName}@${sharedPackage.version}\n`
+    )
 
     if (GITHUB_OUTPUT) {
-        fs.appendFileSync(
-            GITHUB_OUTPUT,
-            `version=${version}\nname=${publishName}\n`
-        )
+        fs.appendFileSync(GITHUB_OUTPUT, `name=${publishName}\n`)
     }
+}
+
+function main() {
+    if (SET_PUBLISH_NAME) {
+        setPublishName()
+        return
+    }
+
+    setVersion()
 }
 
 main()
