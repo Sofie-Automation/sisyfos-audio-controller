@@ -26,10 +26,6 @@ on:
                 description: 'Published package version'
                 value: ${{ jobs.publish-shared-lib.outputs.version }}
 
-permissions:
-    contents: read
-    packages: write
-
 jobs:
     publish-shared-lib:
         runs-on: ubuntu-latest

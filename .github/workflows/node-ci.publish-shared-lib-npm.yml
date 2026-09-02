@@ -21,6 +21,8 @@ on:
 
 jobs:
     publish-shared-lib:
+        permissions:
+            contents: read
         uses: ./.github/workflows/publish-shared-lib.yml
         with:
             version: ${{ inputs.version }}
