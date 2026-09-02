@@ -1,3 +1,9 @@
+## [26.09.0] (2026-09-02)
+
+### Other Changes
+
+- No conventional commits since last release
+
 ## [26.08.0] (2026-08-27)
 
 ### Other Changes
