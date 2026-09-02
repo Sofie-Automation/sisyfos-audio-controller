@@ -38,6 +38,21 @@ function resolveVersion() {
     return rootPackage.version
 }
 
+function toSemver(version) {
+    const [core, ...rest] = version.split('-')
+    const parts = core.split('.')
+    if (parts.length < 3) {
+        return version
+    }
+
+    const normalized = parts
+        .slice(0, 3)
+        .map((part) => String(Number.parseInt(part, 10)))
+        .join('.')
+
+    return rest.length ? `${normalized}-${rest.join('-')}` : normalized
+}
+
 function resolveScope() {
     const scope = SCOPE_ARG || process.env.GITHUB_REPOSITORY_OWNER
     if (!scope) {
@@ -58,7 +73,7 @@ function resolvePublishName(sharedPackage, scope) {
 }
 
 function setVersion() {
-    const version = resolveVersion()
+    const version = toSemver(resolveVersion())
     const sharedPackage = readJson(SHARED_PACKAGE_JSON)
 
     sharedPackage.version = version
