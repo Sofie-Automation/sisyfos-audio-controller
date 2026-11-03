@@ -110,3 +110,22 @@ $defs:
       serverOnline:
         type: boolean
         description: Connection state
+  SettingsReplacement:
+    title: SettingsReplacement
+    description: A full settings file. Unknown fields are kept.
+    allOf:
+      - $ref: '#/$defs/Settings'
+      - type: object
+        required:
+          - numberOfMixers
+          - mixers
+          - numberOfFaders
+          - fadeTime
+          - voFadeTime
+        properties:
+          mixers:
+            minItems: 1
+            items:
+              required:
+                - mixerProtocol
+                - numberOfChannelsInType

@@ -1,0 +1,16 @@
+components:
+  parameters:
+    restart:
+      name: restart
+      in: query
+      required: false
+      description: >-
+        Restart the server after saving so the new settings take effect.
+        The server replies first, then exits. It only comes back if a process
+        supervisor restarts it, such as a Docker restart policy or pm2; without
+        one the server stays down. Pass false to queue several changes and
+        restart later. Queued changes are saved but not applied, and GET
+        /settings keeps returning the running settings until the restart.
+      schema:
+        type: boolean
+        default: true

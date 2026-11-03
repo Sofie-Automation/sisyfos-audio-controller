@@ -2,7 +2,7 @@ get:
   operationId: getSettings
   tags: [settings]
   summary: Get the current settings
-  description: Returns the live settings held in server state, including non-persistent UI and connection fields.
+  description: Returns the live settings held in server state, including non-persistent UI and connection fields. Mixer device tokens are left out.
   responses:
     '200':
       description: The current settings
@@ -10,5 +10,64 @@ get:
         application/json:
           schema:
             $ref: '../../components/settings/settings/settings.yaml#/$defs/Settings'
+    '500':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/internalError'
+put:
+  operationId: putSettings
+  tags: [settings]
+  summary: Replace the settings
+  description: >-
+    Replaces the whole settings file (up to 1 MB of JSON). A mixer sent
+    without deviceToken keeps the current token at the same index.
+    sisyfosVersion always keeps its current value. customPages is ignored;
+    use /pages instead.
+  parameters:
+    - $ref: '../../components/settings/parameters/settingsParameters.yaml#/components/parameters/restart'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/settings/settings/settings.yaml#/$defs/SettingsReplacement'
+  responses:
+    '200':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/ok'
+    '400':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/badRequest'
+    '500':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/internalError'
+patch:
+  operationId: patchSettings
+  tags: [settings]
+  summary: Update part of the settings
+  description: >-
+    Deep-merges the sent JSON into the current settings, then validates the
+    result. Objects merge key by key. mixers merges element by element, so
+    send {} for a mixer to leave it unchanged; mixers beyond the sent array
+    are removed. Every other array is replaced whole. sisyfosVersion always
+    keeps its current value. customPages is ignored; use /pages instead.
+  parameters:
+    - $ref: '../../components/settings/parameters/settingsParameters.yaml#/components/parameters/restart'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/settings/settings/settings.yaml#/$defs/Settings'
+        examples:
+          fadeTimes:
+            value:
+              fadeTime: 200
+              voFadeTime: 400
+          secondMixerIp:
+            value:
+              mixers:
+                - {}
+                - deviceIp: 192.168.1.20
+  responses:
+    '200':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/ok'
+    '400':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/badRequest'
     '500':
       $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/internalError'

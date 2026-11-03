@@ -318,7 +318,8 @@ paths:
         - settings
       summary: Get the current settings
       description: Returns the live settings held in server state, including
-        non-persistent UI and connection fields.
+        non-persistent UI and connection fields. Mixer device tokens are left
+        out.
       responses:
         "200":
           description: The current settings
@@ -549,6 +550,595 @@ paths:
                   serverOnline:
                     type: boolean
                     description: Connection state
+        "500":
+          description: Unexpected server error
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Internal server error
+    put:
+      operationId: putSettings
+      tags:
+        - settings
+      summary: Replace the settings
+      description: Replaces the whole settings file (up to 1 MB of JSON). A mixer sent
+        without deviceToken keeps the current token at the same index.
+        sisyfosVersion always keeps its current value. customPages is ignored;
+        use /pages instead.
+      parameters:
+        - name: restart
+          in: query
+          required: false
+          description: Restart the server after saving so the new settings take effect.
+            The server replies first, then exits. It only comes back if a
+            process supervisor restarts it, such as a Docker restart policy or
+            pm2; without one the server stays down. Pass false to queue several
+            changes and restart later. Queued changes are saved but not applied,
+            and GET /settings keeps returning the running settings until the
+            restart.
+          schema:
+            type: boolean
+            default: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              title: SettingsReplacement
+              description: A full settings file. Unknown fields are kept.
+              allOf:
+                - type: object
+                  title: Settings
+                  description: Server settings, as held in state.settings[0]
+                  properties:
+                    sisyfosVersion:
+                      type: string
+                    showSettings:
+                      type: boolean
+                      description: UI state (non-persistent)
+                    showPagesSetup:
+                      type: boolean
+                    showLabelSettings:
+                      type: boolean
+                    showChanStrip:
+                      type: integer
+                    showChanStripFull:
+                      type: integer
+                    showChanLayoutSettings:
+                      type: integer
+                    showOptions:
+                      description: Channel index, or false when hidden
+                      oneOf:
+                        - type: integer
+                        - type: boolean
+                          enum:
+                            - false
+                    showMonitorOptions:
+                      type: integer
+                    showStorage:
+                      type: boolean
+                    currentPage:
+                      type: object
+                      properties:
+                        type:
+                          type: integer
+                          description: 0 = All, 1 = CustomPage
+                          enum:
+                            - 0
+                            - 1
+                        start:
+                          type: integer
+                        id:
+                          type: string
+                    customPages:
+                      type: array
+                      title: CustomPages
+                      description: All custom pages, in display order
+                      items:
+                        type: object
+                        title: CustomPage
+                        description: A user-defined page of faders
+                        required:
+                          - id
+                          - label
+                          - faders
+                        properties:
+                          id:
+                            type: string
+                            description: Unique identifier for the page
+                          label:
+                            type: string
+                            description: Name shown on the page button
+                          faders:
+                            type: array
+                            description: Zero-based indexes of the faders shown on the page, in display
+                              order
+                            items:
+                              type: integer
+                              minimum: 0
+                        example:
+                          id: page1
+                          label: Studio A
+                          faders:
+                            - 0
+                            - 1
+                            - 2
+                            - 5
+                      example:
+                        - id: page1
+                          label: Studio A
+                          faders:
+                            - 0
+                            - 1
+                            - 2
+                            - 5
+                        - id: page2
+                          label: Studio B
+                          faders:
+                            - 3
+                            - 4
+                    numberOfMixers:
+                      type: integer
+                    mixers:
+                      type: array
+                      items:
+                        type: object
+                        title: MixerSettings
+                        description: Connection and layout settings for one mixer
+                        properties:
+                          mixerProtocol:
+                            type: string
+                            description: Mixer protocol preset key
+                          deviceIp:
+                            type: string
+                          devicePort:
+                            type: integer
+                          deviceUrl:
+                            type: string
+                          deviceToken:
+                            type: string
+                            writeOnly: true
+                            description: Never returned in responses
+                          mixerId:
+                            type: string
+                          protocolLatency:
+                            type: number
+                            description: Time before accepting channel feedback again after sending, for
+                              protocols with latency
+                          mixerMidiInputPort:
+                            type: string
+                          mixerMidiOutputPort:
+                            type: string
+                          numberOfChannelsInType:
+                            type: array
+                            items:
+                              type: integer
+                          numberOfAux:
+                            type: integer
+                          nextSendAux:
+                            type: integer
+                          mixerOnline:
+                            type: boolean
+                          localIp:
+                            type: string
+                          localOscPort:
+                            type: integer
+                          channelMatrixPrefix:
+                            type: string
+                            description: Channel prefix for vMix mixers (e.g. "EXT")
+                    enableRemoteFader:
+                      type: boolean
+                    remoteFaderMidiInputPort:
+                      type: string
+                    remoteFaderMidiOutputPort:
+                      type: string
+                    numberOfFaders:
+                      type: integer
+                    fadeTime:
+                      type: number
+                      description: Default fade time for PGM on/off
+                    voFadeTime:
+                      type: number
+                      description: Default fade time for VO on/off
+                    voLevel:
+                      type: number
+                      description: Relative level of PGM during VO, in %
+                    autoResetLevel:
+                      type: number
+                      description: Reset level before PGM on if lower than this, in %
+                    firstInRowButton:
+                      type: integer
+                      description: 0 = NONE, 1 = AUTO_MANUAL
+                      enum:
+                        - 0
+                        - 1
+                    secondInRowButton:
+                      type: integer
+                      description: 0 = NONE, 1 = MUTE
+                      enum:
+                        - 0
+                        - 1
+                    thirdInRowButton:
+                      type: integer
+                      description: 0 = NONE, 1 = AMIX, 2 = LINK_CHANNELS, 3 = CHANNEL_OPTIONS
+                      enum:
+                        - 0
+                        - 1
+                        - 2
+                        - 3
+                    secondOutRowButton:
+                      type: integer
+                      description: 0 = NONE, 1 = VO, 2 = SLOW_FADE
+                      enum:
+                        - 0
+                        - 1
+                        - 2
+                    thirdOutRowButton:
+                      type: integer
+                      description: 0 = NONE, 1 = PST, 2 = PFL, 3 = CUE_NEXT
+                      enum:
+                        - 0
+                        - 1
+                        - 2
+                        - 3
+                    labelControlsIgnoreAutomation:
+                      type: boolean
+                    labelIgnorePrefix:
+                      type: string
+                    pgmOnFollowsMixer:
+                      type: integer
+                      description: 0 = None, 1 = Global, 2 = Manual, 3 = Auto
+                      enum:
+                        - 0
+                        - 1
+                        - 2
+                        - 3
+                    offtubeMode:
+                      type: boolean
+                    enablePages:
+                      type: boolean
+                    numberOfCustomPages:
+                      type: integer
+                    chanStripFollowsPFL:
+                      type: boolean
+                    labelType:
+                      type: string
+                      enum:
+                        - automatic
+                        - user
+                        - automation
+                        - channel
+                    serverOnline:
+                      type: boolean
+                      description: Connection state
+                - type: object
+                  required:
+                    - numberOfMixers
+                    - mixers
+                    - numberOfFaders
+                    - fadeTime
+                    - voFadeTime
+                  properties:
+                    mixers:
+                      minItems: 1
+                      items:
+                        required:
+                          - mixerProtocol
+                          - numberOfChannelsInType
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: OK
+        "400":
+          description: The request was invalid
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Invalid pages format
+        "500":
+          description: Unexpected server error
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Internal server error
+    patch:
+      operationId: patchSettings
+      tags:
+        - settings
+      summary: Update part of the settings
+      description: Deep-merges the sent JSON into the current settings, then validates
+        the result. Objects merge key by key. mixers merges element by element,
+        so send {} for a mixer to leave it unchanged; mixers beyond the sent
+        array are removed. Every other array is replaced whole. sisyfosVersion
+        always keeps its current value. customPages is ignored; use /pages
+        instead.
+      parameters:
+        - name: restart
+          in: query
+          required: false
+          description: Restart the server after saving so the new settings take effect.
+            The server replies first, then exits. It only comes back if a
+            process supervisor restarts it, such as a Docker restart policy or
+            pm2; without one the server stays down. Pass false to queue several
+            changes and restart later. Queued changes are saved but not applied,
+            and GET /settings keeps returning the running settings until the
+            restart.
+          schema:
+            type: boolean
+            default: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Settings
+              description: Server settings, as held in state.settings[0]
+              properties:
+                sisyfosVersion:
+                  type: string
+                showSettings:
+                  type: boolean
+                  description: UI state (non-persistent)
+                showPagesSetup:
+                  type: boolean
+                showLabelSettings:
+                  type: boolean
+                showChanStrip:
+                  type: integer
+                showChanStripFull:
+                  type: integer
+                showChanLayoutSettings:
+                  type: integer
+                showOptions:
+                  description: Channel index, or false when hidden
+                  oneOf:
+                    - type: integer
+                    - type: boolean
+                      enum:
+                        - false
+                showMonitorOptions:
+                  type: integer
+                showStorage:
+                  type: boolean
+                currentPage:
+                  type: object
+                  properties:
+                    type:
+                      type: integer
+                      description: 0 = All, 1 = CustomPage
+                      enum:
+                        - 0
+                        - 1
+                    start:
+                      type: integer
+                    id:
+                      type: string
+                customPages:
+                  type: array
+                  title: CustomPages
+                  description: All custom pages, in display order
+                  items:
+                    type: object
+                    title: CustomPage
+                    description: A user-defined page of faders
+                    required:
+                      - id
+                      - label
+                      - faders
+                    properties:
+                      id:
+                        type: string
+                        description: Unique identifier for the page
+                      label:
+                        type: string
+                        description: Name shown on the page button
+                      faders:
+                        type: array
+                        description: Zero-based indexes of the faders shown on the page, in display
+                          order
+                        items:
+                          type: integer
+                          minimum: 0
+                    example:
+                      id: page1
+                      label: Studio A
+                      faders:
+                        - 0
+                        - 1
+                        - 2
+                        - 5
+                  example:
+                    - id: page1
+                      label: Studio A
+                      faders:
+                        - 0
+                        - 1
+                        - 2
+                        - 5
+                    - id: page2
+                      label: Studio B
+                      faders:
+                        - 3
+                        - 4
+                numberOfMixers:
+                  type: integer
+                mixers:
+                  type: array
+                  items:
+                    type: object
+                    title: MixerSettings
+                    description: Connection and layout settings for one mixer
+                    properties:
+                      mixerProtocol:
+                        type: string
+                        description: Mixer protocol preset key
+                      deviceIp:
+                        type: string
+                      devicePort:
+                        type: integer
+                      deviceUrl:
+                        type: string
+                      deviceToken:
+                        type: string
+                        writeOnly: true
+                        description: Never returned in responses
+                      mixerId:
+                        type: string
+                      protocolLatency:
+                        type: number
+                        description: Time before accepting channel feedback again after sending, for
+                          protocols with latency
+                      mixerMidiInputPort:
+                        type: string
+                      mixerMidiOutputPort:
+                        type: string
+                      numberOfChannelsInType:
+                        type: array
+                        items:
+                          type: integer
+                      numberOfAux:
+                        type: integer
+                      nextSendAux:
+                        type: integer
+                      mixerOnline:
+                        type: boolean
+                      localIp:
+                        type: string
+                      localOscPort:
+                        type: integer
+                      channelMatrixPrefix:
+                        type: string
+                        description: Channel prefix for vMix mixers (e.g. "EXT")
+                enableRemoteFader:
+                  type: boolean
+                remoteFaderMidiInputPort:
+                  type: string
+                remoteFaderMidiOutputPort:
+                  type: string
+                numberOfFaders:
+                  type: integer
+                fadeTime:
+                  type: number
+                  description: Default fade time for PGM on/off
+                voFadeTime:
+                  type: number
+                  description: Default fade time for VO on/off
+                voLevel:
+                  type: number
+                  description: Relative level of PGM during VO, in %
+                autoResetLevel:
+                  type: number
+                  description: Reset level before PGM on if lower than this, in %
+                firstInRowButton:
+                  type: integer
+                  description: 0 = NONE, 1 = AUTO_MANUAL
+                  enum:
+                    - 0
+                    - 1
+                secondInRowButton:
+                  type: integer
+                  description: 0 = NONE, 1 = MUTE
+                  enum:
+                    - 0
+                    - 1
+                thirdInRowButton:
+                  type: integer
+                  description: 0 = NONE, 1 = AMIX, 2 = LINK_CHANNELS, 3 = CHANNEL_OPTIONS
+                  enum:
+                    - 0
+                    - 1
+                    - 2
+                    - 3
+                secondOutRowButton:
+                  type: integer
+                  description: 0 = NONE, 1 = VO, 2 = SLOW_FADE
+                  enum:
+                    - 0
+                    - 1
+                    - 2
+                thirdOutRowButton:
+                  type: integer
+                  description: 0 = NONE, 1 = PST, 2 = PFL, 3 = CUE_NEXT
+                  enum:
+                    - 0
+                    - 1
+                    - 2
+                    - 3
+                labelControlsIgnoreAutomation:
+                  type: boolean
+                labelIgnorePrefix:
+                  type: string
+                pgmOnFollowsMixer:
+                  type: integer
+                  description: 0 = None, 1 = Global, 2 = Manual, 3 = Auto
+                  enum:
+                    - 0
+                    - 1
+                    - 2
+                    - 3
+                offtubeMode:
+                  type: boolean
+                enablePages:
+                  type: boolean
+                numberOfCustomPages:
+                  type: integer
+                chanStripFollowsPFL:
+                  type: boolean
+                labelType:
+                  type: string
+                  enum:
+                    - automatic
+                    - user
+                    - automation
+                    - channel
+                serverOnline:
+                  type: boolean
+                  description: Connection state
+            examples:
+              fadeTimes:
+                value:
+                  fadeTime: 200
+                  voFadeTime: 400
+              secondMixerIp:
+                value:
+                  mixers:
+                    - {}
+                    - deviceIp: 192.168.1.20
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: OK
+        "400":
+          description: The request was invalid
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Invalid pages format
         "500":
           description: Unexpected server error
           content:
