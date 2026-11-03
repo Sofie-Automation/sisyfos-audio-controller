@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { logger } from './logger'
-import { Settings } from '../../../shared/src/reducers/settingsReducer'
+import { Settings } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { getSnapShotList, ShotStorage, STORAGE_FOLDER } from './SettingsStorage'
 
 const version = process.env.npm_package_version
@@ -51,7 +51,7 @@ const migrate45to47 = (currentSettings: Settings): Settings => {
                 delete stateFromShot.channelState.channel
             }
             let migratedShot: ShotStorage = stateFromShot
-            
+
             fs.writeFileSync(
                 path.join(STORAGE_FOLDER, fileName),
                 JSON.stringify(migratedShot),

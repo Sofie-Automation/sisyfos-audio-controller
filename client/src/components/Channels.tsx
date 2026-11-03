@@ -5,25 +5,25 @@ import ClassNames from 'classnames'
 import Channel from './Channel'
 import '../assets/css/Channels.css'
 import { Store, UnknownAction } from 'redux'
-import { SettingsActionTypes } from '../../../shared/src/actions/settingsActions'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import ChannelRouteSettings from './ChannelRouteSettings'
 import ChanStrip from './ChanStrip'
 import ChannelMonitorOptions from './ChannelMonitorOptions'
-import { Fader } from '../../../shared/src/reducers/fadersReducer'
-import { Channels as IChannels } from '../../../shared/src/reducers/channelsReducer'
+import { Fader } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { Channels as IChannels } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     CustomPages,
     MixerSettings,
     Settings,
     PageType,
     ThirdOutRowButtonType,
-} from '../../../shared/src/reducers/settingsReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     SOCKET_NEXT_MIX,
     SOCKET_CLEAR_PST,
     SOCKET_RESTART_SERVER,
     SOCKET_TOGGLE_ALL_MANUAL,
-} from '../../../shared/src/constants/SOCKET_IO_DISPATCHERS'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import ChanStripFull from './ChanStripFull'
 
 interface ChannelsProps {

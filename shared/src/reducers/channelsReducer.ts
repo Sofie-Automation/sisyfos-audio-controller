@@ -1,4 +1,3 @@
-import { logger } from '../../../server/src/utils/logger'
 import { ChannelActionTypes } from '../actions/channelActions'
 import { RootAction, RootState } from './indexReducer'
 

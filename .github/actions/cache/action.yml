@@ -1,31 +1,37 @@
-name: "Cache dependencies"
-description: "Cache dependencies"
+name: 'Cache dependencies'
+description: 'Cache dependencies'
+inputs:
+    clean-cache:
+        description: 'Clean Yarn state before restoring cache'
+        required: false
+        default: 'false'
 runs:
-  using: "composite"
-  steps:
-    - name: Clean Yarn State
-      shell: bash
-      run: |
-        rm -rf .yarn/cache
-        rm -rf .yarn/install-state.gz
-        yarn cache clean --all
-        
-    - name: Get Yarn cache directory
-      shell: bash
-      id: yarn-cache-dir
-      run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+    using: 'composite'
+    steps:
+        - name: Clean Yarn State
+          if: inputs.clean-cache == 'true'
+          shell: bash
+          run: |
+              rm -rf .yarn/cache
+              rm -rf .yarn/install-state.gz
+              yarn cache clean --all
 
-    - name: Cache Yarn dependencies
-      uses: actions/cache@v4
-      with:
-        path: |
-          ${{ steps.yarn-cache-dir.outputs.dir }}
-          .yarn/cache
-          .yarn/patches
-          .yarn/plugins
-          .yarn/releases
-          .yarn/sdks
-          .yarn/versions
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
+        - name: Get Yarn cache directory
+          shell: bash
+          id: yarn-cache-dir
+          run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+        - name: Cache Yarn dependencies
+          uses: actions/cache@v4
+          with:
+              path: |
+                  ${{ steps.yarn-cache-dir.outputs.dir }}
+                  .yarn/cache
+                  .yarn/patches
+                  .yarn/plugins
+                  .yarn/releases
+                  .yarn/sdks
+                  .yarn/versions
+              key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+              restore-keys: |
+                  ${{ runner.os }}-yarn-

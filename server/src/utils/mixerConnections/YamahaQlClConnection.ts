@@ -7,23 +7,17 @@ import { remoteConnections } from '../../mainClasses'
 import {
     FxParam,
     MixerProtocol,
-} from '../../../../shared/src/constants/MixerProtocolInterface'
-import {
-    ChannelActionTypes,
-} from '../../../../shared/src/actions/channelActions'
-import {
-    FaderActionTypes,
-} from '../../../../shared/src/actions/faderActions'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { logger } from '../logger'
-import {
-    SettingsActionTypes,
-} from '../../../../shared/src/actions/settingsActions'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { sendVuLevel } from '../vuServer'
-import { VuType } from '../../../../shared/src/utils/vu-server-types'
+import { VuType } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     ChannelReference,
     Fader,
-} from '../../../../shared/src/reducers/fadersReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { MixerConnection } from '.'
 
 export class QlClMixerConnection implements MixerConnection {

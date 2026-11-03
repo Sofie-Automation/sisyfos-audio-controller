@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDom from 'react-dom'
 import App from './src/components/App'
 
-import { MixerProtocol } from '../shared/src/constants/MixerProtocolInterface'
+import { MixerProtocol } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import ContextProvider from './src/components/ContextProvider'
 declare global {
     interface Window {

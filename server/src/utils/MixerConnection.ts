@@ -2,37 +2,19 @@ import { store, state } from '../reducers/store'
 import { logger } from './logger'
 import { remoteConnections } from '../mainClasses'
 
-//Utils:
-import { MixerProtocolPresets } from '../../../shared/src/constants/MixerProtocolPresets'
 import {
-    MixerProtocol,
     MixerProtocolGeneric,
-    CasparCGMixerGeometry,
     FxParam,
     MixerConnectionTypes,
-    VMixMixerProtocol,
-} from '../../../shared/src/constants/MixerProtocolInterface'
-import { OscMixerConnection } from './mixerConnections/OscMixerConnection'
-import { VMixMixerConnection } from './mixerConnections/VMixMixerConnection'
-import { MidiMixerConnection } from './mixerConnections/MidiMixerConnection'
-import { QlClMixerConnection } from './mixerConnections/YamahaQlClConnection'
-import { SSLMixerConnection } from './mixerConnections/SSLMixerConnection'
-import { EmberMixerConnection } from './mixerConnections/EmberMixerConnection'
-import { LawoRubyMixerConnection } from './mixerConnections/LawoRubyConnection'
-import { StuderMixerConnection } from './mixerConnections/StuderMixerConnection'
-import { StuderVistaMixerConnection } from './mixerConnections/StuderVistaMixerConnection'
-import { CasparCGConnection } from './mixerConnections/CasparCGConnection'
-import { ChMixerConnection } from '../../../shared/src/reducers/channelsReducer'
-import { ChannelActionTypes } from '../../../shared/src/actions/channelActions'
-import { FaderActionTypes } from '../../../shared/src/actions/faderActions'
-import { AtemMixerConnection } from './mixerConnections/AtemConnection'
-
-import { ChannelReference } from '../../../shared/src/reducers/fadersReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChMixerConnection } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChannelReference } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { sendChLevelsToOuputServer } from './outputLevelServer'
 import { MixerConnection } from './mixerConnections'
-import { SecondOutRowButtonType } from '../../../shared/src/reducers/settingsReducer'
-import { DHDMixerConnection } from './mixerConnections/DHDConnection'
-import { LawoMC2Connection } from './mixerConnections/LawoMC2Connection'
+import { SecondOutRowButtonType } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { mixerRegistry } from '../plugins/MixerRegistry'
 
 export class MixerGenericConnection {
     mixerProtocol: MixerProtocolGeneric[]
@@ -49,107 +31,15 @@ export class MixerGenericConnection {
         this.currentOutputLevel = []
         // Get mixer protocol
         state.settings[0].mixers.forEach((none: any, index: number) => {
-            this.mixerProtocol.push(
-                MixerProtocolPresets[
-                    state.settings[0].mixers[index].mixerProtocol
-                ] || MixerProtocolPresets.sslSystemT
-            )
-            switch (this.mixerProtocol[index].protocol) {
-                case MixerConnectionTypes.OSC: {
-                    this.mixerConnection[index] = new OscMixerConnection(
-                        this.mixerProtocol[index] as MixerProtocol,
-                        index
-                    )
-                    break
-                }
-                case MixerConnectionTypes.YamahaQlCl: {
-                    this.mixerConnection[index] = new QlClMixerConnection(
-                        this.mixerProtocol[index] as MixerProtocol,
-                        index
-                    )
-                    break
-                }
-                case MixerConnectionTypes.GenericMidi: {
-                    this.mixerConnection[index] = new MidiMixerConnection(
-                        this.mixerProtocol[index] as MixerProtocol,
-                        index
-                    )
-                    break
-                }
-                case MixerConnectionTypes.CasparCG: {
-                    this.mixerConnection[index] = new CasparCGConnection(
-                        this.mixerProtocol[index] as CasparCGMixerGeometry,
-                        index
-                    )
-                    break
-                }
-                case MixerConnectionTypes.EMBER: {
-                    this.mixerConnection[index] = new EmberMixerConnection(
-                        this.mixerProtocol[index] as MixerProtocol,
-                        index
-                    )
-                    break
-                }
-                case MixerConnectionTypes.LawoMC2: {
-                    this.mixerConnection[index] = new LawoMC2Connection(
-                        this.mixerProtocol[index] as MixerProtocol,
-                        index
-                    )
-                    break
-                }
-                case MixerConnectionTypes.LawoRuby: {
-                    this.mixerConnection[index] = new LawoRubyMixerConnection(
-                        this.mixerProtocol[index] as MixerProtocol,
-                        index
-                    )
-                    break
-                }
-                case MixerConnectionTypes.Studer: {
-                    this.mixerConnection[index] = new StuderMixerConnection(
-                        this.mixerProtocol[index] as MixerProtocol,
-                        index
-                    )
-                    break
-                }
-                case MixerConnectionTypes.StuderVista: {
-                    this.mixerConnection[index] =
-                        new StuderVistaMixerConnection(
-                            this.mixerProtocol[index] as MixerProtocol,
-                            index
-                        )
-                    break
-                }
-                case MixerConnectionTypes.SSLSystemT: {
-                    this.mixerConnection[index] = new SSLMixerConnection(
-                        this.mixerProtocol[index] as MixerProtocol,
-                        index
-                    )
-                    break
-                }
-                case MixerConnectionTypes.vMix: {
-                    this.mixerConnection[index] = new VMixMixerConnection(
-                        this.mixerProtocol[index] as VMixMixerProtocol,
-                        index
-                    )
-                    break
-                }
-                case MixerConnectionTypes.Atem: {
-                    this.mixerConnection[index] = new AtemMixerConnection(
-                        this.mixerProtocol[index],
-                        index
-                    )
-                    break
-                }
-                case MixerConnectionTypes.DHD: {
-                    this.mixerConnection[index] = new DHDMixerConnection(
-                        this.mixerProtocol[index],
-                        index
-                    )
-                    break
-                }
-                default: {
-                    logger.error("Mixer protocol doesn't exist")
-                }
+            const presetKey = state.settings[0].mixers[index].mixerProtocol
+            this.mixerProtocol.push(mixerRegistry.getProtocol(presetKey))
+            const connection = mixerRegistry.createConnection(presetKey, index)
+            if (connection) {
+                this.mixerConnection[index] = connection
+            } else {
+                logger.error(
+                    `Failed to create mixer connection for preset "${presetKey}"`
+                )
             }
         })
 
@@ -369,8 +259,8 @@ export class MixerGenericConnection {
         state.faders[0].fader[faderIndex].assignedChannels?.forEach(
             (assignedChannel: ChannelReference) => {
                 this.mixerConnection[assignedChannel.mixerIndex].updateFx(
-                    fxParam,
                     assignedChannel.channelIndex,
+                    fxParam,
                     level
                 )
             }

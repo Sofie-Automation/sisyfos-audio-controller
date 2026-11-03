@@ -2,7 +2,7 @@ import {
     MixerProtocol,
     emptyMixerMessage,
     VuLabelConversionType,
-    MixerConnectionTypes
+    MixerConnectionTypes,
 } from '../MixerProtocolInterface'
 
 export const LawoRuby: MixerProtocol = {

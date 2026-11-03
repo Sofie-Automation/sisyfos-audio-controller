@@ -14,7 +14,7 @@
     z-index: 2;
 }
 
-.settings-header{
+.settings-header {
     margin-top: 20px;
     margin-bottom: 20px;
     color: white;
@@ -23,7 +23,6 @@
     border-color: black;
     border-style: solid;
 }
-
 
 .settings-items-body {
     margin-top: 10px;
@@ -38,14 +37,14 @@
     line-height: 1.8em;
 }
 
-
 .settings-show-channel-selection {
     white-space: nowrap;
     margin: 5px;
     color: rgb(255, 255, 255);
 }
 
-input[type=text], select {
+input[type='text'],
+select {
     text-align: right;
     margin: 5px;
     font-size: 1.1em;
@@ -111,5 +110,3 @@ select option {
     border-width: 0;
     outline: 0;
 }
-
-

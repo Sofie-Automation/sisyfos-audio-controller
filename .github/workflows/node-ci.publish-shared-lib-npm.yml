@@ -1,0 +1,33 @@
+#######################################################################################################################
+#
+#   Shared Lib Publish (npm)
+#
+#   Manual workflow_dispatch. Builds and publishes the shared lib to the public npm
+#   registry under @<repo-owner>/sisyfos-audio-controller-shared-lib.
+#   Requires an NPM_TOKEN repository secret with publish access.
+#
+#######################################################################################################################
+name: Publish shared lib (npm)
+
+permissions:
+    contents: read
+
+on:
+    workflow_dispatch:
+        inputs:
+            version:
+                description: 'Version to publish (defaults to root package.json version)'
+                required: false
+                type: string
+
+jobs:
+    publish-shared-lib:
+        permissions:
+            contents: read
+        uses: ./.github/workflows/publish-shared-lib.yml
+        with:
+            version: ${{ inputs.version }}
+            registry-url: https://registry.npmjs.org
+            prepare-publish-args: --set-publish-name
+        secrets:
+            npm-auth-token: ${{ secrets.NPM_TOKEN }}

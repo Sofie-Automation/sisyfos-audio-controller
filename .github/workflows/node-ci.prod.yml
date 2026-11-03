@@ -1,0 +1,74 @@
+#######################################################################################################################
+#
+#   Prod Release
+#
+#   Manual workflow_dispatch from main. Computes CalVer (YY.MM.N), updates CHANGELOG, tags, builds,
+#   publishes GitHub Release and GHCR container image.
+#
+#######################################################################################################################
+name: Prod Node CI
+
+permissions:
+    contents: write
+    packages: write
+    id-token: write
+
+on:
+    workflow_dispatch:
+
+jobs:
+    cache-dependencies:
+        uses: ./.github/workflows/util-cache-dependencies.yml
+
+    prebuild:
+        needs: cache-dependencies
+        uses: ./.github/workflows/util-prebuild.yml
+
+    test:
+        needs: cache-dependencies
+        uses: ./.github/workflows/util-test.yml
+
+    validate-dependencies:
+        uses: ./.github/workflows/util-validate-dependencies.yml
+
+    calver-release:
+        needs:
+            - prebuild
+            - test
+            - validate-dependencies
+        uses: ./.github/workflows/util-calver-release.yml
+        secrets: inherit
+
+    build:
+        needs: calver-release
+        uses: ./.github/workflows/build.yml
+        secrets: inherit
+
+    build-desktop:
+        needs:
+            - calver-release
+            - build
+        uses: ./.github/workflows/build-desktop.yml
+        secrets: inherit
+
+    publish-github-release:
+        needs:
+            - calver-release
+            - build-desktop
+        uses: ./.github/workflows/publish-github-release.yml
+        secrets: inherit
+        with:
+            version: ${{ needs.calver-release.outputs.version }}
+            tag: ${{ needs.calver-release.outputs.tag }}
+            changelog: ${{ needs.calver-release.outputs.changelog }}
+
+    publish-container-image:
+        needs:
+            - calver-release
+            - build
+        uses: ./.github/workflows/publish-container-image.yml
+        secrets: inherit
+        with:
+            tags: |
+                type=raw,value=${{ needs.calver-release.outputs.tag }}
+                type=raw,value=latest

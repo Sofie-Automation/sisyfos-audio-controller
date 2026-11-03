@@ -12,7 +12,8 @@ const CHANGELOG = path.join(ROOT, 'CHANGELOG.md')
 const COMMIT = process.argv.includes('--commit')
 const TAG = process.argv.includes('--tag')
 const githubOutputArg = process.argv.indexOf('--github-output')
-const GITHUB_OUTPUT = githubOutputArg >= 0 ? process.argv[githubOutputArg + 1] : null
+const GITHUB_OUTPUT =
+    githubOutputArg >= 0 ? process.argv[githubOutputArg + 1] : null
 
 const SECTION_ORDER = [
     ['feat', 'Features'],
@@ -27,7 +28,10 @@ const SECTION_ORDER = [
 ]
 
 function run(command) {
-    return execSync(command, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }).trim()
+    return execSync(command, {
+        encoding: 'utf8',
+        stdio: ['pipe', 'pipe', 'pipe'],
+    }).trim()
 }
 
 function getCalverPrefix() {
@@ -125,7 +129,9 @@ function generateChangelog(version, sinceTag) {
         bucket.lines.push(formatCommitLine(commit))
     }
 
-    const date = new Intl.DateTimeFormat('en-CA', { timeZone: TIMEZONE }).format(new Date())
+    const date = new Intl.DateTimeFormat('en-CA', {
+        timeZone: TIMEZONE,
+    }).format(new Date())
     const sections = []
 
     for (const [, { title, lines }] of grouped) {
@@ -136,7 +142,9 @@ function generateChangelog(version, sinceTag) {
     }
 
     if (sections.length === 0) {
-        sections.push('### Other Changes\n\n- No conventional commits since last release')
+        sections.push(
+            '### Other Changes\n\n- No conventional commits since last release'
+        )
     }
 
     return `## [${version}] (${date})\n\n${sections.join('\n\n')}\n`
@@ -149,7 +157,9 @@ function updatePackageJson(version) {
 }
 
 function prependChangelog(entry) {
-    const existing = fs.existsSync(CHANGELOG) ? fs.readFileSync(CHANGELOG, 'utf8') : ''
+    const existing = fs.existsSync(CHANGELOG)
+        ? fs.readFileSync(CHANGELOG, 'utf8')
+        : ''
     fs.writeFileSync(CHANGELOG, `${entry}\n${existing}`)
 }
 
@@ -183,7 +193,9 @@ function commitAndTag(version, tag) {
     const defaultBranch = getDefaultBranch()
 
     run('git config user.name "github-actions[bot]"')
-    run('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"')
+    run(
+        'git config user.email "41898282+github-actions[bot]@users.noreply.github.com"'
+    )
 
     if (COMMIT) {
         run('git add package.json CHANGELOG.md')

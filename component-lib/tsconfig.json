@@ -27,5 +27,5 @@
     },
     "include": ["../client", "../shared"],
     "exclude": ["../**/node_modules/*", "../**/dist", "../**/*.spec.ts"],
-    "files": ["src/index.tsx"]
+    "files": ["src/index.tsx"],
 }

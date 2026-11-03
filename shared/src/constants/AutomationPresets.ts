@@ -12,7 +12,7 @@ export interface AutomationProtocol {
             mixerMessage: string
             value: string
             type: string
-        }
+        },
     ]
     fromAutomation: {
         CHANNEL_PGM_ON_OFF: string

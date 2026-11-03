@@ -1,6 +1,9 @@
-import { createEnhancedReducer } from '../../shared/src/reducers/indexReducer'
-import { Fader, Faders } from '../../shared/src/reducers/fadersReducer'
-import { FaderActionTypes } from '../../shared/src/actions/faderActions'
+import { createEnhancedReducer } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import {
+    Fader,
+    Faders,
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 import fs from 'fs'
 const parsedSimpleStoreJSON = fs.readFileSync(
@@ -192,9 +195,9 @@ describe('Test redux faderReducers actions', () => {
         }
 
         parsedFullStore = JSON.parse(parsedFullStoreJSON)
-        expect(
-            reducer(newState, { type: FaderActionTypes.CLEAR_PST })
-        ).toEqual(parsedFullStore)
+        expect(reducer(newState, { type: FaderActionTypes.CLEAR_PST })).toEqual(
+            parsedFullStore
+        )
     })
 
     /**

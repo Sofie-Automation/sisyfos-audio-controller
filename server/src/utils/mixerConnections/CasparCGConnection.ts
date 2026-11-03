@@ -11,19 +11,15 @@ import {
     CasparCGChannelLayerPair,
     CasparCGMixerGeometryFile,
     FxParam,
-} from '../../../../shared/src/constants/MixerProtocolInterface'
-import { Channel } from '../../../../shared/src/reducers/channelsReducer'
-import {
-    ChannelActionTypes,
-} from '../../../../shared/src/actions/channelActions'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { Channel } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { logger } from '../logger'
 import { dbToFloat, floatToDB } from './LawoRubyConnection'
-import { Fader } from '../../../../shared/src/reducers/fadersReducer'
+import { Fader } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { sendVuLevel } from '../vuServer'
-import { VuType } from '../../../../shared/src/utils/vu-server-types'
-import {
-    SettingsActionTypes,
-} from '../../../../shared/src/actions/settingsActions'
+import { VuType } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { STORAGE_FOLDER } from '../SettingsStorage'
 import { MixerConnection } from '.'
 
@@ -362,7 +358,10 @@ export class CasparCGConnection implements MixerConnection {
             })
     }
 
-    private setAllLayers = (pairs: CasparCGChannelLayerPair[], value: number) => {
+    private setAllLayers = (
+        pairs: CasparCGChannelLayerPair[],
+        value: number
+    ) => {
         pairs.forEach((i) => {
             this.controlVolume(i.channel, i.layer, value)
         })

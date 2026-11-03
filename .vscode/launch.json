@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "outputCapture": "std",            
+            "outputCapture": "std",
             "name": "Debug Jest Tests",
             "cwd": "${workspaceFolder}",
             "args": [
@@ -24,7 +24,7 @@
                     "--runInBand",
                     "--config",
                     "${workspaceRoot}/jest.config.js"
-                ],
+                ]
             },
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"

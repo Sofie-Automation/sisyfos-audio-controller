@@ -1,0 +1,76 @@
+name: Publish shared lib
+
+on:
+    workflow_call:
+        inputs:
+            version:
+                description: 'Version to publish (defaults to root package.json version)'
+                required: false
+                type: string
+                default: ''
+            registry-url:
+                description: 'npm registry URL to publish to'
+                required: true
+                type: string
+            prepare-publish-args:
+                description: 'Optional args for prepare-shared-publish.mjs after build'
+                required: false
+                type: string
+                default: ''
+        secrets:
+            npm-auth-token:
+                description: 'Auth token for the publish registry'
+                required: true
+        outputs:
+            version:
+                description: 'Published package version'
+                value: ${{ jobs.publish-shared-lib.outputs.version }}
+
+jobs:
+    publish-shared-lib:
+        runs-on: ubuntu-latest
+        outputs:
+            version: ${{ steps.prepare.outputs.version }}
+        steps:
+            - name: Access repository
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.ref }}
+
+            - name: Setup Node.js and Yarn
+              uses: ./.github/actions/setup-node-yarn
+
+            - name: Install dependencies
+              uses: ./.github/actions/yarn-install
+
+            - name: Prepare shared package version
+              id: prepare
+              env:
+                  VERSION: ${{ inputs.version }}
+              run: |
+                  set -euo pipefail
+                  args=(--github-output "$GITHUB_OUTPUT")
+                  if [ -n "$VERSION" ]; then
+                      args+=(--version "$VERSION")
+                  fi
+                  node .github/scripts/prepare-shared-publish.mjs "${args[@]}"
+
+            - name: Build shared package
+              run: yarn build:shared
+
+            - name: Prepare for publish
+              env:
+                  REGISTRY_URL: ${{ inputs.registry-url }}
+                  PREPARE_PUBLISH_ARGS: ${{ inputs.prepare-publish-args }}
+              run: |
+                  set -euo pipefail
+                  npm pkg set "publishConfig.registry=${REGISTRY_URL}" publishConfig.access=public --prefix shared
+                  if [ -n "$PREPARE_PUBLISH_ARGS" ]; then
+                      node .github/scripts/prepare-shared-publish.mjs "$PREPARE_PUBLISH_ARGS"
+                  fi
+
+            - name: Publish
+              run: yarn --cwd shared npm publish --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token }}
+                  YARN_NPM_AUTH_TOKEN: ${{ secrets.npm-auth-token }}

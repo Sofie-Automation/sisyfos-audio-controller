@@ -1,86 +1,85 @@
 {
-	"label": "Sofie CasparCG Example",
-	"fromMixer": {
-		"CHANNEL_VU": [
-			["/channel/1/stage/layer/51/audio/1/pFS", "/channel/1/stage/layer/51/audio/2/pFS"],
-			["/channel/1/stage/layer/52/audio/1/pFS", "/channel/1/stage/layer/52/audio/2/pFS"],
-			["/channel/1/stage/layer/53/audio/1/pFS", "/channel/1/stage/layer/53/audio/2/pFS"],
-			["/channel/1/stage/layer/54/audio/1/pFS", "/channel/1/stage/layer/54/audio/2/pFS"],
-			["/channel/1/stage/layer/55/audio/1/pFS", "/channel/1/stage/layer/55/audio/2/pFS"],
-			["/channel/1/stage/layer/56/audio/1/pFS", "/channel/1/stage/layer/56/audio/2/pFS"]
-		]
-	},
-	"toMixer": {
-		"PFL_AUX_FADER_LEVEL": [
-			[
-				{ "channel": 2, "layer": 51 }
-			],
-			[
-				{ "channel": 2, "layer": 52 }
-			],
-			[
-				{ "channel": 2, "layer": 53 }
-			],
-			[
-				{ "channel": 2, "layer": 54 }
-			],
-			[
-				{ "channel": 2, "layer": 55 }
-			],
-			[
-				{ "channel": 2, "layer": 56 }
-			]
-		],
-		"PGM_CHANNEL_FADER_LEVEL": [
-			[
-				{ "channel": 1, "layer": 51 },
-				{ "channel": 3, "layer": 51 }
-			],
-			[
-				{ "channel": 1, "layer": 52 },
-				{ "channel": 3, "layer": 52 }
-			],
-			[
-				{ "channel": 1, "layer": 53 },
-				{ "channel": 3, "layer": 53 }
-			],
-			[
-				{ "channel": 1, "layer": 54 },
-				{ "channel": 3, "layer": 54 }
-			],
-			[
-				{ "channel": 1, "layer": 55 },
-				{ "channel": 3, "layer": 55 }
-			],
-			[
-				{ "channel": 1, "layer": 56 },
-				{ "channel": 3, "layer": 56 }
-			]
-		]
-	},
-	"channelLabels": [
-		"RM1",
-		"RM2",
-		"RM3",
-		"RM4",
-		"RM5",
-		"MP1"
-	],
-	"sourceOptions": {
-		"sources": [
-			{ "channel": 2, "layer": 51 },
-			{ "channel": 2, "layer": 52 },
-			{ "channel": 2, "layer": 53 },
-			{ "channel": 2, "layer": 54 },
-			{ "channel": 2, "layer": 55 },
-			{ "channel": 2, "layer": 56 }
-		],
-		"options": {
-			"CHANNEL_LAYOUT": {
-				"1L-2R": "8ch2",
-				"1L-1R": "4ch-dleft",
-				"2L-2R": "4ch-dright"
-			}
-		}
-	}
+    "label": "Sofie CasparCG Example",
+    "fromMixer": {
+        "CHANNEL_VU": [
+            [
+                "/channel/1/stage/layer/51/audio/1/pFS",
+                "/channel/1/stage/layer/51/audio/2/pFS"
+            ],
+            [
+                "/channel/1/stage/layer/52/audio/1/pFS",
+                "/channel/1/stage/layer/52/audio/2/pFS"
+            ],
+            [
+                "/channel/1/stage/layer/53/audio/1/pFS",
+                "/channel/1/stage/layer/53/audio/2/pFS"
+            ],
+            [
+                "/channel/1/stage/layer/54/audio/1/pFS",
+                "/channel/1/stage/layer/54/audio/2/pFS"
+            ],
+            [
+                "/channel/1/stage/layer/55/audio/1/pFS",
+                "/channel/1/stage/layer/55/audio/2/pFS"
+            ],
+            [
+                "/channel/1/stage/layer/56/audio/1/pFS",
+                "/channel/1/stage/layer/56/audio/2/pFS"
+            ]
+        ]
+    },
+    "toMixer": {
+        "PFL_AUX_FADER_LEVEL": [
+            [{ "channel": 2, "layer": 51 }],
+            [{ "channel": 2, "layer": 52 }],
+            [{ "channel": 2, "layer": 53 }],
+            [{ "channel": 2, "layer": 54 }],
+            [{ "channel": 2, "layer": 55 }],
+            [{ "channel": 2, "layer": 56 }]
+        ],
+        "PGM_CHANNEL_FADER_LEVEL": [
+            [
+                { "channel": 1, "layer": 51 },
+                { "channel": 3, "layer": 51 }
+            ],
+            [
+                { "channel": 1, "layer": 52 },
+                { "channel": 3, "layer": 52 }
+            ],
+            [
+                { "channel": 1, "layer": 53 },
+                { "channel": 3, "layer": 53 }
+            ],
+            [
+                { "channel": 1, "layer": 54 },
+                { "channel": 3, "layer": 54 }
+            ],
+            [
+                { "channel": 1, "layer": 55 },
+                { "channel": 3, "layer": 55 }
+            ],
+            [
+                { "channel": 1, "layer": 56 },
+                { "channel": 3, "layer": 56 }
+            ]
+        ]
+    },
+    "channelLabels": ["RM1", "RM2", "RM3", "RM4", "RM5", "MP1"],
+    "sourceOptions": {
+        "sources": [
+            { "channel": 2, "layer": 51 },
+            { "channel": 2, "layer": 52 },
+            { "channel": 2, "layer": 53 },
+            { "channel": 2, "layer": 54 },
+            { "channel": 2, "layer": 55 },
+            { "channel": 2, "layer": 56 }
+        ],
+        "options": {
+            "CHANNEL_LAYOUT": {
+                "1L-2R": "8ch2",
+                "1L-1R": "4ch-dleft",
+                "2L-2R": "4ch-dright"
+            }
+        }
+    }
 }

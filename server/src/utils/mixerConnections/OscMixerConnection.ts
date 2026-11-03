@@ -10,20 +10,20 @@ import { mixerGenericConnection, remoteConnections } from '../../mainClasses'
 import {
     FxParam,
     MixerProtocol,
-} from '../../../../shared/src/constants/MixerProtocolInterface'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { behringerXrMeter } from './productSpecific/behringerXr'
 import { midasMeter } from './productSpecific/midas'
-import { ChannelActionTypes } from '../../../../shared/src/actions/channelActions'
-import { FaderActionTypes } from '../../../../shared/src/actions/faderActions'
-import { SettingsActionTypes } from '../../../../shared/src/actions/settingsActions'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { logger } from '../logger'
 import { sendVuLevel } from '../vuServer'
-import { VuType } from '../../../../shared/src/utils/vu-server-types'
+import { VuType } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     ChannelReference,
     Fader,
-} from '../../../../shared/src/reducers/fadersReducer'
-import { Channel } from '../../../../shared/src/reducers/channelsReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { Channel } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { STORAGE_FOLDER } from '../SettingsStorage'
 import { MixerConnection } from '.'
 
@@ -69,19 +69,19 @@ export class OscMixerConnection implements MixerConnection {
             this.oscConnection = new osc.UDPPort({
                 localAddress: state.settings[0].mixers[this.mixerIndex].localIp,
                 localPort: parseInt(
-                    state.settings[0].mixers[this.mixerIndex].localOscPort + '',
+                    state.settings[0].mixers[this.mixerIndex].localOscPort + ''
                 ),
                 remoteAddress:
                     state.settings[0].mixers[this.mixerIndex].deviceIp,
                 remotePort: parseInt(
-                    state.settings[0].mixers[this.mixerIndex].devicePort + '',
+                    state.settings[0].mixers[this.mixerIndex].devicePort + ''
                 ),
             })
         } catch (error) {
             logger.error(
                 `Error creating OSC connection to ${
                     state.settings[0].mixers[this.mixerIndex].deviceIp
-                }:${state.settings[0].mixers[this.mixerIndex].devicePort}`,
+                }:${state.settings[0].mixers[this.mixerIndex].devicePort}`
             )
             logger.error(error)
             return
@@ -106,7 +106,7 @@ export class OscMixerConnection implements MixerConnection {
                     assigned.mixerIndex === this.mixerIndex &&
                     assigned.channelIndex === channelIndex
                 )
-            }),
+            })
         )
     }
 
@@ -123,7 +123,7 @@ export class OscMixerConnection implements MixerConnection {
                 clearTimeout(this.mixerOnlineTimer)
                 if (!state.settings[0].mixers[this.mixerIndex].mixerOnline) {
                     logger.info(
-                        `Audio Mixer number: ${this.mixerIndex + 1} is Online`,
+                        `Audio Mixer number: ${this.mixerIndex + 1} is Online`
                     )
                     this.mixerOnline(true)
                 }
@@ -133,7 +133,7 @@ export class OscMixerConnection implements MixerConnection {
                     this.checkOscCommand(
                         message.address,
                         this.mixerProtocol.channelTypes[0].fromMixer
-                            .CHANNEL_VU?.[0].mixerMessage,
+                            .CHANNEL_VU?.[0].mixerMessage
                     )
                 ) {
                     if (
@@ -151,7 +151,7 @@ export class OscMixerConnection implements MixerConnection {
                         midasMeter(this.mixerIndex, message.args)
                     } else {
                         const assignedFaderIndex = this.getAssignedFaderIndex(
-                            message.address.split('/')[this.cmdChannelIndex],
+                            message.address.split('/')[this.cmdChannelIndex]
                         )
                         let ch =
                             message.address.split('/')[this.cmdChannelIndex]
@@ -159,36 +159,36 @@ export class OscMixerConnection implements MixerConnection {
                             assignedFaderIndex,
                             VuType.Channel,
                             0,
-                            message.args[0],
+                            message.args[0]
                         )
                     }
                 } else if (
                     this.checkOscCommand(
                         message.address,
                         this.mixerProtocol.channelTypes[0].fromMixer
-                            .CHANNEL_VU_REDUCTION?.[0].mixerMessage,
+                            .CHANNEL_VU_REDUCTION?.[0].mixerMessage
                     )
                 ) {
                     const assignedFaderIndex = this.getAssignedFaderIndex(
-                        message.address.split('/')[this.cmdChannelIndex],
+                        message.address.split('/')[this.cmdChannelIndex]
                     )
 
                     sendVuLevel(
                         assignedFaderIndex,
                         VuType.Reduction,
                         0,
-                        message.args[0],
+                        message.args[0]
                     )
                 } else if (
                     this.checkOscCommand(
                         message.address,
                         this.mixerProtocol.channelTypes[0].fromMixer
-                            .CHANNEL_OUT_GAIN?.[0].mixerMessage,
+                            .CHANNEL_OUT_GAIN?.[0].mixerMessage
                     )
                 ) {
                     let ch = message.address.split('/')[this.cmdChannelIndex]
                     const assignedFaderIndex = this.getAssignedFaderIndex(
-                        ch - 1,
+                        ch - 1
                     )
 
                     if (
@@ -222,7 +222,7 @@ export class OscMixerConnection implements MixerConnection {
                                             level: message.args[0],
                                         })
                                     }
-                                },
+                                }
                             )
                             if (
                                 !state.faders[0].fader[assignedFaderIndex].pgmOn
@@ -263,21 +263,21 @@ export class OscMixerConnection implements MixerConnection {
                                             level: message.args[0],
                                         })
                                     }
-                                },
+                                }
                             )
                         }
                         global.mainThreadHandler.updatePartialStore(
-                            assignedFaderIndex,
+                            assignedFaderIndex
                         )
                         mixerGenericConnection.updateOutLevel(
                             assignedFaderIndex,
                             0,
-                            this.mixerIndex,
+                            this.mixerIndex
                         )
                         if (remoteConnections) {
                             remoteConnections.updateRemoteFaderState(
                                 assignedFaderIndex,
-                                message.args[0],
+                                message.args[0]
                             )
                         }
                     }
@@ -285,12 +285,12 @@ export class OscMixerConnection implements MixerConnection {
                     this.checkOscCommand(
                         message.address,
                         this.mixerProtocol.channelTypes?.[0].fromMixer
-                            .AUX_LEVEL?.[0].mixerMessage,
+                            .AUX_LEVEL?.[0].mixerMessage
                     )
                 ) {
                     let commandArray: string[] =
                         this.mixerProtocol.channelTypes[0].fromMixer.AUX_LEVEL[0].mixerMessage.split(
-                            '/',
+                            '/'
                         )
                     let messageArray: string[] = message.address.split('/')
                     let ch = 0
@@ -303,14 +303,14 @@ export class OscMixerConnection implements MixerConnection {
                             } else if (commandPart === '{argument}') {
                                 auxIndex = parseFloat(messageArray[index]) - 1
                             }
-                        },
+                        }
                     )
                     if (
                         state.channels[0].chMixerConnection[this.mixerIndex]
                             .channel[ch - 1].auxLevel[auxIndex] > -1
                     ) {
                         logger.trace(
-                            `Aux Message Channel: ${ch}\n  Aux Index: ${auxIndex}\n  Level: ${message.args[0]}`,
+                            `Aux Message Channel: ${ch}\n  Aux Index: ${auxIndex}\n  Level: ${message.args[0]}`
                         )
                         store.dispatch({
                             type: ChannelActionTypes.SET_AUX_LEVEL,
@@ -328,17 +328,21 @@ export class OscMixerConnection implements MixerConnection {
                     this.checkOscCommand(
                         message.address,
                         this.mixerProtocol.channelTypes[0].fromMixer
-                            .CHANNEL_NAME?.[0].mixerMessage,
+                            .CHANNEL_NAME?.[0].mixerMessage
                     )
                 ) {
                     let ch = message.address.split('/')[this.cmdChannelIndex]
                     // If auto/man is setup to be controlled from the mixer:
                     if (state.settings[0].labelControlsIgnoreAutomation) {
-                        let faderIndex = state.channels[0].chMixerConnection[this.mixerIndex].channel[ch-1].assignedFader
+                        let faderIndex =
+                            state.channels[0].chMixerConnection[this.mixerIndex]
+                                .channel[ch - 1].assignedFader
                         store.dispatch({
                             type: FaderActionTypes.IGNORE_AUTOMATION,
                             faderIndex: faderIndex,
-                            state: message.args[0].startsWith(state.settings[0].labelIgnorePrefix),
+                            state: message.args[0].startsWith(
+                                state.settings[0].labelIgnorePrefix
+                            ),
                         })
                     }
                     store.dispatch({
@@ -348,18 +352,18 @@ export class OscMixerConnection implements MixerConnection {
                         label: message.args[0],
                     })
                     global.mainThreadHandler.updatePartialStore(
-                        this.getAssignedFaderIndex(ch - 1),
+                        this.getAssignedFaderIndex(ch - 1)
                     )
                 } else if (
                     this.checkOscCommand(
                         message.address,
                         this.mixerProtocol.channelTypes[0].fromMixer
-                            .CHANNEL_MUTE_ON?.[0].mixerMessage,
+                            .CHANNEL_MUTE_ON?.[0].mixerMessage
                     )
                 ) {
                     let ch = message.address.split('/')[this.cmdChannelIndex]
                     const assignedFaderIndex = this.getAssignedFaderIndex(
-                        ch - 1,
+                        ch - 1
                     )
                     store.dispatch({
                         type: FaderActionTypes.SET_MUTE,
@@ -368,10 +372,10 @@ export class OscMixerConnection implements MixerConnection {
                     })
                     mixerGenericConnection.updateMuteState(
                         assignedFaderIndex,
-                        this.mixerIndex,
+                        this.mixerIndex
                     )
                     global.mainThreadHandler.updatePartialStore(
-                        assignedFaderIndex,
+                        assignedFaderIndex
                     )
                 } else {
                     this.checkFxCommands(message)
@@ -391,7 +395,7 @@ export class OscMixerConnection implements MixerConnection {
         logger.info(
             `OSC listening on port ${
                 state.settings[0].mixers[this.mixerIndex].localOscPort
-            }`,
+            }`
         )
 
         //Ping OSC mixer if mixerProtocol needs it.
@@ -428,7 +432,7 @@ export class OscMixerConnection implements MixerConnection {
                                         channel.auxLevel.forEach(
                                             (
                                                 auxLevel: any,
-                                                auxIndex: number,
+                                                auxIndex: number
                                             ) => {
                                                 setTimeout(
                                                     () => {
@@ -438,19 +442,19 @@ export class OscMixerConnection implements MixerConnection {
                                                             state.faders[0]
                                                                 .fader[
                                                                 assignedFaderIndex
-                                                            ].monitor,
+                                                            ].monitor
                                                         )
                                                     },
                                                     state.faders[0].fader[
                                                         assignedFaderIndex
                                                     ].monitor *
                                                         10 +
-                                                        auxIndex * 100,
+                                                        auxIndex * 100
                                                 )
-                                            },
+                                            }
                                         )
                                     }
-                                },
+                                }
                             )
                         } else {
                             state.channels[0].chMixerConnection[
@@ -458,7 +462,7 @@ export class OscMixerConnection implements MixerConnection {
                             ].channel.forEach((channel: any, index: any) => {
                                 this.sendOutRequest(
                                     item.mixerMessage,
-                                    index + 1,
+                                    index + 1
                                 )
                             })
                         }
@@ -468,7 +472,7 @@ export class OscMixerConnection implements MixerConnection {
                         this.sendOutMessage(item.mixerMessage, 1, value, type)
                     }
                 }, itemIndex * 100)
-            },
+            }
         )
     }
 
@@ -496,7 +500,7 @@ export class OscMixerConnection implements MixerConnection {
             clearTimeout(this.timeoutTimer)
             this.timeoutTimer = setTimeout(() => {
                 logger.warn(
-                    `Audio Mixer number: ${this.mixerIndex + 1} timeout`,
+                    `Audio Mixer number: ${this.mixerIndex + 1} timeout`
                 )
             }, this.mixerProtocol.mixerTimeout)
         }
@@ -523,7 +527,7 @@ export class OscMixerConnection implements MixerConnection {
                         level: message.args[0] / range,
                     })
                     global.mainThreadHandler.updatePartialStore(
-                        assignedFaderIndex,
+                        assignedFaderIndex
                     )
                 }
             }
@@ -534,7 +538,7 @@ export class OscMixerConnection implements MixerConnection {
 
     private checkOscCommand(
         message: string,
-        command: string | undefined,
+        command: string | undefined
     ): boolean {
         if (!command) return false
         if (message === command) return true
@@ -564,7 +568,7 @@ export class OscMixerConnection implements MixerConnection {
         oscMessage: string | undefined,
         channel: number,
         value: string | number,
-        type: string,
+        type: string
     ) {
         if (!oscMessage) return
         let channelString = this.mixerProtocol.leadingZeros
@@ -600,7 +604,7 @@ export class OscMixerConnection implements MixerConnection {
     private sendOutRequestAux(
         oscMessage: string,
         channel: number,
-        auxSend: number,
+        auxSend: number
     ) {
         let channelString = this.mixerProtocol.leadingZeros
             ? ('0' + channel).slice(-2)
@@ -638,7 +642,7 @@ export class OscMixerConnection implements MixerConnection {
                 this.mixerProtocol.channelTypes[channelType].toMixer.PFL_ON[0]
                     .value,
                 this.mixerProtocol.channelTypes[channelType].toMixer.PFL_ON[0]
-                    .type,
+                    .type
             )
         } else if (
             state.faders[0].fader[channelIndex].pflOn === false &&
@@ -651,7 +655,7 @@ export class OscMixerConnection implements MixerConnection {
                 this.mixerProtocol.channelTypes[channelType].toMixer.PFL_OFF[0]
                     .value,
                 this.mixerProtocol.channelTypes[channelType].toMixer.PFL_OFF[0]
-                    .type,
+                    .type
             )
         }
     }
@@ -673,7 +677,7 @@ export class OscMixerConnection implements MixerConnection {
                 mute.mixerMessage,
                 channelTypeIndex + 1,
                 mute.value,
-                mute.type,
+                mute.type
             )
         } else {
             let mute =
@@ -683,7 +687,7 @@ export class OscMixerConnection implements MixerConnection {
                 mute.mixerMessage,
                 channelTypeIndex + 1,
                 mute.value,
-                mute.type,
+                mute.type
             )
         }
     }
@@ -692,7 +696,7 @@ export class OscMixerConnection implements MixerConnection {
         this.updateAuxLevel(
             channelIndex,
             state.settings[0].mixers[this.mixerIndex].nextSendAux - 1,
-            level,
+            level
         )
     }
 
@@ -719,14 +723,15 @@ export class OscMixerConnection implements MixerConnection {
 
     updateAuxLevel(channelIndex: number, auxSendIndex: number, level: number) {
         let channelType =
-        state.channels[0].chMixerConnection[this.mixerIndex].channel[
-            channelIndex
-        ].channelType
-        if (!this.mixerProtocol.channelTypes[channelType].toMixer.AUX_LEVEL) return
+            state.channels[0].chMixerConnection[this.mixerIndex].channel[
+                channelIndex
+            ].channelType
+        if (!this.mixerProtocol.channelTypes[channelType].toMixer.AUX_LEVEL)
+            return
         let channel =
-        state.channels[0].chMixerConnection[this.mixerIndex].channel[
-            channelIndex
-        ].channelTypeIndex + 1
+            state.channels[0].chMixerConnection[this.mixerIndex].channel[
+                channelIndex
+            ].channelTypeIndex + 1
         let auxSendCmd =
             this.mixerProtocol.channelTypes[channelType].toMixer.AUX_LEVEL[0]
         let auxSendNumber = this.mixerProtocol.leadingZeros
@@ -734,7 +739,7 @@ export class OscMixerConnection implements MixerConnection {
             : String(auxSendIndex + 1)
         let message = auxSendCmd.mixerMessage.replace(
             '{argument}',
-            auxSendNumber,
+            auxSendNumber
         )
 
         this.sendOutMessage(message, channel, level, 'f')
@@ -754,7 +759,7 @@ export class OscMixerConnection implements MixerConnection {
                 .CHANNEL_OUT_GAIN[0].mixerMessage,
             channelTypeIndex + 1,
             String(outputLevel),
-            'f',
+            'f'
         )
     }
 
@@ -775,11 +780,11 @@ export class OscMixerConnection implements MixerConnection {
                     .label
         }
         this.sendOutMessage(
-            this.mixerProtocol.channelTypes[channelType].toMixer.CHANNEL_NAME?.[0]
-                .mixerMessage,
+            this.mixerProtocol.channelTypes[channelType].toMixer
+                .CHANNEL_NAME?.[0].mixerMessage,
             channelTypeIndex + 1,
             channelName,
-            's',
+            's'
         )
     }
 
@@ -789,8 +794,8 @@ export class OscMixerConnection implements MixerConnection {
             let data = JSON.parse(
                 fs.readFileSync(
                     path.resolve(STORAGE_FOLDER, presetName),
-                    'utf8',
-                ),
+                    'utf8'
+                )
             )
 
             this.sendBuffered({
@@ -823,6 +828,6 @@ export class OscMixerConnection implements MixerConnection {
     updateChannelSetting(
         channelIndex: number,
         setting: string,
-        value: string,
+        value: string
     ) {}
 }

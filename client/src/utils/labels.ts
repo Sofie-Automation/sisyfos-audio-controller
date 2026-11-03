@@ -1,6 +1,6 @@
 import defaultStoreRedux, {
     ReduxStore,
-} from '../../../shared/src/reducers/store'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import type { Store } from 'redux'
 
 let activeStore: Store = defaultStoreRedux
@@ -15,14 +15,14 @@ export function getSisyfosReduxState(): ReduxStore {
 
 export function getChannelLabel(
     state: ReduxStore,
-    faderIndex: number,
+    faderIndex: number
 ): string | undefined {
     let label = state.channels[0].chMixerConnection
         .flatMap((conn) =>
             conn.channel.map((ch) => ({
                 assignedFader: ch.assignedFader,
                 label: ch.label,
-            })),
+            }))
         )
         .filter((ch) => ch.label && ch.label !== '')
         .find((ch) => ch.assignedFader === faderIndex)?.label

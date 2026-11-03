@@ -1,14 +1,14 @@
 import classNames from 'classnames'
 import React, { useCallback } from 'react'
-import { Fader } from '../../../shared/src/reducers/fadersReducer'
-import { SettingsActionTypes } from '../../../shared/src/actions/settingsActions'
+import { Fader } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import SettingsIcon from '../assets/icons/settings.svg'
 import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { Popover, PopoverContent, PopoverTrigger } from './Popover'
 import '../assets/css/ChannelLayoutSettings.css'
-import * as IO from '../../../shared/src/constants/SOCKET_IO_DISPATCHERS'
+import * as IO from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { RotaryDial } from './RotaryDial'
-import { MixerConnectionTypes } from '../../../shared/src/constants/MixerProtocolInterface'
+import { MixerConnectionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { InputSelector } from './InputSelector'
 
 const SELECTABLE_CHANNELS = [1, 2, 3, 4, 5, 6, 7, 8]

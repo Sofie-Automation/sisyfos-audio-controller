@@ -3,25 +3,20 @@ import React, { ChangeEvent } from 'react'
 import '../assets/css/LabelSettings.css'
 import { Dispatch, Store } from 'redux'
 import { connect } from 'react-redux'
-import {
-    SettingsActionTypes,
-} from '../../../shared/src/actions/settingsActions'
-import { Fader } from '../../../shared/src/reducers/fadersReducer'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { Fader } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     SOCKET_FLUSH_LABELS,
     SOCKET_SET_LABELS,
-} from '../../../shared/src/constants/SOCKET_IO_DISPATCHERS'
-import { CustomPages } from '../../../shared/src/reducers/settingsReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { CustomPages } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { getChannelLabel } from '../utils/labels'
 
-import {
-    FaderActionTypes,
-} from '../../../shared/src/actions/faderActions'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     ChannelActions,
     ChannelActionTypes,
-} from '../../../shared/src/actions/channelActions'
-
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 interface LabelSettingsInjectProps {
     customPages: CustomPages[]
@@ -79,17 +74,23 @@ class LabelSettings extends React.PureComponent<
             )
         ) {
             this.props.dispatch({ type: FaderActionTypes.FLUSH_FADER_LABELS })
-            this.props.dispatch({ type: ChannelActionTypes.FLUSH_CHANNEL_LABELS })
+            this.props.dispatch({
+                type: ChannelActionTypes.FLUSH_CHANNEL_LABELS,
+            })
             window.socketIoClient.emit(SOCKET_FLUSH_LABELS)
         }
     }
 
     handleClose = () => {
-        this.props.dispatch({ type: SettingsActionTypes.TOGGLE_SHOW_LABEL_SETTINGS })
+        this.props.dispatch({
+            type: SettingsActionTypes.TOGGLE_SHOW_LABEL_SETTINGS,
+        })
     }
 
     handleCancel = () => {
-        this.props.dispatch({ type: SettingsActionTypes.TOGGLE_SHOW_LABEL_SETTINGS })
+        this.props.dispatch({
+            type: SettingsActionTypes.TOGGLE_SHOW_LABEL_SETTINGS,
+        })
     }
 
     handleSave = () => {
@@ -97,7 +98,9 @@ class LabelSettings extends React.PureComponent<
             type: FaderActionTypes.UPDATE_LABEL_LIST,
             update: this.state.mutations,
         })
-        this.props.dispatch({ type: SettingsActionTypes.TOGGLE_SHOW_LABEL_SETTINGS })
+        this.props.dispatch({
+            type: SettingsActionTypes.TOGGLE_SHOW_LABEL_SETTINGS,
+        })
         window.socketIoClient.emit(SOCKET_SET_LABELS, {
             update: this.state.mutations,
         })

@@ -1,42 +1,34 @@
-// Node Modules:
 import fs from 'fs'
 import path from 'path'
-import { homedir, platform as getPlatform } from 'os'
-const platform = getPlatform()
-const homeDir = homedir()
 
 import { store } from '../reducers/store'
 import { checkVersion } from './migrations'
+import { STORAGE_FOLDER } from '../constants/storagePaths'
+
+export { STORAGE_FOLDER } from '../constants/storagePaths'
 
 // Redux:
-import { ChannelActionTypes } from '../../../shared/src/actions/channelActions'
-import { FaderActionTypes } from '../../../shared/src/actions/faderActions'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { logger } from './logger'
-import { defaultFadersReducerState } from '../../../shared/src/reducers/fadersReducer'
+import { defaultFadersReducerState } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 import {
     Channels,
     NumberOfChannels,
     defaultChannelsReducerState,
-} from '../../../shared/src/reducers/channelsReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 import {
     CustomPages,
     Settings,
-} from '../../../shared/src/reducers/settingsReducer'
-import { Faders } from '../../../shared/src/reducers/fadersReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { Faders } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 export interface ShotStorage {
     channelState: Channels
     faderState: Faders
 }
-
-// Linux place in "app"/storage to be backward compatible with Docker containers.
-// Windows and Mac place the storagefolder in home -> sisyfos-storage
-export const STORAGE_FOLDER =
-    platform === 'linux'
-        ? path.resolve(process.cwd(), 'storage')
-        : path.resolve(homeDir, 'sisyfos-storage')
 
 export const loadSettings = (storeRedux: any): Settings => {
     let newSettings = storeRedux.settings[0]

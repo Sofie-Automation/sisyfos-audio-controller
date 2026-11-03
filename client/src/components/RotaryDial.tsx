@@ -7,14 +7,20 @@ function clampValue(value: number) {
     return value > 1 ? 1 : value < 0 ? 0 : value
 }
 
-export const RotaryDial = ({ value, onChange } : { value: number, onChange: (value: number) => void }) => {
+export const RotaryDial = ({
+    value,
+    onChange,
+}: {
+    value: number
+    onChange: (value: number) => void
+}) => {
     const startYRef = useRef<number | null>(null)
     const initialValueRef = useRef<number>(0)
     const [rotatingValue, setRotatingValue] = useState<number | null>(null)
 
     const throttledOnChange = useMemo(() => {
         return throttle(onChange, 50, {
-            trailing: true
+            trailing: true,
         })
     }, [onChange])
 
@@ -70,7 +76,9 @@ export const RotaryDial = ({ value, onChange } : { value: number, onChange: (val
         <div className="rotary-dial-wrapper">
             <div
                 className="rotary-dial"
-                style={{ transform: `rotate(${(rotatingValue ?? value) * 300 - 150}deg)` }}
+                style={{
+                    transform: `rotate(${(rotatingValue ?? value) * 300 - 150}deg)`,
+                }}
                 onMouseDown={onMouseDown}
                 onTouchStart={onTouchStart}
             >

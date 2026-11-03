@@ -1,6 +1,12 @@
 .monitor-channel-body {
     color: white;
-    background: linear-gradient(#2f2f2f 0px,#2f2f2f 790px, rgb(0, 0, 0) 1px, #2f2f2f 800px, #2f2f2f 100%);
+    background: linear-gradient(
+        #2f2f2f 0px,
+        #2f2f2f 790px,
+        rgb(0, 0, 0) 1px,
+        #2f2f2f 800px,
+        #2f2f2f 100%
+    );
     margin: 4px;
     border-radius: 7px;
     width: 86px;
@@ -9,8 +15,8 @@
 }
 
 .monitor-channel-strip-button {
-    outline : none;
-    -moz-outline : none;
+    outline: none;
+    -moz-outline: none;
     margin-left: 3px;
     margin-top: 5px;
     margin-right: 3px;
@@ -26,5 +32,4 @@
 .monitor-channel-strip-button.on {
     background-color: rgb(146, 146, 146);
     border-color: rgba(102, 102, 102, 0.301);
-
 }

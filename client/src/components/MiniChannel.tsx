@@ -6,10 +6,10 @@ import '../assets/css/NoUiSlider.css'
 
 //assets:
 import '../assets/css/MiniChannel.css'
-import { Fader } from '../../../shared/src/reducers/fadersReducer'
-import { Channels } from '../../../shared/src/reducers/channelsReducer'
-import { Settings } from '../../../shared/src/reducers/settingsReducer'
-import { SettingsActionTypes } from '../../../shared/src/actions/settingsActions'
+import { Fader } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { Channels } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { Settings } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { getFaderLabel } from '../utils/labels'
 
 interface ChannelInjectProps {
@@ -88,7 +88,7 @@ const mapStateToProps = (state: any, props: any): ChannelInjectProps => {
         channelType: 0 /* TODO: state.channels[0].channel[props.channelIndex].channelType, */,
         channelTypeIndex:
             props.faderIndex /* TODO: state.channels[0].chMixerConnection[0].channel[props.channelIndex].channelTypeIndex, */,
-        label: getFaderLabel(props.faderIndex)
+        label: getFaderLabel(props.faderIndex),
     }
 }
 

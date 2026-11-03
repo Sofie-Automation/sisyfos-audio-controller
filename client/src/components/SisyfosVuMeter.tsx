@@ -149,7 +149,10 @@ export class SisyfosVuMeter extends React.Component<
     }
 
     private getWindowPeak = () => {
-        if (this.value > this.windowPeak || Date.now() - this.windowLast > this.WINDOW) {
+        if (
+            this.value > this.windowPeak ||
+            Date.now() - this.windowLast > this.WINDOW
+        ) {
             this.windowPeak = this.value
             this.windowLast = Date.now()
         }
@@ -161,7 +164,10 @@ export class SisyfosVuMeter extends React.Component<
     }
 
     private calcMiddle = () => {
-        const val = Math.max(this.meterTest, Math.min(this.value, this.meterZero))
+        const val = Math.max(
+            this.meterTest,
+            Math.min(this.value, this.meterZero)
+        )
         return this.totalHeight * (val - this.meterTest) + 1
     }
 
@@ -194,7 +200,12 @@ export class SisyfosVuMeter extends React.Component<
         }
         this.previousValue = this.value
 
-        this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.canvasContext.clearRect(
+            0,
+            0,
+            this.canvas.width,
+            this.canvas.height
+        )
 
         this.canvasContext.fillStyle = COLORS.LOWER
         this.canvasContext.fillRect(
@@ -207,7 +218,8 @@ export class SisyfosVuMeter extends React.Component<
         this.canvasContext.fillStyle = COLORS.MIDDLE
         this.canvasContext.fillRect(
             0,
-            this.totalHeight * (this.range - this.meterTest) - this.calcMiddle(),
+            this.totalHeight * (this.range - this.meterTest) -
+                this.calcMiddle(),
             this.canvas.width,
             this.calcMiddle()
         )

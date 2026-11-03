@@ -1,0 +1,35 @@
+{
+    "name": "All Muted",
+    "channels": [
+        {
+            "index": 0,
+            "faderLevel": 0.75,
+            "inputGain": 0.75,
+            "inputSelector": 1,
+            "mute": true,
+            "pfl": false,
+            "amixOn": false,
+            "nextAuxLevel": 0,
+            "auxLevels": [0, 0, 0, 0],
+            "name": "CH1",
+            "fx": [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            ]
+        },
+        {
+            "index": 1,
+            "faderLevel": 0.75,
+            "inputGain": 0.75,
+            "inputSelector": 1,
+            "mute": true,
+            "pfl": false,
+            "amixOn": false,
+            "nextAuxLevel": 0,
+            "auxLevels": [0, 0, 0, 0],
+            "name": "CH2",
+            "fx": [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            ]
+        }
+    ]
+}

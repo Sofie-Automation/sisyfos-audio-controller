@@ -8,9 +8,9 @@ import {
 import { SnapshotHandler } from './utils/SnapshotHandler'
 import { socketServer } from './expressHandler'
 
-import { SettingsActionTypes } from '../../shared/src/actions/settingsActions'
-import * as IO from '../../shared/src/constants/SOCKET_IO_DISPATCHERS'
-import { FaderActionTypes } from '../../shared/src/actions/faderActions'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import * as IO from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 import {
     loadSettings,
@@ -26,16 +26,16 @@ import {
 import {
     ChannelActions,
     ChannelActionTypes,
-} from '../../shared/src/actions/channelActions'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { logger } from './utils/logger'
-import { CustomPages } from '../../shared/src/reducers/settingsReducer'
-import { FxParam } from '../../shared/src/constants/MixerProtocolInterface'
+import { CustomPages } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FxParam } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import path from 'path'
 import {
     Channel,
     NumberOfChannels,
-} from '../../shared/src/reducers/channelsReducer'
-import { ChannelReference } from '../../shared/src/reducers/fadersReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChannelReference } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { Dispatch } from 'redux'
 
 export class MainThreadHandlers {
@@ -82,17 +82,15 @@ export class MainThreadHandlers {
         if (!faderObj) return
 
         socketServer.emit(IO.SOCKET_SET_STORE_FADER, {
-          faderIndex: faderIndex,
-          state: faderObj,
+            faderIndex: faderIndex,
+            state: faderObj,
         })
         faderObj.assignedChannels?.forEach((channel: ChannelReference) => {
-          socketServer.emit(IO.SOCKET_SET_STORE_CHANNEL, {
-            channelIndex: channel.channelIndex,
-            state:
-              state.channels[0].chMixerConnection[channel.mixerIndex].channel[
-                channel.channelIndex
-              ],
-          })
+            socketServer.emit(IO.SOCKET_SET_STORE_CHANNEL, {
+                channelIndex: channel.channelIndex,
+                state: state.channels[0].chMixerConnection[channel.mixerIndex]
+                    .channel[channel.channelIndex],
+            })
         })
     }
 

@@ -7,21 +7,15 @@ import { mixerGenericConnection, remoteConnections } from '../../mainClasses'
 import {
     FxParam,
     MixerProtocol,
-} from '../../../../shared/src/constants/MixerProtocolInterface'
-import {
-    ChannelActionTypes,
-} from '../../../../shared/src/actions/channelActions'
-import {
-    FaderActionTypes,
-} from '../../../../shared/src/actions/faderActions'
-import {
-    SettingsActionTypes,
-} from '../../../../shared/src/actions/settingsActions'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { logger } from '../logger'
 import {
     ChannelReference,
     Fader,
-} from '../../../../shared/src/reducers/fadersReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { MixerConnection } from '.'
 
 export class SSLMixerConnection implements MixerConnection {

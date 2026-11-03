@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { ReduxStore } from '../../../shared/src/reducers/store'
+import { ReduxStore } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 import '../assets/css/App.css'
 import Channels from './Channels'
@@ -123,15 +123,19 @@ class App extends React.Component<AppProps> {
                         {this.props.t('TRYING TO CONNECT TO SISYFOS SERVER')}
                     </div>
                 )}
-                { (viewId === 'minimonitor') ? (
+                {viewId === 'minimonitor' ? (
                     <MiniChannels />
-                ) : (viewId === 'mic-tally') ? (
+                ) : viewId === 'mic-tally' ? (
                     <MicTally />
                 ) : (
                     <Channels />
                 )}
-                {this.props.store.settings[0].showLabelSettings && <LabelSettings />}
-                {this.props.store.settings[0].showPagesSetup && <PagesSettings />}
+                {this.props.store.settings[0].showLabelSettings && (
+                    <LabelSettings />
+                )}
+                {this.props.store.settings[0].showPagesSetup && (
+                    <PagesSettings />
+                )}
                 {this.props.store.settings[0].showStorage && <Storage />}
                 {this.props.store.settings[0].showSettings && <Settings />}
             </div>

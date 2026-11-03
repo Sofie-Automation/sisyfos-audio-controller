@@ -37,9 +37,9 @@ When you add a feature, you should also provide relevant unit tests, in order to
 * ensure that the feature will continue to work in the future
 -->
 
-- [ ] I have added one or more unit tests for this PR
-- [ ] I have updated the relevant unit tests
-- [ ] No unit test changes are needed for this PR
+-   [ ] I have added one or more unit tests for this PR
+-   [ ] I have updated the relevant unit tests
+-   [ ] No unit test changes are needed for this PR
 
 <!--
 Please provide some instructions and other information for how to verify that the feature works.
@@ -79,7 +79,7 @@ Before you open the PR, make sure the items below are done.
 If they're not, please open the PR as a Draft.
 -->
 
-- [ ] PR is ready to be reviewed.
-- [ ] The functionality has been tested by the author.
-- [ ] Relevant unit tests have been added / updated.
-- [ ] Relevant documentation (code comments, [system documentation](https://sofie-automation.github.io/sofie-core/)) has been added / updated.
+-   [ ] PR is ready to be reviewed.
+-   [ ] The functionality has been tested by the author.
+-   [ ] Relevant unit tests have been added / updated.
+-   [ ] Relevant documentation (code comments, [system documentation](https://sofie-automation.github.io/sofie-core/)) has been added / updated.

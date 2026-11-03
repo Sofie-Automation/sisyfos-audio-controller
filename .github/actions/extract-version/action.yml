@@ -1,30 +1,30 @@
 name: 'Extract version'
 description: 'Split semver version into major, minor and patch (and version).'
 inputs:
-  version:
-    description: 'Version as string'
-    required: true
+    version:
+        description: 'Version as string'
+        required: true
 outputs:
-  version: 
-    description: "Full version"
-    value: ${{ steps.match.outputs.group1 }}
-  major: 
-    description: "Major version"
-    value: ${{ steps.match.outputs.group2 }}
-  minor: 
-    description: "Minor version"
-    value: ${{ steps.match.outputs.group3 }}
-  patch: 
-    description: "Patch version"
-    value: ${{ steps.match.outputs.group4 }}
+    version:
+        description: 'Full version'
+        value: ${{ steps.match.outputs.group1 }}
+    major:
+        description: 'Major version'
+        value: ${{ steps.match.outputs.group2 }}
+    minor:
+        description: 'Minor version'
+        value: ${{ steps.match.outputs.group3 }}
+    patch:
+        description: 'Patch version'
+        value: ${{ steps.match.outputs.group4 }}
 runs:
-  using: 'composite'
-  steps:
-    - run: echo "${{ inputs.version }}"
-      shell: bash
-    - name: Match Semantic Version
-      uses: actions-ecosystem/action-regex-match@v2
-      id: match
-      with:
-        text: ${{ inputs.version }}
-        regex: '^v?(?<version>(?<major>[0-9]+).(?<minor>[0-9]+).(?<patch>[0-9]+))$'
+    using: 'composite'
+    steps:
+        - run: echo "${{ inputs.version }}"
+          shell: bash
+        - name: Match Semantic Version
+          uses: actions-ecosystem/action-regex-match@v2
+          id: match
+          with:
+              text: ${{ inputs.version }}
+              regex: '^v?(?<version>(?<major>[0-9]+).(?<minor>[0-9]+).(?<patch>[0-9]+))$'

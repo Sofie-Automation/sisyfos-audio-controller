@@ -1,9 +1,5 @@
-import {
-    FaderActionTypes,
-} from '../../shared/src/actions/faderActions'
-import {
-    ChannelActionTypes,
-} from '../../shared/src/actions/channelActions'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 const mockDispatch = jest.fn()
 const mockSendVuLevel = jest.fn()
@@ -120,8 +116,7 @@ const createMasterState = ({
     } as any
 }
 
-const dispatchedActions = () =>
-    mockDispatch.mock.calls.map((call) => call[0])
+const dispatchedActions = () => mockDispatch.mock.calls.map((call) => call[0])
 
 describe('VMixMixerConnection master feedback', () => {
     beforeEach(() => {

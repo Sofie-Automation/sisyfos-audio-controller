@@ -1,13 +1,15 @@
-import {
-    MixerProtocolPresets,
-    MixerProtocolList,
-} from '../../shared/src/constants/MixerProtocolPresets'
+import { MixerProtocolPresets } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { MixerGenericConnection } from './utils/MixerConnection'
 import { AutomationConnection } from './utils/AutomationConnection'
 import { RemoteConnection } from './utils/RemoteConnection'
+import { mixerRegistry } from './plugins/MixerRegistry'
+import { loadPlugins } from './plugins/PluginLoader'
 
-const mixerProtocolPresets = MixerProtocolPresets
-const mixerProtocolList = MixerProtocolList
+mixerRegistry.registerBuiltins(MixerProtocolPresets)
+loadPlugins()
+
+const mixerProtocolPresets = mixerRegistry.getAllPresets()
+const mixerProtocolList = mixerRegistry.getProtocolList()
 
 const mixerGenericConnection = new MixerGenericConnection()
 const automationConnection = new AutomationConnection()
@@ -19,4 +21,5 @@ export {
     mixerGenericConnection,
     automationConnection,
     remoteConnections,
+    mixerRegistry,
 }

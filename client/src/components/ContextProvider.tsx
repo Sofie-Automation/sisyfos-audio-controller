@@ -2,7 +2,7 @@ import React from 'react'
 import { useSocketConnection } from '../hooks/useSocketConnection'
 import { I18nextProvider } from 'react-i18next'
 import i18n from '../utils/i18n'
-import storeRedux from '../../../shared/src/reducers/store'
+import storeRedux from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { Provider as ReduxProvider } from 'react-redux'
 import type { Store } from 'redux'
 

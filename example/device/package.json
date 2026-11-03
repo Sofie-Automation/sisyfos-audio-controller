@@ -1,0 +1,36 @@
+{
+    "name": "sisyfos-mock-device",
+    "version": "1.0.0",
+    "description": "Standalone mock audio mixer with WebSocket control API and Web UI",
+    "license": "MIT",
+    "engines": {
+        "node": ">=24"
+    },
+    "scripts": {
+        "dev": "concurrently \"tsx watch src/index.ts\" \"vite --config ui/vite.config.ts\"",
+        "build": "tsc && vite build --config ui/vite.config.ts",
+        "start": "node dist/index.js",
+        "test": "jest"
+    },
+    "dependencies": {
+        "express": "^4.21.2",
+        "ws": "^8.18.0"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.21",
+        "@types/jest": "^29.5.14",
+        "@types/node": "^24.0.0",
+        "@types/react": "^19.0.0",
+        "@types/react-dom": "^19.0.0",
+        "@types/ws": "^8.5.14",
+        "@vitejs/plugin-react": "^4.3.4",
+        "concurrently": "^9.1.2",
+        "jest": "^29.7.0",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "ts-jest": "^29.2.5",
+        "tsx": "^4.19.2",
+        "typescript": "^5.7.2",
+        "vite": "^6.0.5"
+    }
+}

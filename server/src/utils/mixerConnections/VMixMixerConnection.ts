@@ -9,27 +9,27 @@ import path from 'path'
 import {
     FxParam,
     VMixMixerProtocol,
-} from '../../../../shared/src/constants/MixerProtocolInterface'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     ChannelActions,
     ChannelActionTypes,
-} from '../../../../shared/src/actions/channelActions'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     FaderActions,
     FaderActionTypes,
-} from '../../../../shared/src/actions/faderActions'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     SettingsActions,
     SettingsActionTypes,
-} from '../../../../shared/src/actions/settingsActions'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { logger } from '../logger'
 import { sendVuLevel } from '../vuServer'
-import { VuType } from '../../../../shared/src/utils/vu-server-types'
+import { VuType } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { dbToFloat } from './LawoRubyConnection'
 import {
     ChannelReference,
     Fader,
-} from '../../../../shared/src/reducers/fadersReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { MixerConnection } from '.'
 import { STORAGE_FOLDER } from '../SettingsStorage'
 import { Preset } from './productSpecific/vMixPreset'

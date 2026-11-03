@@ -60,12 +60,12 @@ jest.mock('osc', () => ({
 }))
 
 import { EventEmitter } from 'events'
-import { ChannelActionTypes } from '../../shared/src/actions/channelActions'
-import { FaderActionTypes } from '../../shared/src/actions/faderActions'
-import { SettingsActionTypes } from '../../shared/src/actions/settingsActions'
-import { defaultChannelsReducerState } from '../../shared/src/reducers/channelsReducer'
-import { defaultFadersReducerState } from '../../shared/src/reducers/fadersReducer'
-import { defaultSettingsReducerState } from '../../shared/src/reducers/settingsReducer'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { defaultChannelsReducerState } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { defaultFadersReducerState } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { defaultSettingsReducerState } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { store } from '../src/reducers/store'
 import { AutomationConnection } from '../src/utils/AutomationConnection'
 import osc from 'osc'
@@ -84,7 +84,7 @@ describe('AutomationConnection', () => {
     beforeEach(() => {
         // Clear all mocks before each test
         jest.clearAllMocks()
-        global.mainThreadHandler = mockMainThreadHandler
+        global.mainThreadHandler = mockMainThreadHandler as any
 
         // Reset mock implementation
         mockUdpInstance.on.mockReturnThis()
@@ -377,7 +377,7 @@ describe('AutomationConnection', () => {
                 expect(mockUdpInstance.send).toHaveBeenCalledWith(
                     {
                         address: '/pong',
-                        args: [{type: 's', value: '12'}],
+                        args: [{ type: 's', value: '12' }],
                     },
                     '127.0.0.1',
                     5255
@@ -619,4 +619,3 @@ describe('AutomationConnection', () => {
         })
     })
 })
-

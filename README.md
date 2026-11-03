@@ -83,9 +83,9 @@ docker pull ghcr.io/sofie-automation/sisyfos-audio-controller:feature-eav-344-ab
 
 ### CI and releases
 
-- **CI** runs on every push and pull request (all branches): test, validate dependencies, prebuild.
-- **Production release:** Actions → Prod Node CI → Run workflow. CI assigns the next CalVer (`YY.MM.N`), updates `CHANGELOG.md`, creates a git tag, GitHub Release, and GHCR image.
-- **Test image:** Actions → Dev Node CI → Run workflow (select branch). Same branch + commit always produces the same image tag.
+-   **CI** runs on every push and pull request (all branches): test, validate dependencies, prebuild.
+-   **Production release:** Actions → Prod Node CI → Run workflow. CI assigns the next CalVer (`YY.MM.N`), updates `CHANGELOG.md`, creates a git tag, GitHub Release, and GHCR image.
+-   **Test image:** Actions → Dev Node CI → Run workflow (select branch). Same branch + commit always produces the same image tag.
 
 Desktop installers are attached to [GitHub Releases](https://github.com/Sofie-Automation/sisyfos-audio-controller/releases).
 
@@ -105,11 +105,11 @@ yarn start
 
 When running Sisyfos you can define the log level by setting the environment variable `LOG_LEVEL` to one of the following log levels:
 
-- error (only errors)
-- warn (errors and warning)
-- info (standard info regarding connectiviy and data from Automation protocol etc. including errors and warnings)
-- debug (info level plus: data send and received from Audiomixer)
-- trace (debug level plus: data send and received from Automation protocol)
+-   error (only errors)
+-   warn (errors and warning)
+-   info (standard info regarding connectiviy and data from Automation protocol etc. including errors and warnings)
+-   debug (info level plus: data send and received from Audiomixer)
+-   trace (debug level plus: data send and received from Automation protocol)
 
 ### Serve client on a different path:
 
@@ -149,90 +149,90 @@ As NEXT has been implemented, and PFL usually only work on on channel at a time,
 
 ### Following preset name are possible:
 
-- CasparCG
-    - use storage/default-casparcg.ccg as template and place you own file in storage folder.
-    - base your casparcg.config by the casparcg.config file in the same folder
-    - remember to activate OSC in the casparcg.config file to it points to Sisyfos
-- Midas Master
-    - OSC protocol for Midas M32 and Behringer X32
-    - Port 10023
-    - Mixer preset loading (using .x32 files in storage folder)
-    - Protocol supports:
-        - Eq, Comp, Delay, Mix minus
-- Lawo Mc2
-    - Ember Protocol
-- reaper
-    - OSC protocol for control Reaper (reaper.fm)
-- Ardour Master
-    - OSC protocol for Ardour (www.ardour.org)
-    - Port 3819
-    - The volume change in Ardour is on it´s channel faders.
-    - Todo:
-        - Meter calibration
-- SSL System T - Broadcast Mixer
-    - SSL Automation Protocol for System T
-    - Port 10001
-    - Set Protocol Latency to around 120ms
-- Behringer xr master
-    - OSC protocol for Behringer XR12,16,18
-    - Port 10024
-    - In this version the Behringer is slave of Producers-Audio-mixer, so faders on the behringer is turned down when channel is of.
-- DMXIS - Sisyfos control of DMX Lightcontroller
-    - Default Port is 8000
-    - Controls Fader On/Off with preset level from Sisyfos.
-    - Easy implementation of state based lightcontrol from Automation.
-    - the PROTOCOL DELAY setting should be raised to 50ms, as DMXIS is responding a little slowly.
-- midi
-    - Generic MIDI - still preminilary
-    - When using MIDI protocols, the PROTOCOL DELAY setting should be rised to at least 50ms
-- Yamaha QL1
-    - Ip - MIDI based Protocol
-    - Port 50000
-    - Stable implementation of 2-ways Fader and Mute
-- Studer Vista 1-5-9 (untested)
-    - mono, stereo, 51 channels fader level mute and Aux send from Sisyfos TO mixer
-    - No 2 way support for now
-- Studer OnAir 3000 (untested)
-    - channel 1 to 24 fader level from Sisyfos TO mixer
-    - No 2 way support for now
-- VMix
+-   CasparCG
+    -   use storage/default-casparcg.ccg as template and place you own file in storage folder.
+    -   base your casparcg.config by the casparcg.config file in the same folder
+    -   remember to activate OSC in the casparcg.config file to it points to Sisyfos
+-   Midas Master
+    -   OSC protocol for Midas M32 and Behringer X32
+    -   Port 10023
+    -   Mixer preset loading (using .x32 files in storage folder)
+    -   Protocol supports:
+        -   Eq, Comp, Delay, Mix minus
+-   Lawo Mc2
+    -   Ember Protocol
+-   reaper
+    -   OSC protocol for control Reaper (reaper.fm)
+-   Ardour Master
+    -   OSC protocol for Ardour (www.ardour.org)
+    -   Port 3819
+    -   The volume change in Ardour is on it´s channel faders.
+    -   Todo:
+        -   Meter calibration
+-   SSL System T - Broadcast Mixer
+    -   SSL Automation Protocol for System T
+    -   Port 10001
+    -   Set Protocol Latency to around 120ms
+-   Behringer xr master
+    -   OSC protocol for Behringer XR12,16,18
+    -   Port 10024
+    -   In this version the Behringer is slave of Producers-Audio-mixer, so faders on the behringer is turned down when channel is of.
+-   DMXIS - Sisyfos control of DMX Lightcontroller
+    -   Default Port is 8000
+    -   Controls Fader On/Off with preset level from Sisyfos.
+    -   Easy implementation of state based lightcontrol from Automation.
+    -   the PROTOCOL DELAY setting should be raised to 50ms, as DMXIS is responding a little slowly.
+-   midi
+    -   Generic MIDI - still preminilary
+    -   When using MIDI protocols, the PROTOCOL DELAY setting should be rised to at least 50ms
+-   Yamaha QL1
+    -   Ip - MIDI based Protocol
+    -   Port 50000
+    -   Stable implementation of 2-ways Fader and Mute
+-   Studer Vista 1-5-9 (untested)
+    -   mono, stereo, 51 channels fader level mute and Aux send from Sisyfos TO mixer
+    -   No 2 way support for now
+-   Studer OnAir 3000 (untested)
+    -   channel 1 to 24 fader level from Sisyfos TO mixer
+    -   No 2 way support for now
+-   VMix
 
-    - TCP API based Protocol
-    - 2-way Fader, Mute, PFL, Gain & Channel Matrix control
-    - **Advanced Channel Input Selection**:
+    -   TCP API based Protocol
+    -   2-way Fader, Mute, PFL, Gain & Channel Matrix control
+    -   **Advanced Channel Input Selection**:
 
-        - Channels 1-8 of an input can be remapped to output channels L+R (1|2). By default, the channels are treated as a stereo pair.
+        -   Channels 1-8 of an input can be remapped to output channels L+R (1|2). By default, the channels are treated as a stereo pair.
 
-          <img src="Docs/pix/Vmix/Stereo-Pair.png">
-          - In order to make it possible for input channels to be treated as mono, SeparateMono needs to be selected in Audio Settings of a vMix input.
+            <img src="Docs/pix/Vmix/Stereo-Pair.png">
+            - In order to make it possible for input channels to be treated as mono, SeparateMono needs to be selected in Audio Settings of a vMix input.
 
-          <img src="Docs/pix/Vmix/Vmix-SeparateMono.png">
-          - This unlocks the 1|2 option, which splits selected input channels to separate faders.
+            <img src="Docs/pix/Vmix/Vmix-SeparateMono.png">
+            - This unlocks the 1|2 option, which splits selected input channels to separate faders.
 
-          <img src="Docs/pix/Vmix/SeparateMono.png">
-          - For this functionality to work, certain Channel Matrix Presets need to be defined in vMix:
-              - **Standard Presets ("1L" … "8L")**:
-                  - The number indicates which input channel is sent to the Left (L) bus.
-                  - All other channels are sent to the Right (R) bus.
-                  - Example: "1L" → channel 1 → L, channels 2–8 → R. "3L" → channel 3 → L, all others → R.
-              - **LR Preset**:
-                  - Every input channel is sent to both L and R.
-                  - This preset is hardcoded as "LR".
-              - **Custom per-input Presets**:
-                  - To use customized presets, use the Channel Matrix Prefix option. It can be useful to exclude specific channels of an input from certain buses in order to avoid feedback loops (mix-minus).
-                  - When setting Channel Matrix Prefix, faders with labels matching `<prefix> <number>` will use dedicated presets.
-                  - Example: If Channel Matrix Prefix is set to "EXT", and channels labeled "EXT 1" and "EXT 2" exist, the preset names will be as follows:
-                      - For EXT 1: "EXT1_1L", "EXT1_2L", …, "EXT1_8L", and "EXT1_LR".
-                      - For EXT 2: "EXT2_1L", "EXT2_2L", …, "EXT2_8L", and "EXT2_LR".
+            <img src="Docs/pix/Vmix/SeparateMono.png">
+            - For this functionality to work, certain Channel Matrix Presets need to be defined in vMix:
+                - **Standard Presets ("1L" … "8L")**:
+                    - The number indicates which input channel is sent to the Left (L) bus.
+                    - All other channels are sent to the Right (R) bus.
+                    - Example: "1L" → channel 1 → L, channels 2–8 → R. "3L" → channel 3 → L, all others → R.
+                - **LR Preset**:
+                    - Every input channel is sent to both L and R.
+                    - This preset is hardcoded as "LR".
+                - **Custom per-input Presets**:
+                    - To use customized presets, use the Channel Matrix Prefix option. It can be useful to exclude specific channels of an input from certain buses in order to avoid feedback loops (mix-minus).
+                    - When setting Channel Matrix Prefix, faders with labels matching `<prefix> <number>` will use dedicated presets.
+                    - Example: If Channel Matrix Prefix is set to "EXT", and channels labeled "EXT 1" and "EXT 2" exist, the preset names will be as follows:
+                        - For EXT 1: "EXT1_1L", "EXT1_2L", …, "EXT1_8L", and "EXT1_LR".
+                        - For EXT 2: "EXT2_1L", "EXT2_2L", …, "EXT2_8L", and "EXT2_LR".
 
 ## Skaarhoj panels:
 
 Skaarhoj in RAW panel mode is supported for rotary buttons including labels.
 
-- HWC#1-xx = fader level on Sisyfos
-- HWC#81-89 = enabled Monitor sends for Aux mix% on fader 1
-- HWC#91-99 = enabled Monitor sends for Aux mix% on fader 2
-- HWC#101-109 = enabled Monitor sends for Aux mix% on fader 3
+-   HWC#1-xx = fader level on Sisyfos
+-   HWC#81-89 = enabled Monitor sends for Aux mix% on fader 1
+-   HWC#91-99 = enabled Monitor sends for Aux mix% on fader 2
+-   HWC#101-109 = enabled Monitor sends for Aux mix% on fader 3
 
 The monitor sends are the same as those on the Channel Strip.
 

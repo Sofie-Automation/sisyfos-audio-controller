@@ -3,7 +3,7 @@ import { loadSnapshotState, saveSnapshotState } from './SettingsStorage'
 import { mixerProtocolPresets } from '../mainClasses'
 import { state } from '../reducers/store'
 import { logger } from './logger'
-import { NumberOfChannels } from '../../../shared/src/reducers/channelsReducer'
+import { NumberOfChannels } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { STORAGE_FOLDER } from './SettingsStorage'
 
 import path from 'path'

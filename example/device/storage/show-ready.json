@@ -1,0 +1,50 @@
+{
+    "name": "Show Ready",
+    "channels": [
+        {
+            "index": 0,
+            "faderLevel": 0.85,
+            "inputGain": 0.75,
+            "inputSelector": 1,
+            "mute": false,
+            "pfl": false,
+            "amixOn": false,
+            "nextAuxLevel": 0,
+            "auxLevels": [0, 0.25, 0, 0],
+            "name": "Host Mic",
+            "fx": [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            ]
+        },
+        {
+            "index": 1,
+            "faderLevel": 0.7,
+            "inputGain": 0.65,
+            "inputSelector": 2,
+            "mute": false,
+            "pfl": false,
+            "amixOn": false,
+            "nextAuxLevel": 0.1,
+            "auxLevels": [0, 0, 0.4, 0],
+            "name": "Guest Mic",
+            "fx": [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            ]
+        },
+        {
+            "index": 2,
+            "faderLevel": 0.55,
+            "inputGain": 0.75,
+            "inputSelector": 1,
+            "mute": false,
+            "pfl": false,
+            "amixOn": false,
+            "nextAuxLevel": 0,
+            "auxLevels": [0, 0, 0, 0],
+            "name": "Playback",
+            "fx": [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            ]
+        }
+    ]
+}

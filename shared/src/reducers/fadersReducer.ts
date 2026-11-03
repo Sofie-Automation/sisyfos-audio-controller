@@ -104,14 +104,13 @@ export const defaultFadersReducerState = (
     return defaultObj
 }
 
-
 export const faders = (
     state = defaultFadersReducerState(0),
     action: RootAction,
     fullState?: RootState
 ): Array<Faders> => {
     if (!(action.type in FaderActionTypes)) {
-        return state;
+        return state
     }
     let nextState = [structuredClone(state[0])]
     // Check if faderIndex is valid:
@@ -147,20 +146,26 @@ export const faders = (
             return nextState
         case FaderActionTypes.SET_FADER_LEVEL:
             if (
-                fullState.settings[0].pgmOnFollowsMixer === 
-                PgmOnFollowMixerBehaviour.Auto && !nextState[0].fader[action.faderIndex].ignoreAutomation
+                fullState.settings[0].pgmOnFollowsMixer ===
+                    PgmOnFollowMixerBehaviour.Auto &&
+                !nextState[0].fader[action.faderIndex].ignoreAutomation
             ) {
-                nextState[0].fader[action.faderIndex].pgmOn = (action.level >= 0.01)
+                nextState[0].fader[action.faderIndex].pgmOn =
+                    action.level >= 0.01
             } else if (
-                fullState.settings[0].pgmOnFollowsMixer === 
-                PgmOnFollowMixerBehaviour.Manual && nextState[0].fader[action.faderIndex].ignoreAutomation
+                fullState.settings[0].pgmOnFollowsMixer ===
+                    PgmOnFollowMixerBehaviour.Manual &&
+                nextState[0].fader[action.faderIndex].ignoreAutomation
             ) {
-                nextState[0].fader[action.faderIndex].pgmOn = (action.level >= 0.01)
-            } else if (fullState.settings[0].pgmOnFollowsMixer ===
+                nextState[0].fader[action.faderIndex].pgmOn =
+                    action.level >= 0.01
+            } else if (
+                fullState.settings[0].pgmOnFollowsMixer ===
                 PgmOnFollowMixerBehaviour.Global
             ) {
-                nextState[0].fader[action.faderIndex].pgmOn = (action.level >= 0.01)
-            } 
+                nextState[0].fader[action.faderIndex].pgmOn =
+                    action.level >= 0.01
+            }
             nextState[0].fader[action.faderIndex].faderLevel = action.level
             return nextState
         case FaderActionTypes.SET_INPUT_GAIN:
@@ -187,53 +192,63 @@ export const faders = (
             return nextState
         case FaderActionTypes.TOGGLE_PGM:
             if (
-                fullState.settings[0].pgmOnFollowsMixer === 
-                PgmOnFollowMixerBehaviour.Auto && !nextState[0].fader[action.faderIndex].ignoreAutomation
+                fullState.settings[0].pgmOnFollowsMixer ===
+                    PgmOnFollowMixerBehaviour.Auto &&
+                !nextState[0].fader[action.faderIndex].ignoreAutomation
             ) {
-                nextState[0].fader[action.faderIndex].pgmOn = (nextState[0].fader[action.faderIndex].faderLevel >= 0.01)
+                nextState[0].fader[action.faderIndex].pgmOn =
+                    nextState[0].fader[action.faderIndex].faderLevel >= 0.01
             } else if (
-                fullState.settings[0].pgmOnFollowsMixer === 
-                PgmOnFollowMixerBehaviour.Manual && nextState[0].fader[action.faderIndex].ignoreAutomation
+                fullState.settings[0].pgmOnFollowsMixer ===
+                    PgmOnFollowMixerBehaviour.Manual &&
+                nextState[0].fader[action.faderIndex].ignoreAutomation
             ) {
-                nextState[0].fader[action.faderIndex].pgmOn = (nextState[0].fader[action.faderIndex].faderLevel >= 0.01)
-            } else if (fullState.settings[0].pgmOnFollowsMixer ===
+                nextState[0].fader[action.faderIndex].pgmOn =
+                    nextState[0].fader[action.faderIndex].faderLevel >= 0.01
+            } else if (
+                fullState.settings[0].pgmOnFollowsMixer ===
                 PgmOnFollowMixerBehaviour.Global
             ) {
-                nextState[0].fader[action.faderIndex].pgmOn = (nextState[0].fader[action.faderIndex].faderLevel >= 0.01)
+                nextState[0].fader[action.faderIndex].pgmOn =
+                    nextState[0].fader[action.faderIndex].faderLevel >= 0.01
             } else {
                 nextState[0].fader[action.faderIndex].pgmOn =
-                !nextState[0].fader[action.faderIndex].pgmOn  
+                    !nextState[0].fader[action.faderIndex].pgmOn
             }
             nextState[0].fader[action.faderIndex].voOn = false
             return nextState
         case FaderActionTypes.TOGGLE_PGM_UI:
-                 if (
-                    fullState.settings[0].pgmOnFollowsMixer === 
-                    PgmOnFollowMixerBehaviour.Auto && !nextState[0].fader[action.faderIndex].ignoreAutomation
-                ) {
-                    nextState[0].fader[action.faderIndex].pgmOn = false
-                    nextState[0].fader[action.faderIndex].faderLevel = 0
-                } else if (
-                    fullState.settings[0].pgmOnFollowsMixer === 
-                    PgmOnFollowMixerBehaviour.Manual && !nextState[0].fader[action.faderIndex].ignoreAutomation
-                ) {
-                    nextState[0].fader[action.faderIndex].pgmOn = false
-                    nextState[0].fader[action.faderIndex].faderLevel = 0
-                } else if (fullState.settings[0].pgmOnFollowsMixer ===
-                    PgmOnFollowMixerBehaviour.Global
-                ) {
-                    nextState[0].fader[action.faderIndex].pgmOn = false
-                    nextState[0].fader[action.faderIndex].faderLevel = 0
-                } else {
-                    nextState[0].fader[action.faderIndex].pgmOn =
+            if (
+                fullState.settings[0].pgmOnFollowsMixer ===
+                    PgmOnFollowMixerBehaviour.Auto &&
+                !nextState[0].fader[action.faderIndex].ignoreAutomation
+            ) {
+                nextState[0].fader[action.faderIndex].pgmOn = false
+                nextState[0].fader[action.faderIndex].faderLevel = 0
+            } else if (
+                fullState.settings[0].pgmOnFollowsMixer ===
+                    PgmOnFollowMixerBehaviour.Manual &&
+                !nextState[0].fader[action.faderIndex].ignoreAutomation
+            ) {
+                nextState[0].fader[action.faderIndex].pgmOn = false
+                nextState[0].fader[action.faderIndex].faderLevel = 0
+            } else if (
+                fullState.settings[0].pgmOnFollowsMixer ===
+                PgmOnFollowMixerBehaviour.Global
+            ) {
+                nextState[0].fader[action.faderIndex].pgmOn = false
+                nextState[0].fader[action.faderIndex].faderLevel = 0
+            } else {
+                nextState[0].fader[action.faderIndex].pgmOn =
                     !nextState[0].fader[action.faderIndex].pgmOn
-                }
+            }
             nextState[0].fader[action.faderIndex].voOn = false
             return nextState
         case FaderActionTypes.SET_PGM:
             if (isPgmOnFollowsMixer(action.faderIndex, fullState)) {
                 console.log('Setting PGM following mixer')
-                nextState[0].fader[action.faderIndex].pgmOn = (nextState[0].fader[action.faderIndex].faderLevel >= 0.01)
+                nextState[0].fader[action.faderIndex].pgmOn =
+                    nextState[0].fader[action.faderIndex].faderLevel >= 0.01
             } else {
                 console.log('Setting PGM manually to', !!action.pgmOn)
                 nextState[0].fader[action.faderIndex].pgmOn = !!action.pgmOn
@@ -364,7 +379,7 @@ export const faders = (
                     const channelsToUnlink =
                         currentFader.assignedChannels?.filter(
                             (channelReference) =>
-                                channelReference.borrowedFromFaderIndex != null,
+                                channelReference.borrowedFromFaderIndex != null
                         )
                     if (channelsToUnlink?.length) {
                         channelsToUnlink.forEach((channelReference) => {
@@ -377,13 +392,13 @@ export const faders = (
                             if (targetFader) {
                                 currentFader.assignedChannels =
                                     currentFader.assignedChannels?.filter(
-                                        (ref) => ref !== channelReference,
+                                        (ref) => ref !== channelReference
                                     )
                                 delete channelReference.borrowedFromFaderIndex
                                 targetFader.assignedChannels =
                                     targetFader.assignedChannels ?? []
                                 targetFader.assignedChannels.push(
-                                    channelReference,
+                                    channelReference
                                 )
                                 targetFader.faderLevel = currentFader.faderLevel
                                 targetFader.inputGain = currentFader.inputGain
@@ -393,12 +408,11 @@ export const faders = (
                 }
             } else {
                 if (action.linkOn) {
-                    const channelsToReassign: ChannelReference[] | undefined = nextFader?.assignedChannels?.map(
-                        (channel) => ({
+                    const channelsToReassign: ChannelReference[] | undefined =
+                        nextFader?.assignedChannels?.map((channel) => ({
                             ...channel,
                             borrowedFromFaderIndex: nextFaderIndex,
-                        }),
-                    )
+                        }))
                     if (
                         channelsToReassign?.length &&
                         nextFader.capabilities?.isLinkableSecondary
@@ -407,7 +421,7 @@ export const faders = (
                         currentFader.assignedChannels =
                             currentFader.assignedChannels ?? []
                         currentFader.assignedChannels.push(
-                            ...channelsToReassign,
+                            ...channelsToReassign
                         )
                     }
                 }
@@ -546,13 +560,17 @@ function isPgmOnFollowsMixer(
         return true
     }
 
-    if (settings.pgmOnFollowsMixer === PgmOnFollowMixerBehaviour.Auto 
-        && !fader.ignoreAutomation) {
+    if (
+        settings.pgmOnFollowsMixer === PgmOnFollowMixerBehaviour.Auto &&
+        !fader.ignoreAutomation
+    ) {
         return true
     }
 
-    if (settings.pgmOnFollowsMixer === PgmOnFollowMixerBehaviour.Manual 
-        && fader.ignoreAutomation) {
+    if (
+        settings.pgmOnFollowsMixer === PgmOnFollowMixerBehaviour.Manual &&
+        fader.ignoreAutomation
+    ) {
         return true
     }
 

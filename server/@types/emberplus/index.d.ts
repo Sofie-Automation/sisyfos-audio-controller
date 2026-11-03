@@ -1,1 +1,1 @@
-declare module 'emberplus';
+declare module 'emberplus'

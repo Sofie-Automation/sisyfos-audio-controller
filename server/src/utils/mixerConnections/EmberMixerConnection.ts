@@ -8,21 +8,21 @@ import fs from 'fs'
 import {
     FxParam,
     MixerProtocol,
-} from '../../../../shared/src/constants/MixerProtocolInterface'
-import { FaderActionTypes } from '../../../../shared/src/actions/faderActions'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { logger } from '../logger'
 import { dbToFloat, floatToDB } from './LawoRubyConnection'
-import { ChannelActionTypes } from '../../../../shared/src/actions/channelActions'
-import { SettingsActionTypes } from '../../../../shared/src/actions/settingsActions'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     ChannelReference,
     Fader,
-} from '../../../../shared/src/reducers/fadersReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { EmberElement, NumberedTreeNode } from 'emberplus-connection/dist/model'
 import { STORAGE_FOLDER } from '../SettingsStorage'
 import { MixerConnection } from '.'
 import { sendVuLevel } from '../vuServer'
-import { VuType } from '../../../../shared/src/utils/vu-server-types'
+import { VuType } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 export class EmberMixerConnection implements MixerConnection {
     mixerProtocol: MixerProtocol
@@ -31,7 +31,10 @@ export class EmberMixerConnection implements MixerConnection {
     deviceRoot: any
     emberNodeObject: Array<any>
     isSubscribedToChannel: Array<boolean> = []
-    meteringRef: Record< string, {faderIndex: number, factor: number, lastUpdated: number }> = {}
+    meteringRef: Record<
+        string,
+        { faderIndex: number; factor: number; lastUpdated: number }
+    > = {}
 
     constructor(mixerProtocol: MixerProtocol, mixerIndex: number) {
         this.sendOutMessage = this.sendOutMessage.bind(this)
@@ -50,7 +53,7 @@ export class EmberMixerConnection implements MixerConnection {
                     assigned.mixerIndex === this.mixerIndex &&
                     assigned.channelIndex === channelIndex
                 )
-            }),
+            })
         )
     }
 
@@ -58,7 +61,7 @@ export class EmberMixerConnection implements MixerConnection {
         logger.info('Setting up new Ember connection')
         this.emberConnection = new EmberClient(
             state.settings[0].mixers[this.mixerIndex].deviceIp,
-            state.settings[0].mixers[this.mixerIndex].devicePort,
+            state.settings[0].mixers[this.mixerIndex].devicePort
         )
 
         this.emberConnection.on('error', (error: any) => {
@@ -96,42 +99,50 @@ export class EmberMixerConnection implements MixerConnection {
             global.mainThreadHandler.updateMixerOnline(this.mixerIndex)
 
             try {
-                const req = await this.emberConnection.getDirectory(this.emberConnection.tree)
+                const req = await this.emberConnection.getDirectory(
+                    this.emberConnection.tree
+                )
                 await req.response
                 await this.setupMixerConnection()
-           }
-            catch (error) {
+            } catch (error) {
                 logger.error(`Error initiating directory request: ${error}`)
             }
         })
-        this.emberConnection.on('streamUpdate', (path: string, value: number) => {
-            // This log should be removed in production:
-            console.log('Stream Update:' + JSON.stringify({ path, value }, null, 2))
-            const refTofader = this.meteringRef[path]
-            if (refTofader && Date.now() - refTofader.lastUpdated > 1000) {
-                this.meteringRef[path].lastUpdated = Date.now()
-                sendVuLevel(
-                    refTofader.faderIndex,
-                    VuType.Channel,
-                    0,
-                    dbToFloat(value / refTofader.factor)
+        this.emberConnection.on(
+            'streamUpdate',
+            (path: string, value: number) => {
+                // This log should be removed in production:
+                console.log(
+                    'Stream Update:' + JSON.stringify({ path, value }, null, 2)
                 )
+                const refTofader = this.meteringRef[path]
+                if (refTofader && Date.now() - refTofader.lastUpdated > 1000) {
+                    this.meteringRef[path].lastUpdated = Date.now()
+                    sendVuLevel(
+                        refTofader.faderIndex,
+                        VuType.Channel,
+                        0,
+                        dbToFloat(value / refTofader.factor)
+                    )
+                }
             }
-        })
+        )
         logger.info('Connecting to Ember')
         this.emberConnection.connect().catch((e) => {
-            logger.error(`Error when connecting to Ember: ${e}, ${typeof e === 'object' ? e.stack : ''}`)
-        })    
+            logger.error(
+                `Error when connecting to Ember: ${e}, ${typeof e === 'object' ? e.stack : ''}`
+            )
+        })
     }
 
     private async setupMixerConnection() {
         logger.info(
-            'Ember connection established - setting up subscription of channels',
+            'Ember connection established - setting up subscription of channels'
         )
 
         let chNumber: number = 1
         for (const [typeIndex, numberOfChannels] of Object.entries(
-            state.settings[0].mixers[this.mixerIndex].numberOfChannelsInType,
+            state.settings[0].mixers[this.mixerIndex].numberOfChannelsInType
         )) {
             for (
                 let channelTypeIndex = 0;
@@ -141,7 +152,7 @@ export class EmberMixerConnection implements MixerConnection {
                 await this.setupFaderSubscriptions(
                     chNumber,
                     Number(typeIndex),
-                    channelTypeIndex,
+                    channelTypeIndex
                 )
                 chNumber++
             }
@@ -151,50 +162,58 @@ export class EmberMixerConnection implements MixerConnection {
     private async setupFaderSubscriptions(
         chNumber: number,
         typeIndex: number,
-        channelTypeIndex: number,
+        channelTypeIndex: number
     ) {
         const protocol =
             this.mixerProtocol.channelTypes[Number(typeIndex)]?.fromMixer
         if (!protocol) return
 
-        await this.subscribeFaderLevel(chNumber, Number(typeIndex), channelTypeIndex)
+        await this.subscribeFaderLevel(
+            chNumber,
+            Number(typeIndex),
+            channelTypeIndex
+        )
 
         if (protocol.CHANNEL_NAME)
             await this.subscribeChannelName(
                 chNumber,
                 Number(typeIndex),
-                channelTypeIndex,
+                channelTypeIndex
             )
 
         if (protocol.PFL)
             await this.subscribeChannelPFL(
                 chNumber,
                 Number(typeIndex),
-                channelTypeIndex,
+                channelTypeIndex
             )
 
         if (protocol.CHANNEL_AMIX)
-            await this.subscribeAMix(chNumber, Number(typeIndex), channelTypeIndex)
+            await this.subscribeAMix(
+                chNumber,
+                Number(typeIndex),
+                channelTypeIndex
+            )
 
         if (protocol.CHANNEL_INPUT_GAIN)
             await this.subscribeChannelInputGain(
                 chNumber,
                 Number(typeIndex),
-                channelTypeIndex,
+                channelTypeIndex
             )
 
         if (protocol.CHANNEL_MUTE_ON)
             await this.subscribeChannelMute(
                 chNumber,
                 Number(typeIndex),
-                channelTypeIndex,
+                channelTypeIndex
             )
 
         if (protocol.CHANNEL_INPUT_SELECTOR) {
             await this.subscribeChannelInputSelector(
                 chNumber,
                 Number(typeIndex),
-                channelTypeIndex,
+                channelTypeIndex
             )
         }
 
@@ -210,43 +229,45 @@ export class EmberMixerConnection implements MixerConnection {
     private async subscribeToEmberNode(
         channelTypeIndex: number,
         mixerMessage: string,
-        cb: (node: Model.TreeElement<Model.EmberElement>) => void,
+        cb: (node: Model.TreeElement<Model.EmberElement>) => void
     ) {
         const channelName = this._insertChannelName(
             mixerMessage,
-            String(channelTypeIndex + 1),
+            String(channelTypeIndex + 1)
         )
         logger.trace(`Subscribe to ${channelName}`)
         try {
             const node = await this.emberConnection.getElementByPath(
                 this._insertChannelName(
                     mixerMessage,
-                    String(channelTypeIndex + 1),
-                ),
+                    String(channelTypeIndex + 1)
+                )
             )
             if (!node) return
 
             const subsription = await this.emberConnection.subscribe(
                 node as NumberedTreeNode<EmberElement>,
-                cb,
+                cb
             )
 
             await subsription.response
             cb(node)
         } catch (e) {
-            logger.data(e).error('Error when subscribing to node: ' + mixerMessage)
+            logger
+                .data(e)
+                .error('Error when subscribing to node: ' + mixerMessage)
         }
     }
 
     private async subscribeFaderLevel(
         chNumber: number,
         typeIndex: number,
-        channelTypeIndex: number,
+        channelTypeIndex: number
     ) {
         let mixerMessage = this._insertChannelName(
             this.mixerProtocol.channelTypes[typeIndex].fromMixer
                 .CHANNEL_OUT_GAIN[0].mixerMessage,
-            String(channelTypeIndex + 1),
+            String(channelTypeIndex + 1)
         )
 
         await this.subscribeToEmberNode(
@@ -259,10 +280,12 @@ export class EmberMixerConnection implements MixerConnection {
                 const channel =
                     state.channels[0].chMixerConnection[this.mixerIndex]
                         .channel[chNumber - 1]
-                const assignedFaderIndex = this.getAssignedFaderIndex(chNumber - 1)
+                const assignedFaderIndex = this.getAssignedFaderIndex(
+                    chNumber - 1
+                )
 
                 logger.trace(
-                    `Receiving Level from Ch "${chNumber}", val: ${val}, level: ${level}`,
+                    `Receiving Level from Ch "${chNumber}", val: ${val}, level: ${level}`
                 )
 
                 if (!channel.fadeActive && level >= 0 && level <= 1) {
@@ -286,29 +309,31 @@ export class EmberMixerConnection implements MixerConnection {
                     })
 
                     global.mainThreadHandler.updatePartialStore(
-                        assignedFaderIndex,
+                        assignedFaderIndex
                     )
                     if (remoteConnections) {
                         remoteConnections.updateRemoteFaderState(
                             assignedFaderIndex,
-                            level,
+                            level
                         )
                     }
                 }
-            },
+            }
         )
         try {
             this.emberNodeObject[chNumber - 1] =
                 await this.emberConnection.getElementByPath(mixerMessage)
         } catch (e) {
-            logger.error('Error when subscribing to faderlevel: ' + mixerMessage)
+            logger.error(
+                'Error when subscribing to faderlevel: ' + mixerMessage
+            )
         }
     }
 
     private async subscribeChannelName(
         chNumber: number,
         typeIndex: number,
-        channelTypeIndex: number,
+        channelTypeIndex: number
     ) {
         const mixerMessage =
             this.mixerProtocol.channelTypes[typeIndex].fromMixer.CHANNEL_NAME[0]
@@ -350,20 +375,22 @@ export class EmberMixerConnection implements MixerConnection {
                     label: newLabel,
                 })
                 global.mainThreadHandler.updatePartialStore(assignedFaderIndex)
-            },
+            }
         )
     }
 
     private async subscribeChannelPFL(
         chNumber: number,
         typeIndex: number,
-        channelTypeIndex: number,
+        channelTypeIndex: number
     ) {
         const mixerMessage =
             this.mixerProtocol.channelTypes[typeIndex].fromMixer.PFL[0]
                 .mixerMessage
         const channel =
-            state.channels[0].chMixerConnection[this.mixerIndex].channel[chNumber - 1]
+            state.channels[0].chMixerConnection[this.mixerIndex].channel[
+                chNumber - 1
+            ]
         const assignedFaderIndex = this.getAssignedFaderIndex(chNumber - 1)
         await this.subscribeToEmberNode(
             channelTypeIndex,
@@ -372,7 +399,7 @@ export class EmberMixerConnection implements MixerConnection {
                 logger.trace(
                     `Receiving PFL from Ch "${chNumber}", val: ${
                         (node.contents as Model.Parameter).value
-                    }`,
+                    }`
                 )
                 store.dispatch({
                     type: FaderActionTypes.SET_PFL,
@@ -380,20 +407,22 @@ export class EmberMixerConnection implements MixerConnection {
                     pflOn: (node.contents as Model.Parameter).value as boolean,
                 })
                 global.mainThreadHandler.updatePartialStore(assignedFaderIndex)
-            },
+            }
         )
     }
 
     private async subscribeChannelInputGain(
         chNumber: number,
         typeIndex: number,
-        channelTypeIndex: number,
+        channelTypeIndex: number
     ) {
         const mixerMessage =
             this.mixerProtocol.channelTypes[typeIndex].fromMixer
                 .CHANNEL_INPUT_GAIN[0].mixerMessage
         const channel =
-            state.channels[0].chMixerConnection[this.mixerIndex].channel[chNumber - 1]
+            state.channels[0].chMixerConnection[this.mixerIndex].channel[
+                chNumber - 1
+            ]
         const assignedFaderIndex = this.getAssignedFaderIndex(chNumber - 1)
         await this.subscribeToEmberNode(
             channelTypeIndex,
@@ -402,7 +431,7 @@ export class EmberMixerConnection implements MixerConnection {
                 logger.trace(
                     `Receiving input gain from Ch "${chNumber}", val: ${
                         (node.contents as Model.Parameter).value
-                    }`,
+                    }`
                 )
 
                 let level = (node.contents as Model.Parameter).value
@@ -421,14 +450,14 @@ export class EmberMixerConnection implements MixerConnection {
                     level: level,
                 })
                 global.mainThreadHandler.updatePartialStore(assignedFaderIndex)
-            },
+            }
         )
     }
 
     private async subscribeChannelMute(
         chNumber: number,
         typeIndex: number,
-        channelTypeIndex: number,
+        channelTypeIndex: number
     ) {
         const mixerMessage =
             this.mixerProtocol.channelTypes[typeIndex].fromMixer
@@ -441,7 +470,7 @@ export class EmberMixerConnection implements MixerConnection {
                 logger.trace(
                     `Receiving mute state from Ch "${chNumber}", val: ${
                         (node.contents as Model.Parameter).value
-                    }`,
+                    }`
                 )
                 let state = (node.contents as Model.Parameter).value
 
@@ -456,17 +485,19 @@ export class EmberMixerConnection implements MixerConnection {
                     muteOn: state,
                 })
                 global.mainThreadHandler.updatePartialStore(assignedFaderIndex)
-            },
+            }
         )
     }
 
     private async subscribeChannelInputSelector(
         chNumber: number,
         typeIndex: number,
-        channelTypeIndex: number,
+        channelTypeIndex: number
     ) {
         const channel =
-            state.channels[0].chMixerConnection[this.mixerIndex].channel[chNumber - 1]
+            state.channels[0].chMixerConnection[this.mixerIndex].channel[
+                chNumber - 1
+            ]
         const assignedFaderIndex = this.getAssignedFaderIndex(chNumber - 1)
         for (const i in this.mixerProtocol.channelTypes[typeIndex].fromMixer
             .CHANNEL_INPUT_SELECTOR) {
@@ -482,7 +513,7 @@ export class EmberMixerConnection implements MixerConnection {
                     logger.trace(
                         `Receiving input selector from Ch "${chNumber}", val: ${i}: ${
                             (node.contents as Model.Parameter).value
-                        }`,
+                        }`
                     )
 
                     let value = (node.contents as Model.Parameter).value
@@ -491,7 +522,7 @@ export class EmberMixerConnection implements MixerConnection {
                         logger.trace(
                             `Dispatching input selector Ch "${chNumber}", selected: ${
                                 i + 1
-                            }`,
+                            }`
                         )
                         store.dispatch({
                             type: FaderActionTypes.SET_INPUT_SELECTOR,
@@ -500,9 +531,9 @@ export class EmberMixerConnection implements MixerConnection {
                         })
                     }
                     global.mainThreadHandler.updatePartialStore(
-                        assignedFaderIndex,
+                        assignedFaderIndex
                     )
-                },
+                }
             )
         }
     }
@@ -510,10 +541,12 @@ export class EmberMixerConnection implements MixerConnection {
     private async subscribeAMix(
         chNumber: number,
         typeIndex: number,
-        channelTypeIndex: number,
+        channelTypeIndex: number
     ) {
         const channel =
-            state.channels[0].chMixerConnection[this.mixerIndex].channel[chNumber - 1]
+            state.channels[0].chMixerConnection[this.mixerIndex].channel[
+                chNumber - 1
+            ]
         const assignedFaderIndex = this.getAssignedFaderIndex(chNumber - 1)
         // subscribe to amix
         const mixerMessage =
@@ -526,7 +559,7 @@ export class EmberMixerConnection implements MixerConnection {
                 logger.trace(
                     `Receiving AMix from Ch "${chNumber}", val: ${
                         (node.contents as Model.Parameter).value
-                    }`,
+                    }`
                 )
                 store.dispatch({
                     type: FaderActionTypes.SET_AMIX,
@@ -534,51 +567,68 @@ export class EmberMixerConnection implements MixerConnection {
                     state: (node.contents as Model.Parameter).value as boolean,
                 })
                 global.mainThreadHandler.updatePartialStore(assignedFaderIndex)
-            },
+            }
         )
     }
     private async subscribeVUMeter(
-        chNumber: number, 
+        chNumber: number,
         typeIndex: number,
-        channelTypeIndex: number,
+        channelTypeIndex: number
     ) {
         const assignedFaderIndex = this.getAssignedFaderIndex(chNumber - 1)
-        const mixerMessage = 
-                this._insertChannelName(
-                    this.mixerProtocol.channelTypes[typeIndex].fromMixer.CHANNEL_VU[0].mixerMessage, String(channelTypeIndex + 1)
-                )
-        
+        const mixerMessage = this._insertChannelName(
+            this.mixerProtocol.channelTypes[typeIndex].fromMixer.CHANNEL_VU[0]
+                .mixerMessage,
+            String(channelTypeIndex + 1)
+        )
+
         try {
-            const node = await this.emberConnection.getElementByPath(mixerMessage)
-            
-            if (!node?.contents || node.contents.type !== Model.ElementType.Parameter) {
+            const node =
+                await this.emberConnection.getElementByPath(mixerMessage)
+
+            if (
+                !node?.contents ||
+                node.contents.type !== Model.ElementType.Parameter
+            ) {
                 logger.error('Invalid node type for VU meter')
                 return
             }
-    
+
             const param = node.contents
             if (!param.streamIdentifier) {
                 logger.error('No stream identifier found for VU meter')
                 return
             }
-                
+
             const internalPath = this.emberConnection.getInternalNodePath(node)
             if (!internalPath) return
-            this.meteringRef[String(internalPath)] ={ faderIndex: assignedFaderIndex, factor: param.factor, lastUpdated: Date.now() }
+            this.meteringRef[String(internalPath)] = {
+                faderIndex: assignedFaderIndex,
+                factor: param.factor,
+                lastUpdated: Date.now(),
+            }
 
-            logger.info(`Setting up subscription for VU : ${mixerMessage} Internal Path : ${internalPath}`)
-            logger.debug(`VU meter parameters: ${JSON.stringify(param, null, 2)}`)
+            logger.info(
+                `Setting up subscription for VU : ${mixerMessage} Internal Path : ${internalPath}`
+            )
+            logger.debug(
+                `VU meter parameters: ${JSON.stringify(param, null, 2)}`
+            )
             // Subscribe to the parameter - this will also subscribe to its stream
             const subscription = await this.emberConnection.subscribe(
                 node as NumberedTreeNode<EmberElement>,
                 (node) => {
-                    logger.trace('VU meter update' + JSON.stringify(node.contents, null, 2))
-                    if (node.contents.type !== Model.ElementType.Parameter) return
+                    logger.trace(
+                        'VU meter update' +
+                            JSON.stringify(node.contents, null, 2)
+                    )
+                    if (node.contents.type !== Model.ElementType.Parameter)
+                        return
                     const value = Number(node.contents.value)
                     if (Number.isNaN(value)) return
-    
+
                     const factor = param.factor ?? 1
-    
+
                     sendVuLevel(
                         assignedFaderIndex,
                         VuType.Channel,
@@ -588,7 +638,6 @@ export class EmberMixerConnection implements MixerConnection {
                 }
             )
             await subscription.response
-    
         } catch (e) {
             logger.error('Error when subscribing to VU meter: ' + mixerMessage)
         }
@@ -599,7 +648,10 @@ export class EmberMixerConnection implements MixerConnection {
         channelIndex: number,
         value: string | number | boolean
     ) {
-        let message = this._insertChannelName(mixerMessage, channelIndex.toString())
+        let message = this._insertChannelName(
+            mixerMessage,
+            channelIndex.toString()
+        )
         logger.trace('Sending out message : ' + message + ', val: ' + value)
 
         this.emberConnection
@@ -609,7 +661,7 @@ export class EmberMixerConnection implements MixerConnection {
                     value *= element.contents.factor
                 }
                 logger.trace(
-                    `Sending out message: ${message}\n  val: ${value}\n  typeof: ${typeof value}`,
+                    `Sending out message: ${message}\n  val: ${value}\n  typeof: ${typeof value}`
                 )
                 await (
                     await this.emberConnection.setValue(element, value)
@@ -657,7 +709,7 @@ export class EmberMixerConnection implements MixerConnection {
                     .mixerMessage,
                 channelTypeIndex + 1,
                 !!this.mixerProtocol.channelTypes[channelType].toMixer.PFL_ON[0]
-                    .value as any,
+                    .value as any
             )
         } else {
             this.sendOutMessage(
@@ -665,7 +717,7 @@ export class EmberMixerConnection implements MixerConnection {
                     .mixerMessage,
                 channelTypeIndex + 1,
                 !!this.mixerProtocol.channelTypes[channelType].toMixer
-                    .PFL_OFF[0].value as any,
+                    .PFL_OFF[0].value as any
             )
         }
     }
@@ -690,7 +742,7 @@ export class EmberMixerConnection implements MixerConnection {
             this.mixerProtocol.channelTypes[channelType].toMixer
                 .CHANNEL_MUTE_ON[0].mixerMessage,
             channelTypeIndex + 1,
-            muteOn,
+            muteOn
         )
     }
 
@@ -713,11 +765,7 @@ export class EmberMixerConnection implements MixerConnection {
 
         // let level = gain * (protocol.max - protocol.min) + protocol.min
 
-        this.sendOutMessage(
-            protocol.mixerMessage,
-            channelTypeIndex + 1,
-            level,
-        )
+        this.sendOutMessage(protocol.mixerMessage, channelTypeIndex + 1, level)
     }
     updateInputSelector(channelIndex: number, inputSelected: number) {
         const channel =
@@ -764,12 +812,13 @@ export class EmberMixerConnection implements MixerConnection {
                 state.channels[0].chMixerConnection[0].channel[channelIndex]
                     .label
         }
-        if (!this.mixerProtocol.channelTypes[channelType].toMixer.CHANNEL_NAME) return
+        if (!this.mixerProtocol.channelTypes[channelType].toMixer.CHANNEL_NAME)
+            return
         this.sendOutMessage(
             this.mixerProtocol.channelTypes[channelType].toMixer.CHANNEL_NAME[0]
                 .mixerMessage,
             channelTypeIndex + 1,
-            channelName,
+            channelName
         )
     }
 
@@ -783,11 +832,7 @@ export class EmberMixerConnection implements MixerConnection {
         let protocol =
             this.mixerProtocol.channelTypes[channelType].toMixer.CHANNEL_AMIX[0]
 
-        this.sendOutMessage(
-            protocol.mixerMessage,
-            channelTypeIndex + 1,
-            amixOn,
-        )
+        this.sendOutMessage(protocol.mixerMessage, channelTypeIndex + 1, amixOn)
     }
 
     async loadMixerPreset(presetName: string) {
@@ -799,7 +844,7 @@ export class EmberMixerConnection implements MixerConnection {
     updateChannelSetting(
         channelIndex: number,
         setting: string,
-        value: string,
+        value: string
     ) {}
 
     private _insertChannelName(command: string, channel: string | number) {
@@ -823,7 +868,7 @@ export class EmberMixerConnection implements MixerConnection {
             this.mixerProtocol.channelTypes[typeIndex].fromMixer
                 .CHANNEL_OUT_GAIN[0].min
 
-        return value / range + min        
+        return value / range + min
     }
 
     private _faderLevelToFloat(value: number, typeIndex: number) {

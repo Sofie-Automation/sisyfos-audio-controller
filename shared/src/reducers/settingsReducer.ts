@@ -1,7 +1,4 @@
-import { MixerProtocolPresets } from '../constants/MixerProtocolPresets'
-import {
-    SettingsActionTypes,
-} from '../actions/settingsActions'
+import { SettingsActionTypes } from '../actions/settingsActions'
 import { RootAction } from './indexReducer'
 
 export enum PageType {
@@ -91,10 +88,10 @@ export interface Settings {
     numberOfCustomPages: number
     chanStripFollowsPFL: boolean
     labelType: 'automatic' | 'user' | 'automation' | 'channel'
-    
+
     /** Connection state */
     serverOnline: boolean
-    
+
     // Deprecated:
     automationMode?: boolean
     showPfl?: boolean
@@ -188,7 +185,7 @@ export const settings = (
     action: RootAction
 ): Array<Settings> => {
     if (!(action.type in SettingsActionTypes)) {
-        return state;
+        return state
     }
     let nextState = [structuredClone(state[0])]
 
@@ -248,7 +245,7 @@ export const settings = (
                     start: 0,
                 }
             } else {
-               currentPage = {
+                currentPage = {
                     type: action.pageType,
                     id: '',
                     start: action.id,
@@ -282,13 +279,6 @@ export const settings = (
 
             if (!nextState[0].mixers) {
                 nextState = [Object.assign({}, defaultSettingsReducerState[0])]
-            }
-            if (
-                typeof MixerProtocolPresets[
-                    nextState[0].mixers[0].mixerProtocol
-                ] === 'undefined'
-            ) {
-                nextState[0].mixers[0].mixerProtocol = 'genericMidi'
             }
             return nextState
         default:

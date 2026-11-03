@@ -6,11 +6,11 @@ import { remoteConnections } from '../../mainClasses'
 import {
     FxParam,
     MixerProtocol,
-} from '../../../../shared/src/constants/MixerProtocolInterface'
-import { FaderActionTypes } from '../../../../shared/src/actions/faderActions'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { logger } from '../logger'
-import { SettingsActionTypes } from '../../../../shared/src/actions/settingsActions'
-import { ChannelActionTypes } from '../../../../shared/src/actions/channelActions'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { EmberElement, NumberedTreeNode } from 'emberplus-connection/dist/model'
 import { MixerConnection } from '.'
 

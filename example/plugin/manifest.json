@@ -1,0 +1,9 @@
+{
+    "id": "sisyfos-mock-websocket-plugin",
+    "version": "1.0.0",
+    "mixers": {
+        "mockWebSocket": {
+            "displayName": "Mock WebSocket Device"
+        }
+    }
+}

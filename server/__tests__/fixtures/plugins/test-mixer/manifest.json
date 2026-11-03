@@ -1,0 +1,9 @@
+{
+    "id": "test-mixer",
+    "version": "1.0.0",
+    "mixers": {
+        "testPluginMixer": {
+            "displayName": "Test Plugin Mixer"
+        }
+    }
+}

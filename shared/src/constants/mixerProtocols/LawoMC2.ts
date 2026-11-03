@@ -118,14 +118,15 @@ export const LawoMC2: MixerProtocol = {
                 ],
                 CHANNEL_VU: [
                     {
-                        mixerMessage: 'Channels.Inputs.${channel}.Metering.Main Level',
+                        mixerMessage:
+                            'Channels.Inputs.${channel}.Metering.Main Level',
                         value: true,
                         type: 'boolean',
                         min: -128,
                         max: 12,
                         zero: 0,
                     },
-                ]
+                ],
             },
             toMixer: {
                 CHANNEL_OUT_GAIN: [
@@ -301,14 +302,15 @@ export const LawoMC2: MixerProtocol = {
                 ],
                 CHANNEL_VU: [
                     {
-                        mixerMessage: 'Channels.Groups.${channel}.Metering.Main Level',
+                        mixerMessage:
+                            'Channels.Groups.${channel}.Metering.Main Level',
                         value: true,
                         type: 'boolean',
                         min: -128,
                         max: 12,
                         zero: 0,
                     },
-                ]
+                ],
             },
             toMixer: {
                 CHANNEL_OUT_GAIN: [

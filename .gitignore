@@ -17,6 +17,8 @@ builds/
 dist/
 coverage/
 node_modules/
+example/**/node_modules/
+example/**/.yarn/
 release/
 *.compiled.*
 settings.json

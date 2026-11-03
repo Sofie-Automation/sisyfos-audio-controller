@@ -2,19 +2,17 @@ import React from 'react'
 import ReactSlider from 'react-slider'
 
 import '../assets/css/ChanStrip.css'
-import {  Store } from 'redux'
+import { Store } from 'redux'
 import { connect } from 'react-redux'
-import {
-    SettingsActionTypes,
-} from '../../../shared/src/actions/settingsActions'
-import { Fader } from '../../../shared/src/reducers/fadersReducer'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { Fader } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     SOCKET_SET_FX,
     SOCKET_SET_AUX_LEVEL,
     SOCKET_SET_INPUT_GAIN,
-} from '../../../shared/src/constants/SOCKET_IO_DISPATCHERS'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import ReductionMeter from './ReductionMeter'
-import { FxParam } from '../../../shared/src/constants/MixerProtocolInterface'
+import { FxParam } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { getFaderLabel } from '../utils/labels'
 import { InputSelector } from './InputSelector'
 
@@ -41,7 +39,6 @@ class ChanStrip extends React.PureComponent<
     constructor(props: any) {
         super(props)
     }
-
 
     handleShowChStripFull() {
         this.props.dispatch({
@@ -99,22 +96,21 @@ class ChanStrip extends React.PureComponent<
                 <div className="parameter-mini-text">{maxLabel + ' dB'}</div>
                 {window.mixerProtocol.channelTypes[0].toMixer
                     .CHANNEL_INPUT_GAIN ? (
-                        <ReactSlider
-                            className="chan-strip-fader"
-                            thumbClassName="chan-strip-thumb"
-                            orientation="vertical"
-                            invert
-                            min={0}
-                            max={1}
-                            step={0.01}
-                            value={
-                                this.props.fader[this.props.faderIndex]
-                                    .inputGain
-                            }
-                            onChange={(event: any) => {
-                                this.handleInputGain(event)
-                            }}
-                        />
+                    <ReactSlider
+                        className="chan-strip-fader"
+                        thumbClassName="chan-strip-thumb"
+                        orientation="vertical"
+                        invert
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={
+                            this.props.fader[this.props.faderIndex].inputGain
+                        }
+                        onChange={(event: any) => {
+                            this.handleInputGain(event)
+                        }}
+                    />
                 ) : null}
                 <div className="parameter-mini-text">{minLabel + ' dB'}</div>
             </div>
@@ -259,20 +255,14 @@ class ChanStrip extends React.PureComponent<
                 window.mixerProtocol.channelTypes[0].toMixer
                     .CHANNEL_INPUT_SELECTOR
             const hasGainTrim =
-                window.mixerProtocol.channelTypes[0].toMixer[
-                    FxParam.GainTrim
-                ]
+                window.mixerProtocol.channelTypes[0].toMixer[FxParam.GainTrim]
             const hasComp =
                 window.mixerProtocol.channelTypes[0].toMixer[
                     FxParam.CompThrs
                 ] ||
-                window.mixerProtocol.channelTypes[0].toMixer[
-                    FxParam.CompRatio
-                ]
+                window.mixerProtocol.channelTypes[0].toMixer[FxParam.CompRatio]
             const hasDelay =
-                window.mixerProtocol.channelTypes[0].toMixer[
-                    FxParam.DelayTime
-                ]
+                window.mixerProtocol.channelTypes[0].toMixer[FxParam.DelayTime]
             const hasEq =
                 window.mixerProtocol.channelTypes[0].toMixer[
                     FxParam.EqGain01
@@ -283,9 +273,7 @@ class ChanStrip extends React.PureComponent<
                 window.mixerProtocol.channelTypes[0].toMixer[
                     FxParam.EqGain03
                 ] ||
-                window.mixerProtocol.channelTypes[0].toMixer[
-                    FxParam.EqGain04
-                ]
+                window.mixerProtocol.channelTypes[0].toMixer[FxParam.EqGain04]
             const hasMonitorSends = this.props.channel.find(
                 (ch: any) => ch.auxLevel[this.props.auxSendIndex] >= 0
             )
@@ -293,47 +281,46 @@ class ChanStrip extends React.PureComponent<
                 <div className="parameters">
                     <div className="horizontal">
                         {hasInput && (
-                                <div className="item">
-                                    <div className="title">INPUT</div>
-                                    <div className="content">
-                                        <InputSelector fader={this.props.fader[this.props.faderIndex]} faderIndex={this.props.faderIndex} />
-                                        {this.inputGain()}
-                                    </div>
+                            <div className="item">
+                                <div className="title">INPUT</div>
+                                <div className="content">
+                                    <InputSelector
+                                        fader={
+                                            this.props.fader[
+                                                this.props.faderIndex
+                                            ]
+                                        }
+                                        faderIndex={this.props.faderIndex}
+                                    />
+                                    {this.inputGain()}
                                 </div>
+                            </div>
                         )}
                         {hasGainTrim && (
-                                <div className="item">
-                                    <div className="title">INPUT</div>
-                                    <div className="content">
-                                        {this.fxParamFader(
-                                            FxParam.GainTrim
-                                        )}
-                                    </div>
+                            <div className="item">
+                                <div className="title">INPUT</div>
+                                <div className="content">
+                                    {this.fxParamFader(FxParam.GainTrim)}
                                 </div>
+                            </div>
                         )}
                         {hasComp && (
-                                <div className="item">
-                                    <div className="title">COMPRESSOR</div>
-                                    <div className="content">
-                                        {this.fxParamFader(
-                                            FxParam.CompThrs
-                                        )}
-                                        <p className="zero-comp">______</p>
-                                        {this.fxParamFader(
-                                            FxParam.CompRatio
-                                        )}
-                                        <p className="zero-comp">______</p>
-                                        {this.gainReduction()}
-                                    </div>
+                            <div className="item">
+                                <div className="title">COMPRESSOR</div>
+                                <div className="content">
+                                    {this.fxParamFader(FxParam.CompThrs)}
+                                    <p className="zero-comp">______</p>
+                                    {this.fxParamFader(FxParam.CompRatio)}
+                                    <p className="zero-comp">______</p>
+                                    {this.gainReduction()}
                                 </div>
+                            </div>
                         )}
                         {hasDelay && (
-                                <div className="item">
-                                    <div className="title">DELAY</div>
-                                    <div className="content">
-                                        {this.delay()}
-                                    </div>
-                                </div>
+                            <div className="item">
+                                <div className="title">DELAY</div>
+                                <div className="content">{this.delay()}</div>
+                            </div>
                         )}
                     </div>
 

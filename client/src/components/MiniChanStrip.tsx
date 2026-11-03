@@ -4,8 +4,8 @@ import ReactSlider from 'react-slider'
 import '../assets/css/MiniChanStrip.css'
 import { Store } from 'redux'
 import { connect } from 'react-redux'
-import { Fader } from '../../../shared/src/reducers/fadersReducer'
-import { SOCKET_SET_AUX_LEVEL } from '../../../shared/src/constants/SOCKET_IO_DISPATCHERS'
+import { Fader } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SOCKET_SET_AUX_LEVEL } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { getFaderLabel } from '../utils/labels'
 
 interface ChanStripInjectProps {

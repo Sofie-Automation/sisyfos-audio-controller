@@ -1,7 +1,7 @@
 import {
     CasparCGMixerGeometry,
     CasparCGMixerGeometryFile,
-    MixerConnectionTypes
+    MixerConnectionTypes,
 } from '../MixerProtocolInterface'
 
 // TODO: This is just template data to avoid error if not loading

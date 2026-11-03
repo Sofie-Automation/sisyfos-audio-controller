@@ -10,8 +10,8 @@
         "noImplicitAny": false,
         "resolveJsonModule": true,
         "module": "commonjs",
-        "outDir": "dist"
+        "outDir": "dist",
     },
     "include": ["../server", "../../shared"],
-    "exclude": ["node_modules/*", "dist/*", "**/*.spec.ts"]
+    "exclude": ["node_modules/*", "dist/*", "**/*.spec.ts"],
 }

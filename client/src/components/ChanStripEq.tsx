@@ -5,10 +5,10 @@ import ReactSlider from 'react-slider'
 import '../assets/css/ChanStripEq.css'
 import { Store } from 'redux'
 import { connect } from 'react-redux'
-import { Fader } from '../../../shared/src/reducers/fadersReducer'
-import { Channel } from '../../../shared/src/reducers/channelsReducer'
-import { SOCKET_SET_FX } from '../../../shared/src/constants/SOCKET_IO_DISPATCHERS'
-import { FxParam } from '../../../shared/src/constants/MixerProtocolInterface'
+import { Fader } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { Channel } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SOCKET_SET_FX } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { FxParam } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { getFaderLabel } from '../utils/labels'
 
 interface ChanStripFullInjectProps {
@@ -117,7 +117,12 @@ class ChanStripEq extends React.PureComponent<
         })
     }
 
-    handleDragCaptureEq(key: number, totalWidth: number, totalHeight: number, event: any) {
+    handleDragCaptureEq(
+        key: number,
+        totalWidth: number,
+        totalHeight: number,
+        event: any
+    ) {
         let eqFreqKey =
             FxParam[
                 String(FxParam[key]).replace(
@@ -143,7 +148,8 @@ class ChanStripEq extends React.PureComponent<
     }
     gainPositionToValue(position: number, totalHeight: number) {
         return (
-            (totalHeight * EQ_Y_SIZE - (position - totalHeight * EQ_Y_OFFSET)) / (totalHeight * EQ_Y_SIZE)
+            (totalHeight * EQ_Y_SIZE - (position - totalHeight * EQ_Y_OFFSET)) /
+            (totalHeight * EQ_Y_SIZE)
         )
     }
 
@@ -273,9 +279,7 @@ class ChanStripEq extends React.PureComponent<
                                 <div
                                     className="dot"
                                     style={{
-                                        color: String(
-                                            EqColors[FxParam[fxKey]]
-                                        ),
+                                        color: String(EqColors[FxParam[fxKey]]),
                                     }}
                                 >
                                     O

@@ -3,7 +3,7 @@ import {
     SOCKET_GET_MIXER_PRESET_LIST,
     SOCKET_RETURN_MIXER_PRESET_LIST,
     SOCKET_LOAD_MIXER_PRESET,
-} from '../../../shared/src/constants/SOCKET_IO_DISPATCHERS'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 const MixerPresetStorage: React.FC = () => {
     const [presetList, setPresetList] = useState<string[]>(

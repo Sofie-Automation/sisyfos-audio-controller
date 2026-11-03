@@ -1,66 +1,66 @@
 .channel-settings-body {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 400px;
-	overflow: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    overflow: auto;
     max-height: 90vh;
     background-color: rgb(31, 31, 31);
     border-color: rgb(124, 124, 124);
     border-style: solid;
     border-width: 4px;
-	text-align: center;
-	z-index: 2;
+    text-align: center;
+    z-index: 2;
 
-	color: #fff;
+    color: #fff;
 }
 
 .channel-settings-body > h2 {
-	border-bottom: 1px solid #999;
-	margin: 0;
-	padding: 10px 0;
-	line-height: 50px;
+    border-bottom: 1px solid #999;
+    margin: 0;
+    padding: 10px 0;
+    line-height: 50px;
 }
 
 .channel-settings-body > .close {
-	position: absolute;
-	outline : none;
+    position: absolute;
+    outline: none;
     border-color: rgb(99, 99, 99);
     background-color: rgb(27, 27, 27);
-	border-radius: 100%;
-	display: block;
-	color: #fff;
-	width: 50px;
-	height: 50px;
-	font-size: 30px;
-	line-height: 50px;
-	top: 9px;
-	right: 9px;
+    border-radius: 100%;
+    display: block;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    line-height: 50px;
+    top: 9px;
+    right: 9px;
 }
 
 .channel-settings-group {
-	border-bottom: 1px solid #999;
+    border-bottom: 1px solid #999;
 }
 
 .channel-settings-group > button {
-	line-height: 10px;
+    line-height: 10px;
 
-	outline : none;
+    outline: none;
     border-color: rgb(99, 99, 99);
     background-color: rgb(27, 27, 27);
     margin-right: auto;
-	margin-top: 15px;
+    margin-top: 15px;
     margin-bottom: 15px;
-	margin-left: auto;
-	border-radius: 7px;
-	display: block;
-	color: #fff;
-	width: 90%;
-	font-size: 30px;
+    margin-left: auto;
+    border-radius: 7px;
+    display: block;
+    color: #fff;
+    width: 90%;
+    font-size: 30px;
     line-height: 50px;
 }
 
 .channel-settings-group > button.active {
-	border-color: rgb(17, 0, 255);
+    border-color: rgb(17, 0, 255);
 }

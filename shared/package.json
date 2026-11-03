@@ -1,13 +1,66 @@
 {
-  "name": "shared",
-  "private": true,
-  "version": "0.0.0",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^24",
-    "typescript": "^5.0.4"
-  },
-  "dependencies": {
-    "redux": "^5.0.1"
-  }
+    "name": "@sofie-automation/sisyfos-audio-controller-shared-lib",
+    "version": "0.0.0",
+    "description": "Shared types, reducers, and constants for Sisyfos Audio Controller",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Sofie-Automation/sisyfos-audio-controller.git",
+        "directory": "shared"
+    },
+    "bugs": {
+        "url": "https://github.com/Sofie-Automation/sisyfos-audio-controller/issues"
+    },
+    "homepage": "https://github.com/Sofie-Automation/sisyfos-audio-controller/tree/main/shared#readme",
+    "contributors": [
+        {
+            "name": "Kasper Olsson Hans",
+            "email": "github@olzzon.dk"
+        },
+        {
+            "name": "Mint de Wit",
+            "email": "mint@superfly.tv",
+            "url": "https://superfly.tv"
+        },
+        {
+            "name": "Jan Starzak",
+            "email": "jan@superfly.tv",
+            "url": "https://superfly.tv"
+        },
+        {
+            "name": "Anders Frederik Jørgensen",
+            "email": "afjo@tv2.dk"
+        }
+    ],
+    "engines": {
+        "node": ">=24",
+        "yarn": ">=4.1.0"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.js"
+        }
+    },
+    "files": [
+        "/dist"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://npm.pkg.github.com"
+    },
+    "devDependencies": {
+        "@types/node": "^24",
+        "typescript": "^5.0.4"
+    },
+    "dependencies": {
+        "redux": "^5.0.1"
+    }
 }

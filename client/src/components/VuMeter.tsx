@@ -12,7 +12,9 @@ export class VuMeter extends React.Component<VuMeterInjectedProps> {
     render() {
         return (
             <SisyfosVuMeter
-                getLevel={() => vuMeters[this.props.faderIndex]?.[this.props.channel] || 0}
+                getLevel={() =>
+                    vuMeters[this.props.faderIndex]?.[this.props.channel] || 0
+                }
                 meterConfig={window.mixerProtocol?.meter}
             />
         )

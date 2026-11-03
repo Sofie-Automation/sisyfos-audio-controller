@@ -1,6 +1,6 @@
 import { state } from '../../../reducers/store'
 import { sendVuLevel } from '../../vuServer'
-import { VuType } from '../../../../../shared/src/utils/vu-server-types'
+import { VuType } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 const calcVuLevel = (level: number) => {
     return Math.log(level) / Math.log(600) + 1

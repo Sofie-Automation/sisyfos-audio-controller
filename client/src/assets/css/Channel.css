@@ -191,7 +191,8 @@
     border: none;
     background-color: transparent;
 }
-.channel-layout-settings-button > svg, .channel-stereo-link-button > svg {
+.channel-layout-settings-button > svg,
+.channel-stereo-link-button > svg {
     width: 24px;
     height: 24px;
 }

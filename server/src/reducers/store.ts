@@ -1,7 +1,5 @@
-import storeRedux from '../../../shared/src/reducers/store'
-import {
-    SettingsActionTypes,
-} from '../../../shared/src/actions/settingsActions'
+import storeRedux from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { loadSettings } from '../utils/SettingsStorage'
 
 storeRedux.dispatch({

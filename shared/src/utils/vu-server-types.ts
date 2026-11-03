@@ -1,4 +1,4 @@
 export enum VuType {
-  Channel = 'vuChannel',
-  Reduction = 'vuReduction',
+    Channel = 'vuChannel',
+    Reduction = 'vuReduction',
 }

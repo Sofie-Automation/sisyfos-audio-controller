@@ -118,7 +118,9 @@ body.v-mic-tally {
     color: white;
     background-color: #c40000;
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
+    transition:
+        background-color 0.2s,
+        color 0.2s;
 }
 .c-mic-tally__toggle-prompt__actions button.cancel {
     background-color: rgb(66, 27, 27);

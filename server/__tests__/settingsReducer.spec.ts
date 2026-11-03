@@ -1,7 +1,5 @@
-import { createEnhancedReducer } from '../../shared/src/reducers/indexReducer'
-import {
-    SettingsActionTypes,
-} from '../../shared/src/actions/settingsActions'
+import { createEnhancedReducer } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 import fs from 'fs'
 const parsedFullStoreJSON = fs.readFileSync(

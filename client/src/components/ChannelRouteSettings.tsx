@@ -4,21 +4,21 @@ import ClassNames from 'classnames'
 import '../assets/css/ChannelRouteSettings.css'
 import { Store } from 'redux'
 import { connect } from 'react-redux'
-import { SettingsActionTypes } from '../../../shared/src/actions/settingsActions'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     SOCKET_ASSIGN_CH_TO_FADER,
     SOCKET_ASSIGN_ONE_TO_ONE,
     SOCKET_REMOVE_ALL_CH_ASSIGNMENTS,
     SOCKET_SET_LINK,
     SOCKET_SET_CAPABILITY,
-} from '../../../shared/src/constants/SOCKET_IO_DISPATCHERS'
-import { ChMixerConnection } from '../../../shared/src/reducers/channelsReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChMixerConnection } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     ChannelReference,
     Fader,
-} from '../../../shared/src/reducers/fadersReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { getFaderLabel } from '../utils/labels'
-import { RootState } from '../../../shared/src/reducers/indexReducer'
+import { RootState } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 interface ChannelSettingsInjectProps {
     label: string

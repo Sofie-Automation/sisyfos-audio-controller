@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "@babel/core": "^7.26.10",
+        "@sofie-automation/sisyfos-audio-controller-shared-lib": "workspace:*",
         "@tv2media/logger": "^2.0.2",
         "atem-connection": "^3.4.0",
         "casparcg-connection": "^5.1.0",
@@ -31,7 +32,6 @@
         "osc": "^2.4.5",
         "performance-now": "^2.1.0",
         "redux": "^5.0.1",
-        "shared": "*",
         "socket.io": "^4.7.4",
         "tslib": "^2.6.2",
         "vmix-js-utils": "patch:vmix-js-utils@npm%3A4.0.19#~/.yarn/patches/vmix-js-utils-npm-4.0.19-cfd45f1970.patch",

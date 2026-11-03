@@ -3,26 +3,26 @@ import net from 'net'
 import { store, state } from '../../reducers/store'
 import { mixerGenericConnection } from '../../mainClasses'
 
-import { FaderActionTypes } from '../../../../shared/src/actions/faderActions'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 //Utils:
 import {
-    RemoteProtocol,
-    RemoteFaderPresets,
-} from '../../../../shared/src/constants/remoteProtocols/SkaarhojProtocol'
-import { MixerProtocolPresets } from '../../../../shared/src/constants/MixerProtocolPresets'
+    SkaarhojRemoteFaderPresets,
+    SkaarhojRemoteProtocol,
+    MixerProtocolPresets,
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { logger } from '../logger'
-import { ChannelActionTypes } from '../../../../shared/src/actions/channelActions'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 export class SkaarhojRemoteConnection {
-    remoteProtocol: RemoteProtocol
+    remoteProtocol: SkaarhojRemoteProtocol
     mixerProtocol: any
     clientList: any[]
 
     constructor() {
         this.updateRemoteFaderState = this.updateRemoteFaderState.bind(this)
 
-        this.remoteProtocol = RemoteFaderPresets.rawPanel
+        this.remoteProtocol = SkaarhojRemoteFaderPresets.rawPanel
         this.mixerProtocol =
             MixerProtocolPresets[state.settings[0].mixers[0].mixerProtocol] ||
             MixerProtocolPresets.genericMidi

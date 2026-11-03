@@ -11,7 +11,7 @@ import {
     saveCustomPages,
     getCustomPages,
 } from './utils/SettingsStorage'
-import { SOCKET_RETURN_PAGES_LIST } from '../../shared/src/constants/SOCKET_IO_DISPATCHERS'
+import { SOCKET_RETURN_PAGES_LIST } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 import express from 'express'
 import path from 'path'

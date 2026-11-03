@@ -4,19 +4,17 @@ import ReactSlider from 'react-slider'
 import '../assets/css/ChanStripFull.css'
 import { Store } from 'redux'
 import { connect } from 'react-redux'
-import {
-    SettingsActionTypes,
-} from '../../../shared/src/actions/settingsActions'
-import { Fader } from '../../../shared/src/reducers/fadersReducer'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { Fader } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     SOCKET_SET_FX,
     SOCKET_SET_AUX_LEVEL,
     SOCKET_SET_INPUT_GAIN,
     SOCKET_SET_INPUT_SELECTOR,
-} from '../../../shared/src/constants/SOCKET_IO_DISPATCHERS'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import ReductionMeter from './ReductionMeter'
-import { FxParam } from '../../../shared/src/constants/MixerProtocolInterface'
-import { Channel } from '../../../shared/src/reducers/channelsReducer'
+import { FxParam } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { Channel } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import { getFaderLabel } from '../utils/labels'
 import ChanStripEq from './ChanStripEq'
 import { InputSelector } from './InputSelector'
@@ -41,7 +39,6 @@ const DEL_VALUES = [10, 1, -1, -10]
 class ChanStripFull extends React.PureComponent<
     ChanStripFullProps & ChanStripFullInjectProps & Store
 > {
-
     constructor(props: any) {
         super(props)
     }
@@ -308,92 +305,83 @@ class ChanStripFull extends React.PureComponent<
             return (
                 <div className="chstrip-full-parameters">
                     {hasInput && (
-                            <div className="chstrip-full-content-group">
-                                <div className="title">INPUT</div>
-                                <div className="chstrip-full-content">
-                                    <InputSelector fader={this.props.fader[this.props.faderIndex]} faderIndex={this.props.faderIndex} />
-                                    {this.inputGain()}
-                                </div>
-                            </div>
-                    )}
-                        {this.doesParamExists(FxParam.GainTrim) ? (
-                            <div className="chstrip-full-content-group">
-                                <div className="title">INPUT</div>
-                                <div className="chstrip-full-content">
-                                    {this.fxParamFader(FxParam.GainTrim)}
-                                </div>
-                            </div>
-                        ) : (
-                            <div/>
-                        )}
-                        {this.doesParamExists(FxParam.CompThrs) ? (
-                            <div className="chstrip-full-content-group">
-                                <div className="title">COMPRESSOR</div>
-                                <div className="chstrip-full-content">
-                                    {this.fxParamButton(FxParam.CompOnOff)}
-                                    {this.fxParamFader(FxParam.CompThrs)}
-                                    <p className="chstrip-full-zero-comp">
-                                        ______
-                                    </p>
-                                    {this.fxParamFader(FxParam.CompRatio)}
-                                    <p className="chstrip-full-zero-comp">
-                                        ______
-                                    </p>
-                                    {this.gainReduction()}
-                                    {this.fxParamFader(FxParam.CompMakeUp)}
-                                    <p className="chstrip-full-zero-comp">
-                                        ______
-                                    </p>
-                                    {this.fxParamFader(FxParam.CompAttack)}
-                                    <p className="chstrip-full-zero-comp">
-                                        ______
-                                    </p>
-                                    {this.fxParamFader(FxParam.CompHold)}
-                                    <p className="chstrip-full-zero-comp">
-                                        ______
-                                    </p>
-                                    {this.fxParamFader(
-                                        FxParam.CompRelease
-                                    )}
-                                    <p className="chstrip-full-zero-comp">
-                                        ______
-                                    </p>
-                                </div>
-                            </div>
-                        ) : (
-                            <div/>
-                        )}
-                        {this.doesParamExists(FxParam.DelayTime) ? (
-                            <div className="chstrip-full-content-group">
-                                <div className="title">DELAY</div>
-                                <div className="chstrip-full-content">
-                                    {this.delay()}
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="noDelayButtons"></div>
-                        )}
                         <div className="chstrip-full-content-group">
-                            <div className="title">
-                                {this.props.label}
-                                {' - MONITOR MIX MINUS'}
-                            </div>
+                            <div className="title">INPUT</div>
                             <div className="chstrip-full-content">
-                                <ul className="chstrip-full-monitor-sends">
-                                    {this.props.channel.map(
-                                        (ch: any, index: number) => {
-                                            if (
-                                                ch.auxLevel[
-                                                    this.props.auxSendIndex
-                                                ] >= 0
-                                            ) {
-                                                return this.monitor(index)
-                                            }
-                                        }
-                                    )}
-                                </ul>
+                                <InputSelector
+                                    fader={
+                                        this.props.fader[this.props.faderIndex]
+                                    }
+                                    faderIndex={this.props.faderIndex}
+                                />
+                                {this.inputGain()}
                             </div>
                         </div>
+                    )}
+                    {this.doesParamExists(FxParam.GainTrim) ? (
+                        <div className="chstrip-full-content-group">
+                            <div className="title">INPUT</div>
+                            <div className="chstrip-full-content">
+                                {this.fxParamFader(FxParam.GainTrim)}
+                            </div>
+                        </div>
+                    ) : (
+                        <div />
+                    )}
+                    {this.doesParamExists(FxParam.CompThrs) ? (
+                        <div className="chstrip-full-content-group">
+                            <div className="title">COMPRESSOR</div>
+                            <div className="chstrip-full-content">
+                                {this.fxParamButton(FxParam.CompOnOff)}
+                                {this.fxParamFader(FxParam.CompThrs)}
+                                <p className="chstrip-full-zero-comp">______</p>
+                                {this.fxParamFader(FxParam.CompRatio)}
+                                <p className="chstrip-full-zero-comp">______</p>
+                                {this.gainReduction()}
+                                {this.fxParamFader(FxParam.CompMakeUp)}
+                                <p className="chstrip-full-zero-comp">______</p>
+                                {this.fxParamFader(FxParam.CompAttack)}
+                                <p className="chstrip-full-zero-comp">______</p>
+                                {this.fxParamFader(FxParam.CompHold)}
+                                <p className="chstrip-full-zero-comp">______</p>
+                                {this.fxParamFader(FxParam.CompRelease)}
+                                <p className="chstrip-full-zero-comp">______</p>
+                            </div>
+                        </div>
+                    ) : (
+                        <div />
+                    )}
+                    {this.doesParamExists(FxParam.DelayTime) ? (
+                        <div className="chstrip-full-content-group">
+                            <div className="title">DELAY</div>
+                            <div className="chstrip-full-content">
+                                {this.delay()}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="noDelayButtons"></div>
+                    )}
+                    <div className="chstrip-full-content-group">
+                        <div className="title">
+                            {this.props.label}
+                            {' - MONITOR MIX MINUS'}
+                        </div>
+                        <div className="chstrip-full-content">
+                            <ul className="chstrip-full-monitor-sends">
+                                {this.props.channel.map(
+                                    (ch: any, index: number) => {
+                                        if (
+                                            ch.auxLevel[
+                                                this.props.auxSendIndex
+                                            ] >= 0
+                                        ) {
+                                            return this.monitor(index)
+                                        }
+                                    }
+                                )}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             )
         } else {
@@ -409,7 +397,7 @@ class ChanStripFull extends React.PureComponent<
                         <ChanStripEq faderIndex={this.props.faderIndex} />
                     </div>
                 ) : (
-                    <div/>
+                    <div />
                 )}
             </React.Fragment>
         )

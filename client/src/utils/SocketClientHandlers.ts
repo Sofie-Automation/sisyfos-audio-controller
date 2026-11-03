@@ -1,13 +1,9 @@
-import {
-    FaderActionTypes,
-} from '../../../shared/src/actions/faderActions'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     ChannelActions,
     ChannelActionTypes,
-} from '../../../shared/src/actions/channelActions'
-import {
-    SettingsActionTypes,
-} from '../../../shared/src/actions/settingsActions'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     SOCKET_RETURN_SNAPSHOT_LIST,
     SOCKET_SET_FULL_STORE,
@@ -17,13 +13,13 @@ import {
     SOCKET_SET_MIXER_ONLINE,
     SOCKET_RETURN_MIXER_PRESET_LIST,
     SOCKET_RETURN_PAGES_LIST,
-} from '../../../shared/src/constants/SOCKET_IO_DISPATCHERS'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     ChMixerConnection,
     NumberOfChannels,
-} from '../../../shared/src/reducers/channelsReducer'
-import { VuType } from '../../../shared/src/utils/vu-server-types'
-import { MixerSettings } from '../../../shared/src/reducers/settingsReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { VuType } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { MixerSettings } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import type { Store } from 'redux'
 import { getSisyfosReduxState } from './labels'
 
@@ -57,7 +53,6 @@ export const socketClientHandlers = (store: Store) => {
         .on(SOCKET_SET_FULL_STORE, (payload: any) => {
             // console.log('STATE RECEIVED :', payload)
             if (window.mixerProtocol) {
-
                 dispatch({
                     type: ChannelActionTypes.SET_COMPLETE_CH_STATE,
                     numberOfTypeChannels: payload.numberOfChannels,
@@ -153,8 +148,7 @@ export const socketClientHandlers = (store: Store) => {
                 const reduxState = getSisyfosReduxState()
                 if (
                     reduxState.settings[0].showChanStrip === faderIndex ||
-                    reduxState.settings[0].showChanStripFull ===
-                        faderIndex
+                    reduxState.settings[0].showChanStripFull === faderIndex
                 ) {
                     dispatch({
                         type: FaderActionTypes.SET_VU_REDUCTION_LEVEL,

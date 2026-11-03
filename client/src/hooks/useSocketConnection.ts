@@ -6,8 +6,8 @@ import {
     SOCKET_GET_CCG_LIST,
     SOCKET_GET_MIXER_PRESET_LIST,
     SOCKET_GET_PAGES_LIST,
-} from '../../../shared/src/constants/SOCKET_IO_DISPATCHERS'
-import defaultStoreRedux from '../../../shared/src/reducers/store'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import defaultStoreRedux from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import type { Store } from 'redux'
 import { setActiveSisyfosStore } from '../utils/labels'
 
@@ -32,7 +32,8 @@ export function useSocketConnection(
         })
 
         const { pathname, host } = window.location
-        const socketServerPath = customPath ??
+        const socketServerPath =
+            customPath ??
             pathname + (pathname.endsWith('/') ? '' : '/') + 'socket.io/'
         const uri = customUri ?? host
 
@@ -47,7 +48,10 @@ export function useSocketConnection(
         window.socketIoClient.emit(SOCKET_GET_MIXER_PRESET_LIST)
 
         console.log('Setting up SocketIO connection ' + socketServerPath)
-        window.socketIoClient.emit('get-mixerprotocol', 'get selected mixerprotocol')
+        window.socketIoClient.emit(
+            'get-mixerprotocol',
+            'get selected mixerprotocol'
+        )
         window.socketIoClient.emit('get-store', 'update local store')
         window.socketIoClient.emit('get-settings', 'update local settings')
         window.socketIoClient.emit(SOCKET_GET_PAGES_LIST)

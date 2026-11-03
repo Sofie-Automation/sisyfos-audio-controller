@@ -1,7 +1,7 @@
-import { FaderActionTypes } from '../../shared/src/actions/faderActions'
-import { ChannelActionTypes } from '../../shared/src/actions/channelActions'
-import { SettingsActionTypes } from '../../shared/src/actions/settingsActions'
-import { createEnhancedReducer } from '../../shared/src/reducers/indexReducer'
+import { FaderActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { SettingsActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { createEnhancedReducer } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import fs from 'fs'
 const parsedEmptyStoreJSON = fs.readFileSync(
     '__tests__/__mocks__/parsedEmptyStore.json',

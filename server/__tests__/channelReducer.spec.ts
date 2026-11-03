@@ -1,11 +1,9 @@
-import { createEnhancedReducer } from '../../shared/src/reducers/indexReducer'
-import {
-    ChannelActionTypes,
-} from '../../shared/src/actions/channelActions'
+import { createEnhancedReducer } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
+import { ChannelActionTypes } from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 import {
     Channel,
     NumberOfChannels,
-} from '../../shared/src/reducers/channelsReducer'
+} from '@sofie-automation/sisyfos-audio-controller-shared-lib'
 
 import fs from 'fs'
 const parsedFullStoreJSON = fs.readFileSync(
@@ -24,7 +22,7 @@ describe('Test redux channelReducer actions', () => {
         let parsedFullStore = JSON.parse(parsedFullStoreJSON)
         let nextState = JSON.parse(parsedFullStoreJSON)
         nextState.channels[0].chMixerConnection[0].channel[10].outputLevel = 0.5
-        
+
         expect(
             reducer(parsedFullStore, {
                 type: ChannelActionTypes.SET_OUTPUT_LEVEL,
@@ -42,7 +40,7 @@ describe('Test redux channelReducer actions', () => {
         let parsedFullStore = JSON.parse(parsedFullStoreJSON)
         let nextState = JSON.parse(parsedFullStoreJSON)
         nextState.channels[0].chMixerConnection[0].channel[10].assignedFader = 2
-        
+
         expect(
             reducer(parsedFullStore, {
                 type: ChannelActionTypes.SET_ASSIGNED_FADER,
@@ -60,7 +58,7 @@ describe('Test redux channelReducer actions', () => {
         let parsedFullStore = JSON.parse(parsedFullStoreJSON)
         let nextState = JSON.parse(parsedFullStoreJSON)
         nextState.channels[0].chMixerConnection[0].channel[10].fadeActive = true
-        
+
         expect(
             reducer(parsedFullStore, {
                 type: ChannelActionTypes.FADE_ACTIVE,
@@ -89,20 +87,16 @@ describe('Test redux channelReducer actions', () => {
                 fadeActive: false,
                 outputLevel: 0.75,
             })
-            nextState.channels[0].chMixerConnection[0].channel[
-                i
-            ].outputLevel = 0.75
+            nextState.channels[0].chMixerConnection[0].channel[i].outputLevel =
+                0.75
         }
-        
+
         expect(
-            reducer(
-                parsedFullStore,
-                {
-                    type: ChannelActionTypes.SET_COMPLETE_CH_STATE,
-                    allState: { chMixerConnection: [{ channel: channels }] },
-                    numberOfTypeChannels: numberOfChannels,
-                }
-            )
+            reducer(parsedFullStore, {
+                type: ChannelActionTypes.SET_COMPLETE_CH_STATE,
+                allState: { chMixerConnection: [{ channel: channels }] },
+                numberOfTypeChannels: numberOfChannels,
+            })
         ).toEqual(nextState)
     })
 })
