@@ -7,6 +7,7 @@ import { AppProps } from './App'
 //Utils:
 import '../assets/css/Settings.css'
 import {
+    defaultSettingsReducerState,
     FirstInRowButtonType,
     SecondInRowButtonType,
     SecondOutRowButtonType,
@@ -182,8 +183,36 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
         this.setState({ settings: settingsCopy })
     }
 
+    // Stops scrolling the page from changing a focused number input
+    blurOnWheel = (event: React.WheelEvent<HTMLInputElement>) => {
+        event.currentTarget.blur()
+    }
+
+    // Text inputs yield strings, so fields that are numbers in the defaults
+    // are converted back before saving
+    restoreNumbers = (values: any, defaults: any) => {
+        const result = { ...values }
+        for (const key of Object.keys(defaults)) {
+            if (
+                typeof defaults[key] === 'number' &&
+                typeof result[key] === 'string'
+            ) {
+                const parsed = Number(result[key])
+                result[key] =
+                    result[key].trim() !== '' && !isNaN(parsed)
+                        ? parsed
+                        : defaults[key]
+            }
+        }
+        return result
+    }
+
     handleSave = () => {
-        let settingsCopy = Object.assign({}, this.state.settings)
+        const defaults = defaultSettingsReducerState[0]
+        let settingsCopy = this.restoreNumbers(this.state.settings, defaults)
+        settingsCopy.mixers = settingsCopy.mixers.map((mixer: any) =>
+            this.restoreNumbers(mixer, defaults.mixers[0])
+        )
         settingsCopy.showSettings = false
         window.socketIoClient.emit(SOCKET_SAVE_SETTINGS, settingsCopy)
         this.props.dispatch({
@@ -317,7 +346,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                                     MIXER PORT :
                                     <input
                                         name="devicePort"
-                                        type="text"
+                                        type="number"
+                                        onWheel={this.blurOnWheel}
                                         value={mixer.devicePort}
                                         onChange={(event) =>
                                             this.handleMixerChange(
@@ -392,7 +422,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                                     LOCAL MIXER PORT :
                                     <input
                                         name="localOscPort"
-                                        type="text"
+                                        type="number"
+                                        onWheel={this.blurOnWheel}
                                         value={mixer.localOscPort}
                                         onChange={(event) =>
                                             this.handleMixerChange(
@@ -407,7 +438,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                                     PROTOCOL LATENCY :
                                     <input
                                         name="protocolLatency"
-                                        type="text"
+                                        type="number"
+                                        onWheel={this.blurOnWheel}
                                         value={mixer.protocolLatency}
                                         onChange={(event) =>
                                             this.handleMixerChange(
@@ -422,7 +454,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                                     NUMBER OF AUX :
                                     <input
                                         name="numberOfAux"
-                                        type="text"
+                                        type="number"
+                                        onWheel={this.blurOnWheel}
                                         value={mixer.numberOfAux}
                                         onChange={(event) =>
                                             this.handleMixerChange(
@@ -437,7 +470,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                                     NEXT SEND AUX NR.:
                                     <input
                                         name="nextSendAux"
-                                        type="text"
+                                        type="number"
+                                        onWheel={this.blurOnWheel}
                                         value={mixer.nextSendAux}
                                         onChange={(event) =>
                                             this.handleMixerChange(
@@ -495,7 +529,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                     FADE TIME :
                     <input
                         name="fadeTime"
-                        type="text"
+                        type="number"
+                        onWheel={this.blurOnWheel}
                         value={this.state.settings.fadeTime}
                         onChange={this.handleChange}
                     />
@@ -506,7 +541,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                     VOICE OVER FADE TIME :
                     <input
                         name="voFadeTime"
-                        type="text"
+                        type="number"
+                        onWheel={this.blurOnWheel}
                         value={this.state.settings.voFadeTime}
                         onChange={this.handleChange}
                     />
@@ -517,7 +553,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                     VOICE OVER DIM :
                     <input
                         name="voLevel"
-                        type="text"
+                        type="number"
+                        onWheel={this.blurOnWheel}
                         value={this.state.settings.voLevel}
                         onChange={this.handleChange}
                     />
@@ -528,7 +565,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                     AUTORESET LEVEL :
                     <input
                         name="autoResetLevel"
-                        type="text"
+                        type="number"
+                        onWheel={this.blurOnWheel}
                         value={this.state.settings.autoResetLevel}
                         onChange={this.handleChange}
                     />
@@ -539,7 +577,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                     NUMBER OF FADERS :
                     <input
                         name="numberOfFaders"
-                        type="text"
+                        type="number"
+                        onWheel={this.blurOnWheel}
                         value={this.state.settings.numberOfFaders}
                         onChange={this.handleChange}
                     />
@@ -549,7 +588,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                     NUMBER OF MIXERS :
                     <input
                         name="numberOfMixers"
-                        type="text"
+                        type="number"
+                        onWheel={this.blurOnWheel}
                         value={this.state.settings.numberOfMixers}
                         onChange={this.handleNumberOfMixers}
                     />
@@ -569,7 +609,8 @@ class Settings extends React.PureComponent<AppProps & Store, SettingsState> {
                     NUMBER OF CUSTOM PAGES:
                     <input
                         name="numberOfCustomPages"
-                        type="text"
+                        type="number"
+                        onWheel={this.blurOnWheel}
                         value={this.state.settings.numberOfCustomPages}
                         onChange={this.handleChange}
                     />
