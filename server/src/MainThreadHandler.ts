@@ -220,16 +220,19 @@ export class MainThreadHandlers {
         return loaded
     }
 
-    applySettings(settings: Settings, { restart }: { restart: boolean }) {
+    async applySettings(
+        settings: Settings,
+        { restart }: { restart: boolean }
+    ): Promise<void> {
         logger.data(settings).info('Save settings:')
-        saveSettings(settings)
+        const saved = saveSettings(settings).catch((error: any) =>
+            logger.data(error).error('Error writing settings.json file: ')
+        )
         this.reIndexAssignedChannelsRelation()
         this.updateFullClientStore()
+        await saved
         if (restart) {
-            /** Delay restart to ensure the async saveSettings is done before restarting*/
-            setTimeout(() => {
-                process.exit(0)
-            }, 1000)
+            process.exit(0)
         }
     }
 
@@ -265,11 +268,15 @@ export class MainThreadHandlers {
             .on(IO.SOCKET_LOAD_SNAPSHOT, (payload: string) =>
                 this.loadSnapshot(payload)
             )
-            .on(IO.SOCKET_SAVE_SNAPSHOT, (payload: string) => {
+            .on(IO.SOCKET_SAVE_SNAPSHOT, async (payload: string) => {
                 logger.info('Save Snapshot')
-                this.snapshotHandler.saveSnapshotSettings(
-                    path.join(STORAGE_FOLDER, payload)
-                )
+                try {
+                    await this.snapshotHandler.saveSnapshotSettings(
+                        path.join(STORAGE_FOLDER, payload)
+                    )
+                } catch (error: any) {
+                    logger.data(error).error('Error saving Snapshot')
+                }
 
                 socketServer.emit(
                     IO.SOCKET_RETURN_SNAPSHOT_LIST,

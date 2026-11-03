@@ -51,6 +51,8 @@ export class SnapshotHandler {
             saveSnapshotState(
                 snapshot,
                 path.resolve(STORAGE_FOLDER, 'default.shot')
+            ).catch((error: any) =>
+                logger.data(error).error('Error saving Snapshot')
             )
         }, 2000)
     }
@@ -64,11 +66,11 @@ export class SnapshotHandler {
         )
     }
 
-    saveSnapshotSettings(fileName: string) {
+    saveSnapshotSettings(fileName: string): Promise<void> {
         let snapshot = {
             faderState: state.faders[0],
             channelState: state.channels[0],
         }
-        saveSnapshotState(snapshot, fileName)
+        return saveSnapshotState(snapshot, fileName)
     }
 }

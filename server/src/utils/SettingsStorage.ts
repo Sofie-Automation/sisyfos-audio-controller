@@ -53,27 +53,22 @@ export const loadSettings = (storeRedux: any): Settings => {
         logger
             .data(error)
             .error('Couldn´t read Settings.json file, creating af new')
-        saveSettings(newSettings)
+        saveSettings(newSettings).catch((error: any) =>
+            logger.data(error).error('Error writing settings.json file: ')
+        )
         return newSettings
     }
 }
 
-export const saveSettings = (settings: any) => {
+export const saveSettings = async (settings: any): Promise<void> => {
     const settingsCopy = { ...settings }
     delete settingsCopy.customPages
-    let json = JSON.stringify(settingsCopy)
-    if (!fs.existsSync(STORAGE_FOLDER)) {
-        fs.mkdirSync(STORAGE_FOLDER)
-    }
-    fs.writeFile(
+    const json = JSON.stringify(settingsCopy)
+    await fs.promises.mkdir(STORAGE_FOLDER, { recursive: true })
+    await fs.promises.writeFile(
         path.resolve(STORAGE_FOLDER, 'settings.json'),
         json,
-        'utf8',
-        (error: any) => {
-            if (error) {
-                logger.data(error).error('Error writing settings.json file: ')
-            }
-        }
+        'utf8'
     )
 }
 
@@ -125,15 +120,13 @@ export const loadSnapshotState = (
     }
 }
 
-export const saveSnapshotState = (stateSnapshot: any, fileName: string) => {
-    let json = JSON.stringify(stateSnapshot)
-    fs.writeFile(fileName, json, 'utf8', (error: any) => {
-        if (error) {
-            logger.data(error).error('Error saving Snapshot')
-        } else {
-            logger.trace('Snapshot ' + fileName + ' Saved to storage folder')
-        }
-    })
+export const saveSnapshotState = async (
+    stateSnapshot: any,
+    fileName: string
+): Promise<void> => {
+    const json = JSON.stringify(stateSnapshot)
+    await fs.promises.writeFile(fileName, json, 'utf8')
+    logger.trace('Snapshot ' + fileName + ' Saved to storage folder')
 }
 
 export const getSnapShotList = (): string[] => {
