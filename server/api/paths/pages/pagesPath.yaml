@@ -1,0 +1,43 @@
+get:
+  operationId: getPages
+  tags: [pages]
+  summary: Download the custom pages
+  description: Returns an empty list if no pages have been saved.
+  responses:
+    '200':
+      description: The custom pages, sent as a pages.json attachment
+      headers:
+        Content-Disposition:
+          schema:
+            type: string
+          example: attachment; filename="pages.json"
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/pages/customPages/customPages.yaml#/$defs/CustomPages'
+          examples:
+            twoPages:
+              $ref: '../../components/pages/customPages/customPages-example.yaml'
+put:
+  operationId: putPages
+  tags: [pages]
+  summary: Replace the custom pages
+  description: >-
+    Overwrites all custom pages (up to 1 MB of JSON) and broadcasts the new
+    list to connected socket.io clients.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/pages/customPages/customPages.yaml#/$defs/CustomPages'
+        examples:
+          twoPages:
+            $ref: '../../components/pages/customPages/customPages-example.yaml'
+  responses:
+    '200':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/ok'
+    '400':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/badRequest'
+    '500':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/internalError'

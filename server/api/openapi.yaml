@@ -1,0 +1,29 @@
+openapi: '3.0.3'
+info:
+  title: Sisyfos Audio Controller HTTP API
+  version: '1.0.0'
+  description: >-
+    HTTP endpoints for managing files in the Sisyfos storage folder.
+    Live mixer state and control is exposed over socket.io, not this API.
+  license:
+    name: MIT License
+    url: http://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:1176/api
+    description: Local server. The API is always served at /api, regardless of ROOT_PATH.
+
+# The API has no authentication
+security: []
+
+tags:
+  - name: mixerPreset
+    description: Mixer preset files in the storage folder
+  - name: pages
+    description: Custom fader pages
+
+paths:
+  /mixer-preset/{filename}:
+    $ref: './paths/mixerPreset/mixerPresetPath.yaml'
+  /pages:
+    $ref: './paths/pages/pagesPath.yaml'

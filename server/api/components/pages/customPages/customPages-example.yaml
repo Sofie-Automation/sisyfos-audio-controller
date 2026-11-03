@@ -1,0 +1,6 @@
+summary: Two pages
+value:
+  - $ref: '../customPage/customPage-example.yaml'
+  - id: 'page2'
+    label: 'Studio B'
+    faders: [3, 4]

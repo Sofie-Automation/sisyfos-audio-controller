@@ -1,0 +1,24 @@
+$defs:
+  CustomPage:
+    type: object
+    title: CustomPage
+    description: A user-defined page of faders
+    required:
+      - id
+      - label
+      - faders
+    properties:
+      id:
+        type: string
+        description: Unique identifier for the page
+      label:
+        type: string
+        description: Name shown on the page button
+      faders:
+        type: array
+        description: Zero-based indexes of the faders shown on the page, in display order
+        items:
+          type: integer
+          minimum: 0
+    example:
+      $ref: './customPage-example.yaml'

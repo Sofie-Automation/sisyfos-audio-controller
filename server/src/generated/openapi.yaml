@@ -1,0 +1,311 @@
+# This file was automatically generated using @apidevtools/json-schema-ref-parser
+# DO NOT MODIFY IT BY HAND. Instead, modify the source OpenAPI schema files,
+# and run "yarn merge-schemas" to regenerate this file.
+openapi: 3.0.3
+info:
+  title: Sisyfos Audio Controller HTTP API
+  version: 1.0.0
+  description: HTTP endpoints for managing files in the Sisyfos storage folder.
+    Live mixer state and control is exposed over socket.io, not this API.
+  license:
+    name: MIT License
+    url: http://opensource.org/licenses/MIT
+servers:
+  - url: http://localhost:1176/api
+    description: Local server. The API is always served at /api, regardless of ROOT_PATH.
+security: []
+tags:
+  - name: mixerPreset
+    description: Mixer preset files in the storage folder
+  - name: pages
+    description: Custom fader pages
+paths:
+  "/mixer-preset/{filename}":
+    parameters:
+      - name: filename
+        in: path
+        required: true
+        description: Preset file name in the storage folder. Any directory part is stripped.
+        schema:
+          type: string
+        example: studio-a.shot
+    get:
+      operationId: getMixerPreset
+      tags:
+        - mixerPreset
+      summary: Download a mixer preset
+      responses:
+        "200":
+          description: The preset file, sent as an attachment
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+              example: attachment; filename="studio-a.shot"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                title: MixerPresetFile
+                description: Raw preset file contents. The format depends on the mixer protocol
+                  and is not interpreted by this API.
+                format: binary
+        "404":
+          description: The file does not exist
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: File not found
+    put:
+      operationId: putMixerPreset
+      tags:
+        - mixerPreset
+      summary: Upload a mixer preset
+      description: Creates or overwrites the preset. The body is stored as-is, up to 50 MB.
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              title: MixerPresetFile
+              description: Raw preset file contents. The format depends on the mixer protocol
+                and is not interpreted by this API.
+              format: binary
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: OK
+        "400":
+          description: The request was invalid
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Invalid pages format
+        "500":
+          description: Unexpected server error
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Internal server error
+    delete:
+      operationId: deleteMixerPreset
+      tags:
+        - mixerPreset
+      summary: Delete a mixer preset
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: OK
+        "404":
+          description: The file does not exist
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: File not found
+  /pages:
+    get:
+      operationId: getPages
+      tags:
+        - pages
+      summary: Download the custom pages
+      description: Returns an empty list if no pages have been saved.
+      responses:
+        "200":
+          description: The custom pages, sent as a pages.json attachment
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+              example: attachment; filename="pages.json"
+          content:
+            application/json:
+              schema:
+                type: array
+                title: CustomPages
+                description: All custom pages, in display order
+                items:
+                  type: object
+                  title: CustomPage
+                  description: A user-defined page of faders
+                  required:
+                    - id
+                    - label
+                    - faders
+                  properties:
+                    id:
+                      type: string
+                      description: Unique identifier for the page
+                    label:
+                      type: string
+                      description: Name shown on the page button
+                    faders:
+                      type: array
+                      description: Zero-based indexes of the faders shown on the page, in display
+                        order
+                      items:
+                        type: integer
+                        minimum: 0
+                  example:
+                    id: page1
+                    label: Studio A
+                    faders:
+                      - 0
+                      - 1
+                      - 2
+                      - 5
+                example:
+                  - id: page1
+                    label: Studio A
+                    faders:
+                      - 0
+                      - 1
+                      - 2
+                      - 5
+                  - id: page2
+                    label: Studio B
+                    faders:
+                      - 3
+                      - 4
+              examples:
+                twoPages:
+                  summary: Two pages
+                  value:
+                    - id: page1
+                      label: Studio A
+                      faders:
+                        - 0
+                        - 1
+                        - 2
+                        - 5
+                    - id: page2
+                      label: Studio B
+                      faders:
+                        - 3
+                        - 4
+    put:
+      operationId: putPages
+      tags:
+        - pages
+      summary: Replace the custom pages
+      description: Overwrites all custom pages (up to 1 MB of JSON) and broadcasts the
+        new list to connected socket.io clients.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              title: CustomPages
+              description: All custom pages, in display order
+              items:
+                type: object
+                title: CustomPage
+                description: A user-defined page of faders
+                required:
+                  - id
+                  - label
+                  - faders
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier for the page
+                  label:
+                    type: string
+                    description: Name shown on the page button
+                  faders:
+                    type: array
+                    description: Zero-based indexes of the faders shown on the page, in display
+                      order
+                    items:
+                      type: integer
+                      minimum: 0
+                example:
+                  id: page1
+                  label: Studio A
+                  faders:
+                    - 0
+                    - 1
+                    - 2
+                    - 5
+              example:
+                - id: page1
+                  label: Studio A
+                  faders:
+                    - 0
+                    - 1
+                    - 2
+                    - 5
+                - id: page2
+                  label: Studio B
+                  faders:
+                    - 3
+                    - 4
+            examples:
+              twoPages:
+                summary: Two pages
+                value:
+                  - id: page1
+                    label: Studio A
+                    faders:
+                      - 0
+                      - 1
+                      - 2
+                      - 5
+                  - id: page2
+                    label: Studio B
+                    faders:
+                      - 3
+                      - 4
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: OK
+        "400":
+          description: The request was invalid
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Invalid pages format
+        "500":
+          description: Unexpected server error
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Internal server error

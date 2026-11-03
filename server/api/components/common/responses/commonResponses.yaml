@@ -1,0 +1,30 @@
+components:
+  responses:
+    ok:
+      description: Success
+      content:
+        text/plain:
+          schema:
+            type: string
+          example: OK
+    badRequest:
+      description: The request was invalid
+      content:
+        text/plain:
+          schema:
+            $ref: '../errorMessage/errorMessage.yaml#/$defs/ErrorMessage'
+          example: Invalid pages format
+    notFound:
+      description: The file does not exist
+      content:
+        text/plain:
+          schema:
+            $ref: '../errorMessage/errorMessage.yaml#/$defs/ErrorMessage'
+          example: File not found
+    internalError:
+      description: Unexpected server error
+      content:
+        text/plain:
+          schema:
+            $ref: '../errorMessage/errorMessage.yaml#/$defs/ErrorMessage'
+          example: Internal server error

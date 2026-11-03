@@ -1,0 +1,6 @@
+$defs:
+  MixerPresetFile:
+    type: string
+    title: MixerPresetFile
+    description: Raw preset file contents. The format depends on the mixer protocol and is not interpreted by this API.
+    format: binary

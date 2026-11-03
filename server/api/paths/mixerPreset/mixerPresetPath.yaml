@@ -1,0 +1,47 @@
+parameters:
+  - $ref: '../../components/mixerPreset/parameters/mixerPresetParameters.yaml#/components/parameters/filename'
+get:
+  operationId: getMixerPreset
+  tags: [mixerPreset]
+  summary: Download a mixer preset
+  responses:
+    '200':
+      description: The preset file, sent as an attachment
+      headers:
+        Content-Disposition:
+          schema:
+            type: string
+          example: attachment; filename="studio-a.shot"
+      content:
+        application/octet-stream:
+          schema:
+            $ref: '../../components/mixerPreset/mixerPresetFile/mixerPresetFile.yaml#/$defs/MixerPresetFile'
+    '404':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/notFound'
+put:
+  operationId: putMixerPreset
+  tags: [mixerPreset]
+  summary: Upload a mixer preset
+  description: Creates or overwrites the preset. The body is stored as-is, up to 50 MB.
+  requestBody:
+    required: true
+    content:
+      application/octet-stream:
+        schema:
+          $ref: '../../components/mixerPreset/mixerPresetFile/mixerPresetFile.yaml#/$defs/MixerPresetFile'
+  responses:
+    '200':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/ok'
+    '400':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/badRequest'
+    '500':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/internalError'
+delete:
+  operationId: deleteMixerPreset
+  tags: [mixerPreset]
+  summary: Delete a mixer preset
+  responses:
+    '200':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/ok'
+    '404':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/notFound'

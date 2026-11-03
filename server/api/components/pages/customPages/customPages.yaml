@@ -1,0 +1,9 @@
+$defs:
+  CustomPages:
+    type: array
+    title: CustomPages
+    description: All custom pages, in display order
+    items:
+      $ref: '../customPage/customPage.yaml#/$defs/CustomPage'
+    example:
+      $ref: './customPages-example.yaml#/value'

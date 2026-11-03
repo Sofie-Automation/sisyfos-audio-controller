@@ -1,0 +1,5 @@
+$defs:
+  ErrorMessage:
+    type: string
+    title: ErrorMessage
+    description: Human-readable error message. Server errors are not detailed; check the server log.

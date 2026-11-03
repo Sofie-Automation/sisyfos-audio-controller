@@ -22,6 +22,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@apidevtools/json-schema-ref-parser@npm:^16.0.5":
+  version: 16.0.5
+  resolution: "@apidevtools/json-schema-ref-parser@npm:16.0.5"
+  dependencies:
+    js-yaml: "npm:^5.4.2"
+  peerDependencies:
+    "@types/json-schema": ^7.0.15
+  checksum: 10c0/9cf324c5e0407e8da479190f118bd4c5d284be4cf136d0f64606aeb44659aac69bf3dec52b1c8a6fc45c64d499f89d3e573450371b59a69eb8ebe1f262425bc0
+  languageName: node
+  linkType: hard
+
 "@babel/cli@npm:^7.24.7":
   version: 7.26.4
   resolution: "@babel/cli@npm:7.26.4"
@@ -3843,6 +3854,13 @@ __metadata:
   dependencies:
     sprintf-js: "npm:~1.0.2"
   checksum: 10c0/b2972c5c23c63df66bca144dbc65d180efa74f25f8fd9b7d9a0a6c88ae839db32df3d54770dcb6460cf840d232b60695d1a6b1053f599d84e73f7437087712de
+  languageName: node
+  linkType: hard
+
+"argparse@npm:^3.0.3":
+  version: 3.0.4
+  resolution: "argparse@npm:3.0.4"
+  checksum: 10c0/845346e39e677b46f8558cece7c8dad1f7045f8b86af33356d8565b26a16940bf770a14a51d6da40ce76554a141e0e95b514d055d1da17a2f1b42df7d523fa0f
   languageName: node
   linkType: hard
 
@@ -7957,6 +7975,17 @@ asn1@evs-broadcast/node-asn1:
   languageName: node
   linkType: hard
 
+"js-yaml@npm:^5.4.2":
+  version: 5.5.0
+  resolution: "js-yaml@npm:5.5.0"
+  dependencies:
+    argparse: "npm:^3.0.3"
+  bin:
+    js-yaml: bin/js-yaml.mjs
+  checksum: 10c0/311619f44dd788657e9b81d4b5c60ff367441f364045e3796bc604a41f25819852748fb173ae82f2553d53cb609d7fdb79e0a74148892cb2c085eebe91839b53
+  languageName: node
+  linkType: hard
+
 "jsesc@npm:^3.0.2":
   version: 3.1.0
   resolution: "jsesc@npm:3.1.0"
@@ -10926,6 +10955,7 @@ asn1@evs-broadcast/node-asn1:
   version: 0.0.0-use.local
   resolution: "server@workspace:server"
   dependencies:
+    "@apidevtools/json-schema-ref-parser": "npm:^16.0.5"
     "@babel/core": "npm:^7.26.10"
     "@tv2media/logger": "npm:^2.0.2"
     "@types/express": "npm:^4.17.21"
@@ -10952,6 +10982,7 @@ asn1@evs-broadcast/node-asn1:
     web-midi-api: "npm:^2.2.5"
     webmidi: "npm:^2.5.1"
     ws: "npm:^8.21.0"
+    yaml: "npm:^1.10.3"
   languageName: unknown
   linkType: soft
 

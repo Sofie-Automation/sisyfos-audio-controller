@@ -1,0 +1,10 @@
+components:
+  parameters:
+    filename:
+      name: filename
+      in: path
+      required: true
+      description: Preset file name in the storage folder. Any directory part is stripped.
+      schema:
+        type: string
+      example: studio-a.shot
