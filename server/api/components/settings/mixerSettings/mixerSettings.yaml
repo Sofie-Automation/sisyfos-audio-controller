@@ -1,0 +1,45 @@
+$defs:
+  MixerSettings:
+    type: object
+    title: MixerSettings
+    description: Connection and layout settings for one mixer
+    properties:
+      mixerProtocol:
+        type: string
+        description: Mixer protocol preset key
+      deviceIp:
+        type: string
+      devicePort:
+        type: integer
+      deviceUrl:
+        type: string
+      deviceToken:
+        type: string
+        writeOnly: true
+        description: Never returned in responses
+      mixerId:
+        type: string
+      protocolLatency:
+        type: number
+        description: Time before accepting channel feedback again after sending, for protocols with latency
+      mixerMidiInputPort:
+        type: string
+      mixerMidiOutputPort:
+        type: string
+      numberOfChannelsInType:
+        type: array
+        items:
+          type: integer
+      numberOfAux:
+        type: integer
+      nextSendAux:
+        type: integer
+      mixerOnline:
+        type: boolean
+      localIp:
+        type: string
+      localOscPort:
+        type: integer
+      channelMatrixPrefix:
+        type: string
+        description: Channel prefix for vMix mixers (e.g. "EXT")

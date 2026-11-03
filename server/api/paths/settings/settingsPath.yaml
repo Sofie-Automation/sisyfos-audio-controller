@@ -1,0 +1,14 @@
+get:
+  operationId: getSettings
+  tags: [settings]
+  summary: Get the current settings
+  description: Returns the live settings held in server state, including non-persistent UI and connection fields.
+  responses:
+    '200':
+      description: The current settings
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/settings/settings/settings.yaml#/$defs/Settings'
+    '500':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/internalError'

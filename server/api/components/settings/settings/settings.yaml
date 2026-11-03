@@ -1,0 +1,112 @@
+$defs:
+  Settings:
+    type: object
+    title: Settings
+    description: Server settings, as held in state.settings[0]
+    properties:
+      sisyfosVersion:
+        type: string
+      showSettings:
+        type: boolean
+        description: UI state (non-persistent)
+      showPagesSetup:
+        type: boolean
+      showLabelSettings:
+        type: boolean
+      showChanStrip:
+        type: integer
+      showChanStripFull:
+        type: integer
+      showChanLayoutSettings:
+        type: integer
+      showOptions:
+        description: Channel index, or false when hidden
+        oneOf:
+          - type: integer
+          - type: boolean
+            enum: [false]
+      showMonitorOptions:
+        type: integer
+      showStorage:
+        type: boolean
+      currentPage:
+        type: object
+        properties:
+          type:
+            type: integer
+            description: 0 = All, 1 = CustomPage
+            enum: [0, 1]
+          start:
+            type: integer
+          id:
+            type: string
+      customPages:
+        $ref: '../../pages/customPages/customPages.yaml#/$defs/CustomPages'
+      numberOfMixers:
+        type: integer
+      mixers:
+        type: array
+        items:
+          $ref: '../mixerSettings/mixerSettings.yaml#/$defs/MixerSettings'
+      enableRemoteFader:
+        type: boolean
+      remoteFaderMidiInputPort:
+        type: string
+      remoteFaderMidiOutputPort:
+        type: string
+      numberOfFaders:
+        type: integer
+      fadeTime:
+        type: number
+        description: Default fade time for PGM on/off
+      voFadeTime:
+        type: number
+        description: Default fade time for VO on/off
+      voLevel:
+        type: number
+        description: Relative level of PGM during VO, in %
+      autoResetLevel:
+        type: number
+        description: Reset level before PGM on if lower than this, in %
+      firstInRowButton:
+        type: integer
+        description: 0 = NONE, 1 = AUTO_MANUAL
+        enum: [0, 1]
+      secondInRowButton:
+        type: integer
+        description: 0 = NONE, 1 = MUTE
+        enum: [0, 1]
+      thirdInRowButton:
+        type: integer
+        description: 0 = NONE, 1 = AMIX, 2 = LINK_CHANNELS, 3 = CHANNEL_OPTIONS
+        enum: [0, 1, 2, 3]
+      secondOutRowButton:
+        type: integer
+        description: 0 = NONE, 1 = VO, 2 = SLOW_FADE
+        enum: [0, 1, 2]
+      thirdOutRowButton:
+        type: integer
+        description: 0 = NONE, 1 = PST, 2 = PFL, 3 = CUE_NEXT
+        enum: [0, 1, 2, 3]
+      labelControlsIgnoreAutomation:
+        type: boolean
+      labelIgnorePrefix:
+        type: string
+      pgmOnFollowsMixer:
+        type: integer
+        description: 0 = None, 1 = Global, 2 = Manual, 3 = Auto
+        enum: [0, 1, 2, 3]
+      offtubeMode:
+        type: boolean
+      enablePages:
+        type: boolean
+      numberOfCustomPages:
+        type: integer
+      chanStripFollowsPFL:
+        type: boolean
+      labelType:
+        type: string
+        enum: [automatic, user, automation, channel]
+      serverOnline:
+        type: boolean
+        description: Connection state

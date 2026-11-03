@@ -21,9 +21,13 @@ tags:
     description: Mixer preset files in the storage folder
   - name: pages
     description: Custom fader pages
+  - name: settings
+    description: Server settings
 
 paths:
   /mixer-preset/{filename}:
     $ref: './paths/mixerPreset/mixerPresetPath.yaml'
   /pages:
     $ref: './paths/pages/pagesPath.yaml'
+  /settings:
+    $ref: './paths/settings/settingsPath.yaml'
