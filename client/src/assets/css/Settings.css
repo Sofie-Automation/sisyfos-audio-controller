@@ -45,7 +45,7 @@
     color: rgb(255, 255, 255);
 }
 
-input[type=text], select {
+input[type=text], input[type=number], select {
     text-align: right;
     margin: 5px;
     font-size: 1.1em;
@@ -54,6 +54,18 @@ input[type=text], select {
     color: white;
     border-radius: 0;
     width: 200px;
+}
+
+/* Hide the spinner arrows so number fields match the text fields */
+input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 select {
