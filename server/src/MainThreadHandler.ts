@@ -6,7 +6,7 @@ import {
     remoteConnections,
 } from './mainClasses'
 import { SnapshotHandler } from './utils/SnapshotHandler'
-import { socketServer } from './expressHandler'
+import { socketServer } from './http/server'
 
 import { SettingsActionTypes } from '../../shared/src/actions/settingsActions'
 import * as IO from '../../shared/src/constants/SOCKET_IO_DISPATCHERS'

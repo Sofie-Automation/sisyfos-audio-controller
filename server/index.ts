@@ -1,5 +1,5 @@
 import { MainThreadHandlers } from './src/MainThreadHandler'
-import { expressInit } from './src/expressHandler'
+import { startServer } from './src/http'
 
 declare global {
     namespace NodeJS {
@@ -12,4 +12,4 @@ declare global {
 }
 
 global.mainThreadHandler = new MainThreadHandlers()
-expressInit()
+startServer()
