@@ -28,7 +28,10 @@ import {
     ChannelActionTypes,
 } from '../../shared/src/actions/channelActions'
 import { logger } from './utils/logger'
-import { CustomPages } from '../../shared/src/reducers/settingsReducer'
+import {
+    CustomPages,
+    Settings,
+} from '../../shared/src/reducers/settingsReducer'
 import { FxParam } from '../../shared/src/constants/MixerProtocolInterface'
 import path from 'path'
 import {
@@ -217,6 +220,19 @@ export class MainThreadHandlers {
         return loaded
     }
 
+    applySettings(settings: Settings, { restart }: { restart: boolean }) {
+        logger.data(settings).info('Save settings:')
+        saveSettings(settings)
+        this.reIndexAssignedChannelsRelation()
+        this.updateFullClientStore()
+        if (restart) {
+            /** Delay restart to ensure the async saveSettings is done before restarting*/
+            setTimeout(() => {
+                process.exit(0)
+            }, 1000)
+        }
+    }
+
     socketServerHandlers(socket: any) {
         logger.info('Setting up socket IO main handlers.')
 
@@ -333,16 +349,9 @@ export class MainThreadHandlers {
                 )
                 logger.info(`Save custom pages list: ${payload}`)
             })
-            .on(IO.SOCKET_SAVE_SETTINGS, (payload: any) => {
-                logger.data(payload).info('Save settings:')
-                saveSettings(payload)
-                this.reIndexAssignedChannelsRelation()
-                this.updateFullClientStore()
-                /** Delay restart to ensure the async saveSettings is done before restarting*/
-                setTimeout(() => {
-                    process.exit(0)
-                }, 1000)
-            })
+            .on(IO.SOCKET_SAVE_SETTINGS, (payload: Settings) =>
+                this.applySettings(payload, { restart: true })
+            )
             .on(IO.SOCKET_RESTART_SERVER, () => {
                 process.exit(0)
             })
