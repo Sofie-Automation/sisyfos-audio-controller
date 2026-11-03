@@ -1,0 +1,14 @@
+get:
+  operationId: getSnapshots
+  tags: [snapshots]
+  summary: List the saved snapshots
+  description: Returns the .shot files in the storage folder. default.shot is left out.
+  responses:
+    '200':
+      description: The snapshot file names
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/snapshots/snapshotList/snapshotList.yaml#/$defs/SnapshotList'
+    '500':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/internalError'

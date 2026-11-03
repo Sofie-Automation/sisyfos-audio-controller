@@ -1,0 +1,8 @@
+$defs:
+  SnapshotList:
+    type: array
+    title: SnapshotList
+    description: Snapshot file names in the storage folder, excluding default.shot
+    items:
+      type: string
+    example: ['morning-show.shot', 'evening-news.shot']

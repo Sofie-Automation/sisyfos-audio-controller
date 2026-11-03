@@ -21,6 +21,8 @@ tags:
     description: Custom fader pages
   - name: settings
     description: Server settings
+  - name: snapshots
+    description: Snapshot files in the storage folder
 paths:
   "/mixer-preset/{filename}":
     parameters:
@@ -1139,6 +1141,37 @@ paths:
                 description: Human-readable error message. Server errors are not detailed; check
                   the server log.
               example: Invalid pages format
+        "500":
+          description: Unexpected server error
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Internal server error
+  /snapshots:
+    get:
+      operationId: getSnapshots
+      tags:
+        - snapshots
+      summary: List the saved snapshots
+      description: Returns the .shot files in the storage folder. default.shot is left out.
+      responses:
+        "200":
+          description: The snapshot file names
+          content:
+            application/json:
+              schema:
+                type: array
+                title: SnapshotList
+                description: Snapshot file names in the storage folder, excluding default.shot
+                items:
+                  type: string
+                example:
+                  - morning-show.shot
+                  - evening-news.shot
         "500":
           description: Unexpected server error
           content:

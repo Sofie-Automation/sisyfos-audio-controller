@@ -23,6 +23,8 @@ tags:
     description: Custom fader pages
   - name: settings
     description: Server settings
+  - name: snapshots
+    description: Snapshot files in the storage folder
 
 paths:
   /mixer-preset/{filename}:
@@ -31,3 +33,5 @@ paths:
     $ref: './paths/pages/pagesPath.yaml'
   /settings:
     $ref: './paths/settings/settingsPath.yaml'
+  /snapshots:
+    $ref: './paths/snapshots/snapshotsPath.yaml'
