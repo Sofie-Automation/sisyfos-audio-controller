@@ -206,6 +206,17 @@ export class MainThreadHandlers {
         this.updateFullClientStore()
     }
 
+    loadSnapshot(fileName: string): boolean {
+        logger.info(`Load Snapshot: ${fileName}`)
+        const loaded = this.snapshotHandler.loadSnapshotSettings(
+            path.join(STORAGE_FOLDER, path.basename(fileName)),
+            true
+        )
+        this.reIndexAssignedChannelsRelation()
+        this.updateFullClientStore()
+        return loaded
+    }
+
     socketServerHandlers(socket: any) {
         logger.info('Setting up socket IO main handlers.')
 
@@ -235,15 +246,9 @@ export class MainThreadHandlers {
                     getSnapShotList()
                 )
             })
-            .on(IO.SOCKET_LOAD_SNAPSHOT, (payload: string) => {
-                logger.info('Load Snapshot')
-                this.snapshotHandler.loadSnapshotSettings(
-                    path.join(STORAGE_FOLDER, payload),
-                    true
-                )
-                this.reIndexAssignedChannelsRelation()
-                this.updateFullClientStore()
-            })
+            .on(IO.SOCKET_LOAD_SNAPSHOT, (payload: string) =>
+                this.loadSnapshot(payload)
+            )
             .on(IO.SOCKET_SAVE_SNAPSHOT, (payload: string) => {
                 logger.info('Save Snapshot')
                 this.snapshotHandler.saveSnapshotSettings(

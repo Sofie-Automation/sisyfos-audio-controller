@@ -82,7 +82,7 @@ export const loadSnapshotState = (
     numberOfFaders: number,
     fileName: string,
     loadAll: boolean
-) => {
+): boolean => {
     try {
         const stateFromFile: ShotStorage = JSON.parse(
             fs.readFileSync(fileName, 'utf8')
@@ -100,6 +100,7 @@ export const loadSnapshotState = (
                 allState: stateFromFile.faderState as Faders,
             })
         }
+        return true
     } catch (error) {
         if (fileName.includes('default.shot')) {
             store.dispatch({
@@ -120,6 +121,7 @@ export const loadSnapshotState = (
         } else {
             logger.data(error).error('Error loading Snapshot')
         }
+        return false
     }
 }
 
