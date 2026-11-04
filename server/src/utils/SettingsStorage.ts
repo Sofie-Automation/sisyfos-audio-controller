@@ -12,6 +12,7 @@ import { checkVersion } from './migrations'
 import { ChannelActionTypes } from '../../../shared/src/actions/channelActions'
 import { FaderActionTypes } from '../../../shared/src/actions/faderActions'
 import { logger } from './logger'
+import { isValidSnapshot } from './snapshotValidation'
 import { defaultFadersReducerState } from '../../../shared/src/reducers/fadersReducer'
 
 import {
@@ -79,9 +80,10 @@ export const loadSnapshotState = (
     loadAll: boolean
 ): boolean => {
     try {
-        const stateFromFile: ShotStorage = JSON.parse(
-            fs.readFileSync(fileName, 'utf8')
-        )
+        const stateFromFile = JSON.parse(fs.readFileSync(fileName, 'utf8'))
+        if (!isValidSnapshot(stateFromFile)) {
+            throw new Error(`Invalid snapshot format in ${fileName}`)
+        }
 
         if (loadAll) {
             store.dispatch({

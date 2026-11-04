@@ -18,3 +18,24 @@ get:
             $ref: '../../components/snapshots/snapshotFile/snapshotFile.yaml#/$defs/SnapshotFile'
     '404':
       $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/notFound'
+put:
+  operationId: putSnapshot
+  tags: [snapshots]
+  summary: Upload a snapshot
+  description: >-
+    Creates or overwrites the snapshot (up to 50 MB of JSON) and broadcasts
+    the new snapshot list to connected socket.io clients. default.shot cannot
+    be written.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/snapshots/snapshot/snapshot.yaml#/$defs/Snapshot'
+  responses:
+    '200':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/ok'
+    '400':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/badRequest'
+    '500':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/internalError'

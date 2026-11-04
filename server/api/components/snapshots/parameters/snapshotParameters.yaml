@@ -4,7 +4,9 @@ components:
       name: filename
       in: path
       required: true
-      description: Snapshot file name in the storage folder. Any directory part is stripped, and only .shot files are served.
+      description: >-
+        Snapshot file name in the storage folder. Any directory part is
+        stripped, and .shot is added if missing.
       schema:
         type: string
       example: morning-show.shot

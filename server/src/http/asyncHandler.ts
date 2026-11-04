@@ -22,11 +22,16 @@ export const errorHandler: express.ErrorRequestHandler = (
     res,
     _next
 ) => {
-    const status = err instanceof HttpError ? err.status : 500
+    // Body parser errors (malformed JSON, body too large) carry their own
+    // client error status and are marked safe to expose
+    const isClientError =
+        err instanceof HttpError ||
+        (err.expose && err.status >= 400 && err.status < 500)
+    const status = isClientError ? err.status : 500
     logger.data(err).error(`${req.method} ${req.originalUrl} failed`)
     if (!res.headersSent) {
         res.status(status).send(
-            err instanceof HttpError ? err.message : 'Internal server error'
+            isClientError ? err.message : 'Internal server error'
         )
     }
 }

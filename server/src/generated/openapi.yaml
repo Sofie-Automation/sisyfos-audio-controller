@@ -1188,7 +1188,7 @@ paths:
         in: path
         required: true
         description: Snapshot file name in the storage folder. Any directory part is
-          stripped, and only .shot files are served.
+          stripped, and .shot is added if missing.
         schema:
           type: string
         example: morning-show.shot
@@ -1223,3 +1223,86 @@ paths:
                 description: Human-readable error message. Server errors are not detailed; check
                   the server log.
               example: File not found
+    put:
+      operationId: putSnapshot
+      tags:
+        - snapshots
+      summary: Upload a snapshot
+      description: Creates or overwrites the snapshot (up to 50 MB of JSON) and
+        broadcasts the new snapshot list to connected socket.io clients.
+        default.shot cannot be written.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Snapshot
+              description: Saved fader and channel state. Only the structure below is checked,
+                not the other fader and channel fields, so snapshots saved by
+                older versions are accepted. The body is stored as-is.
+              required:
+                - channelState
+                - faderState
+              properties:
+                channelState:
+                  type: object
+                  required:
+                    - chMixerConnection
+                  properties:
+                    chMixerConnection:
+                      type: array
+                      description: Channel state for each mixer
+                      items:
+                        type: object
+                        required:
+                          - channel
+                        properties:
+                          channel:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - channelType
+                              properties:
+                                channelType:
+                                  type: number
+                                  description: Index of the channel type in the mixer protocol
+                faderState:
+                  type: object
+                  required:
+                    - fader
+                  properties:
+                    fader:
+                      type: array
+                      description: State of each fader
+                      items:
+                        type: object
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: OK
+        "400":
+          description: The request was invalid
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Invalid pages format
+        "500":
+          description: Unexpected server error
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Internal server error

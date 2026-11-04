@@ -1,0 +1,39 @@
+$defs:
+  Snapshot:
+    type: object
+    title: Snapshot
+    description: >-
+      Saved fader and channel state. Only the structure below is checked, not
+      the other fader and channel fields, so snapshots saved by older versions
+      are accepted. The body is stored as-is.
+    required: [channelState, faderState]
+    properties:
+      channelState:
+        type: object
+        required: [chMixerConnection]
+        properties:
+          chMixerConnection:
+            type: array
+            description: Channel state for each mixer
+            items:
+              type: object
+              required: [channel]
+              properties:
+                channel:
+                  type: array
+                  items:
+                    type: object
+                    required: [channelType]
+                    properties:
+                      channelType:
+                        type: number
+                        description: Index of the channel type in the mixer protocol
+      faderState:
+        type: object
+        required: [fader]
+        properties:
+          fader:
+            type: array
+            description: State of each fader
+            items:
+              type: object
