@@ -1,0 +1,6 @@
+$defs:
+  SnapshotFile:
+    type: string
+    title: SnapshotFile
+    description: Raw snapshot file contents, a JSON document holding the saved fader and channel state.
+    format: binary

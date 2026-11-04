@@ -1,0 +1,20 @@
+parameters:
+  - $ref: '../../components/snapshots/parameters/snapshotParameters.yaml#/components/parameters/filename'
+get:
+  operationId: getSnapshot
+  tags: [snapshots]
+  summary: Download a snapshot
+  responses:
+    '200':
+      description: The snapshot file, sent as an attachment
+      headers:
+        Content-Disposition:
+          schema:
+            type: string
+          example: attachment; filename="morning-show.shot"
+      content:
+        application/octet-stream:
+          schema:
+            $ref: '../../components/snapshots/snapshotFile/snapshotFile.yaml#/$defs/SnapshotFile'
+    '404':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/notFound'

@@ -35,3 +35,5 @@ paths:
     $ref: './paths/settings/settingsPath.yaml'
   /snapshots:
     $ref: './paths/snapshots/snapshotsPath.yaml'
+  /snapshot/{filename}:
+    $ref: './paths/snapshots/snapshotPath.yaml'

@@ -1182,3 +1182,44 @@ paths:
                 description: Human-readable error message. Server errors are not detailed; check
                   the server log.
               example: Internal server error
+  "/snapshot/{filename}":
+    parameters:
+      - name: filename
+        in: path
+        required: true
+        description: Snapshot file name in the storage folder. Any directory part is
+          stripped, and only .shot files are served.
+        schema:
+          type: string
+        example: morning-show.shot
+    get:
+      operationId: getSnapshot
+      tags:
+        - snapshots
+      summary: Download a snapshot
+      responses:
+        "200":
+          description: The snapshot file, sent as an attachment
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+              example: attachment; filename="morning-show.shot"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                title: SnapshotFile
+                description: Raw snapshot file contents, a JSON document holding the saved fader
+                  and channel state.
+                format: binary
+        "404":
+          description: The file does not exist
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: File not found
