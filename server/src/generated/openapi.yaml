@@ -1230,7 +1230,27 @@ paths:
       summary: Upload a snapshot
       description: Creates or overwrites the snapshot (up to 50 MB of JSON) and
         broadcasts the new snapshot list to connected socket.io clients.
-        default.shot cannot be written.
+        default.shot cannot be written. With load=true the snapshot is also
+        loaded in the same request.
+      parameters:
+        - name: load
+          in: query
+          required: false
+          description: Load the snapshot right after saving it, as POST
+            /snapshot/{filename}/load does.
+          schema:
+            type: boolean
+            default: false
+        - name: push
+          in: query
+          required: false
+          description: Send the loaded fader levels to the mixers straight away. Without
+            it, loading only updates the server state and connected clients, and
+            the mixers pick up the change later. Only used when a snapshot is
+            loaded.
+          schema:
+            type: boolean
+            default: false
       requestBody:
         required: true
         content:
@@ -1306,3 +1326,49 @@ paths:
                 description: Human-readable error message. Server errors are not detailed; check
                   the server log.
               example: Internal server error
+  "/snapshot/{filename}/load":
+    parameters:
+      - name: filename
+        in: path
+        required: true
+        description: Snapshot file name in the storage folder. Any directory part is
+          stripped, and .shot is added if missing.
+        schema:
+          type: string
+        example: morning-show.shot
+    post:
+      operationId: loadSnapshot
+      tags:
+        - snapshots
+      summary: Load a snapshot
+      description: Makes the snapshot the active fader and channel state and sends the
+        full state to connected socket.io clients.
+      parameters:
+        - name: push
+          in: query
+          required: false
+          description: Send the loaded fader levels to the mixers straight away. Without
+            it, loading only updates the server state and connected clients, and
+            the mixers pick up the change later. Only used when a snapshot is
+            loaded.
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: OK
+        "404":
+          description: The snapshot does not exist or is not a valid snapshot
+          content:
+            text/plain:
+              schema:
+                type: string
+                title: ErrorMessage
+                description: Human-readable error message. Server errors are not detailed; check
+                  the server log.
+              example: Snapshot not found or invalid

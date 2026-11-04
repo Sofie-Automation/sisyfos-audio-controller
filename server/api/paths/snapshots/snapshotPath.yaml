@@ -25,7 +25,10 @@ put:
   description: >-
     Creates or overwrites the snapshot (up to 50 MB of JSON) and broadcasts
     the new snapshot list to connected socket.io clients. default.shot cannot
-    be written.
+    be written. With load=true the snapshot is also loaded in the same request.
+  parameters:
+    - $ref: '../../components/snapshots/parameters/snapshotParameters.yaml#/components/parameters/load'
+    - $ref: '../../components/snapshots/parameters/snapshotParameters.yaml#/components/parameters/push'
   requestBody:
     required: true
     content:

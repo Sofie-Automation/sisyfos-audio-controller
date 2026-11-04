@@ -1,0 +1,21 @@
+parameters:
+  - $ref: '../../components/snapshots/parameters/snapshotParameters.yaml#/components/parameters/filename'
+post:
+  operationId: loadSnapshot
+  tags: [snapshots]
+  summary: Load a snapshot
+  description: >-
+    Makes the snapshot the active fader and channel state and sends the full
+    state to connected socket.io clients.
+  parameters:
+    - $ref: '../../components/snapshots/parameters/snapshotParameters.yaml#/components/parameters/push'
+  responses:
+    '200':
+      $ref: '../../components/common/responses/commonResponses.yaml#/components/responses/ok'
+    '404':
+      description: The snapshot does not exist or is not a valid snapshot
+      content:
+        text/plain:
+          schema:
+            $ref: '../../components/common/errorMessage/errorMessage.yaml#/$defs/ErrorMessage'
+          example: Snapshot not found or invalid

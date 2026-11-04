@@ -10,3 +10,22 @@ components:
       schema:
         type: string
       example: morning-show.shot
+    load:
+      name: load
+      in: query
+      required: false
+      description: Load the snapshot right after saving it, as POST /snapshot/{filename}/load does.
+      schema:
+        type: boolean
+        default: false
+    push:
+      name: push
+      in: query
+      required: false
+      description: >-
+        Send the loaded fader levels to the mixers straight away. Without it,
+        loading only updates the server state and connected clients, and the
+        mixers pick up the change later. Only used when a snapshot is loaded.
+      schema:
+        type: boolean
+        default: false

@@ -37,3 +37,5 @@ paths:
     $ref: './paths/snapshots/snapshotsPath.yaml'
   /snapshot/{filename}:
     $ref: './paths/snapshots/snapshotPath.yaml'
+  /snapshot/{filename}/load:
+    $ref: './paths/snapshots/snapshotLoadPath.yaml'
