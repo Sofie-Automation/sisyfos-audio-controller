@@ -36,7 +36,7 @@ jobs:
             changelog: ${{ steps.calver.outputs.changelog }}
         steps:
             - name: Access repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
               with:
                   ref: ${{ github.ref }}
                   fetch-depth: ${{ inputs.fetch-depth }}
