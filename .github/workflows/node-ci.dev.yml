@@ -22,7 +22,7 @@ jobs:
             tags: ${{ steps.tag.outputs.tags }}
         steps:
             - name: Access repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
 
             - name: Compute image tag
               id: tag
