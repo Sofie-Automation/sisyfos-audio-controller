@@ -25,7 +25,7 @@
         "@tv2media/logger": "^2.0.2",
         "atem-connection": "^3.4.0",
         "casparcg-connection": "^5.1.0",
-        "emberplus-connection": "^0.3.0",
+        "emberplus-connection": "^0.3.2-0",
         "express": "^4.18.2",
         "node-emberplus": "^3.0.8",
         "node-vmix": "patch:node-vmix@https%3A//github.com/tv2norge-collab/node-vmix.git%23commit=777c0eb25427fab4b09218d736e78e416e8b4fec#~/.yarn/patches/node-vmix-https-b566bcb416.patch",
